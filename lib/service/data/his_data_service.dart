@@ -5,6 +5,8 @@ import 'package:whisper/model/data_model/his_model.dart';
 import 'package:whisper/model/music_model.dart';
 import 'package:whisper/model/sheet_model.dart';
 
+import '../event_service.dart';
+
 ///历史数据读写
 class HisDataService {
   static List<String> searchHis;
@@ -94,6 +96,8 @@ class HisDataService {
     //对象赋值
     playSheetHis = newSheetHis;
     await _write();
+
+    eventBus.fire(SheetHisRefreshEvent("add"));
   }
 
   ///删除歌单播放历史

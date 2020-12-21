@@ -17,6 +17,12 @@ class MySheetsRefreshEvent {
   MySheetsRefreshEvent(this.string);
 }
 
+//歌单历史刷新
+class SheetHisRefreshEvent {
+  String string;
+  SheetHisRefreshEvent(this.string);
+}
+
 //当前播放刷新
 class CurMusicRefreshEvent {
   MusicModel music;

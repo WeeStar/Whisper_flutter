@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:whisper/model/sheet_model.dart';
 import 'package:whisper/service/data/his_data_service.dart';
 import 'package:whisper/service/data/my_sheets_data_service.dart';
+import 'package:whisper/service/event_service.dart';
 import 'package:whisper/view/sheet_view/my/sheet_my_his.dart';
 import 'package:whisper/view/sheet_view/my/sheet_my_list.dart';
 import 'package:whisper/view/sheet_view/my/sheet_my_tab_delegate.dart';
@@ -38,6 +39,13 @@ class _MainViewMyState extends State<MainViewMy> with TickerProviderStateMixin {
 
     _controller = TabController(
         initialIndex: _mySheets.length > 0 ? 0 : 1, length: 2, vsync: this);
+
+    //监听歌单历史刷新
+    eventBus.on<SheetHisRefreshEvent>().listen((event) {
+      setState(() {
+        _hisSheets = HisDataService.playSheetHis;
+      });
+    });
   }
 
   TabBar _buildTabBar() {
