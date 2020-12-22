@@ -80,7 +80,8 @@ class _WelcomeViewState extends State<WelcomeView>
         }), (route) => route == null);
 
         //初始化播放服务
-        PlayerService.build();
+        var platform =  Theme.of(context).platform;
+        PlayerService.build(platform);
       });
     });
 

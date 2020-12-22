@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/material.dart';
 import 'package:whisper/model/data_model/cur_play_model.dart';
 import 'package:whisper/model/music_model.dart';
 import 'package:whisper/model/sheet_model.dart';
@@ -23,18 +24,22 @@ class PlayerService {
   //播放器
   static AudioPlayer audioPlayer;
 
+  //平台
+  static TargetPlatform platform;
+
   //监听事件
   static StreamSubscription _onPositionChanged;
   static StreamSubscription _onPlayerStateChanged;
-  static StreamSubscription _onPlayComplete;
   static StreamSubscription _onPlayError;
   static StreamSubscription _onNotifyStateChanged;
   static StreamSubscription _onPlayerCommand;
 
   //初始化
-  static build() {
+  static build(TargetPlatform _platform) {
+    platform = _platform;
     curMusic = CurPlayDataService.curPlay.curMusic;
     curList = CurPlayDataService.curPlay.curList;
+    roundMode = CurPlayDataService.curPlay.roundMode;
   }
 
   static dispose() {
@@ -47,8 +52,15 @@ class PlayerService {
     //处理插入当前列表
     //播放整个歌单
     if (sheet != null) {
-      if (sheet.tracks == null || sheet.tracks.isEmpty) return;
-      curList = sheet.tracks;
+      //处理无效歌曲
+      var playSheet = sheet;
+      playSheet.tracks =
+          sheet.tracks.where((element) => element.isPlayable()).toList();
+      if (playSheet.tracks == null || playSheet.tracks.isEmpty) return;
+
+      //设置当前音乐 当前列表
+      curList = playSheet.tracks;
+      if (!(music?.isPlayable() ?? false)) music = null;
       curMusic = music ?? curList[0];
 
       //记录播放历史
@@ -57,6 +69,9 @@ class PlayerService {
 
     //播放单首歌曲
     else if (music != null) {
+      //播放无效单曲 跳出
+      if (!music.isPlayable()) return;
+
       //需插入当前播放列表 获取插入位置
       if (!curList.any((element) => element.id == music.id)) {
         var curIdx = _getInsertIdx();
@@ -65,6 +80,7 @@ class PlayerService {
       //赋值当前音乐为传入音乐
       curMusic = music;
     }
+
     //否则为直接恢复播放
     //当前为空 跳出
     if (curMusic == null) return;
@@ -91,6 +107,7 @@ class PlayerService {
 
     //直接恢复播放的 不在记录本地数据
     if (music == null && sheet == null) return;
+
     //记录当前播放
     CurPlayDataService.curPlay.curList = curList;
     CurPlayDataService.curPlay.curMusic = curMusic;
@@ -116,7 +133,7 @@ class PlayerService {
 
     //获取当前位置 上一曲位置
     var curIdx = _getCurIdx();
-    var preIdx = curIdx == 0 ? curList.length = 1 : curIdx - 1;
+    var preIdx = curIdx == 0 ? curList.length - 1 : curIdx - 1;
 
     //播放
     play(music: curList[preIdx]);
@@ -172,12 +189,11 @@ class PlayerService {
     if (playUrl == null || playUrl.isEmpty) return false;
 
     //释放上个监听
-    _onPositionChanged?.cancel();
-    _onPlayerStateChanged?.cancel();
-    _onPlayComplete?.cancel();
-    _onPlayError?.cancel();
-    _onNotifyStateChanged?.cancel();
-    _onPlayerCommand?.cancel();
+    await _onPositionChanged?.cancel();
+    await _onPlayerStateChanged?.cancel();
+    await _onPlayError?.cancel();
+    await _onNotifyStateChanged?.cancel();
+    await _onPlayerCommand?.cancel();
 
     //释放上个Player
     await audioPlayer?.stop();
@@ -192,23 +208,23 @@ class PlayerService {
       print(exp);
       return false;
     }
-    await audioPlayer.setReleaseMode(ReleaseMode.STOP);
+    await audioPlayer.setPlaybackRate(playbackRate: 0.0);
 
     //获取时长
     curTime = Duration.zero;
     var duration = Duration(milliseconds: await audioPlayer.getDuration());
 
     // 设置IOS锁屏
-    audioPlayer.startHeadlessService();
-    audioPlayer.setNotification(
-        title: curMusic?.title ?? "未知歌曲",
-        artist: curMusic?.artist ?? "未知歌手",
-        albumTitle: curMusic?.album ?? "未知专辑",
-        imageUrl: curMusic?.img_url ?? '',
-        duration: duration,
-        elapsedTime: Duration(seconds: 0),
-        hasNextTrack: true,
-        hasPreviousTrack: true);
+    if (platform == TargetPlatform.iOS)
+      await audioPlayer.setNotification(
+          title: curMusic?.title ?? "未知歌曲",
+          artist: curMusic?.artist ?? "未知歌手",
+          albumTitle: curMusic?.album ?? "未知专辑",
+          imageUrl: '',
+          duration: duration,
+          elapsedTime: Duration(seconds: 0),
+          hasNextTrack: true,
+          hasPreviousTrack: true);
 
     //广播当前播放歌曲
     eventBus.fire(CurMusicRefreshEvent(curMusic, duration));
@@ -216,20 +232,27 @@ class PlayerService {
     //当前进度获取 发广播
     _onPositionChanged =
         audioPlayer.onAudioPositionChanged.listen((Duration c) {
+      //广播进度
       curTime = c;
       eventBus.fire(PlayTimeRefreshEvent(c));
     });
 
     //播放状态变化 发广播
     _onPlayerStateChanged = audioPlayer.onPlayerStateChanged.listen((state) {
-      print("状态变化广播");
-      eventBus.fire(PlayStateRefreshEvent(state));
-    });
+      //播放完成 下一首
+      if (state == AudioPlayerState.COMPLETED) {
+        print("播放完成");
+        next();
+      }
 
-    //播放完成 下一首
-    _onPlayComplete = audioPlayer.onPlayerCompletion.listen((event) {
-      next();
-      print("播放完成");
+      print("状态变化广播");
+
+      //调整进度条速率
+      audioPlayer?.setPlaybackRate(
+          playbackRate: state == AudioPlayerState.PLAYING ? 1.0 : 0.0);
+
+      //广播播放状态
+      eventBus.fire(PlayStateRefreshEvent(state));
     });
 
     //播放失败 下一首
@@ -246,6 +269,8 @@ class PlayerService {
       //调整进度条速率
       audioPlayer?.setPlaybackRate(
           playbackRate: state == AudioPlayerState.PLAYING ? 1.0 : 0.0);
+
+      //广播播放状态
       eventBus.fire(PlayStateRefreshEvent(state));
     });
 
@@ -282,11 +307,11 @@ class PlayerService {
     var curIdx = _getCurIdx();
 
     //强制下一首
-    if (isForce) return (curIdx == curList.length ? 0 : curIdx + 1);
+    if (isForce) return ((curIdx == (curList.length - 1)) ? 0 : curIdx + 1);
 
     switch (roundMode) {
       case RoundModeEnum.listRound:
-        return (curIdx == curList.length ? 0 : curIdx + 1);
+        return ((curIdx == (curList.length - 1)) ? 0 : curIdx + 1);
       case RoundModeEnum.randomRound:
         var nextIdx = 0;
         var random = new Random();

@@ -215,7 +215,11 @@ class _SheetInfoViewState extends State<SheetInfoView>
                       onTap: () {
                         if (_sheetInfo.tracks == null ||
                             _sheetInfo.tracks.length == 0) return;
-                        //播放全部歌曲
+
+                        //无效歌曲跳出
+                        if (!_sheetInfo.tracks[idx - 3].isPlayable()) return;
+
+                        //播放选中歌曲
                         PlayerService.play(
                             music: _sheetInfo.tracks[idx - 3],
                             sheet: _sheetInfo);
