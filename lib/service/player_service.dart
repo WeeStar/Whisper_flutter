@@ -125,15 +125,15 @@ class PlayerService {
     //列表为空 跳出
     if (curList == null || curList.isEmpty) return;
 
-    //只有一首歌 跳转到0
-    if (curList.length == 1) {
-      seek(Duration.zero);
-      return;
-    }
-
     //获取当前位置 上一曲位置
     var curIdx = _getCurIdx();
     var preIdx = curIdx == 0 ? curList.length - 1 : curIdx - 1;
+
+    //不变 seek0
+    if (curIdx == preIdx) {
+      seek(Duration.zero);
+      return;
+    }
 
     //播放
     play(music: curList[preIdx]);
@@ -143,12 +143,6 @@ class PlayerService {
   static next([bool isForce = false]) {
     //列表为空 跳出
     if (curList == null || curList.isEmpty) return;
-
-    //只有一首歌 跳转到0
-    if (curList.length == 1) {
-      seek(Duration.zero);
-      return;
-    }
 
     //获取当前位置 下一曲位置
     var curIdx = _getCurIdx();
@@ -241,16 +235,12 @@ class PlayerService {
     _onPlayerStateChanged = audioPlayer.onPlayerStateChanged.listen((state) {
       //播放完成 下一首
       if (state == AudioPlayerState.COMPLETED) {
-        print("播放完成");
         next();
       }
-
-      print("状态变化广播");
 
       //调整进度条速率
       audioPlayer?.setPlaybackRate(
           playbackRate: state == AudioPlayerState.PLAYING ? 1.0 : 0.0);
-
       //广播播放状态
       eventBus.fire(PlayStateRefreshEvent(state));
     });
@@ -258,16 +248,13 @@ class PlayerService {
     //播放失败 下一首
     _onPlayError = audioPlayer.onPlayerError.listen((event) {
       next(true);
-      print("播放失败");
     });
 
     //ios 锁屏通知发起状态变化 接收播放暂停
     _onNotifyStateChanged =
         audioPlayer.onNotificationPlayerStateChanged.listen((state) {
-      print("锁屏播放暂停");
-
       //调整进度条速率
-      audioPlayer?.setPlaybackRate(
+      audioPlayer.setPlaybackRate(
           playbackRate: state == AudioPlayerState.PLAYING ? 1.0 : 0.0);
 
       //广播播放状态
@@ -282,7 +269,6 @@ class PlayerService {
       } else if (event == PlayerControlCommand.PREVIOUS_TRACK) {
         pre();
       }
-      print("锁屏上下曲");
     });
     return true;
   }
@@ -310,16 +296,17 @@ class PlayerService {
     if (isForce) return ((curIdx == (curList.length - 1)) ? 0 : curIdx + 1);
 
     switch (roundMode) {
-      case RoundModeEnum.listRound:
+      case RoundModeEnum.listRound://列表循环
         return ((curIdx == (curList.length - 1)) ? 0 : curIdx + 1);
-      case RoundModeEnum.randomRound:
+      case RoundModeEnum.randomRound://随机循环
         var nextIdx = 0;
+        if (curList.length == 1) return nextIdx;
         var random = new Random();
         do {
           nextIdx = random.nextInt(curList.length);
         } while (nextIdx == curIdx);
         return nextIdx;
-      case RoundModeEnum.singleRound:
+      case RoundModeEnum.singleRound://单曲循环
         return curIdx;
       default:
         return -1;
