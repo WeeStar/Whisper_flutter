@@ -16,13 +16,16 @@ class PlayerService {
   //当前音频
   static MusicModel curMusic;
   static List<MusicModel> curList;
-  static Duration curTime;
+
+  static Duration curTime = Duration.zero;
+  static Duration totalTime = Duration.zero;
 
   //循环方式
   static RoundModeEnum roundMode;
 
   //播放器
   static AudioPlayer audioPlayer;
+  static bool isPlaying = false;
 
   //平台
   static TargetPlatform platform;
@@ -117,7 +120,6 @@ class PlayerService {
   //暂停
   static pause() {
     audioPlayer?.pause();
-    audioPlayer?.setPlaybackRate(playbackRate: 0.0);
   }
 
   //上一首
@@ -131,7 +133,9 @@ class PlayerService {
 
     //不变 seek0
     if (curIdx == preIdx) {
-      seek(Duration.zero);
+      seek(Duration.zero).then((_) {
+        audioPlayer.resume();
+      });
       return;
     }
 
@@ -150,7 +154,9 @@ class PlayerService {
 
     //不变 seek0
     if (curIdx == nextIdx) {
-      seek(Duration.zero);
+      seek(Duration.zero).then((_) {
+        audioPlayer.resume();
+      });
       return;
     }
 
@@ -159,13 +165,17 @@ class PlayerService {
   }
 
   //跳转
-  static seek(Duration seekTo) {
-    audioPlayer.seek(seekTo);
+  static Future<void> seek(Duration seekTo) async {
+    await audioPlayer.seek(seekTo);
   }
 
   // 私有 初始化播放器
   static Future<bool> _initAudioPlayer() async {
     if (curMusic == null) return false;
+
+    //先广播当前播放歌曲 播放页直接变化 请求到时长后再次变化
+    totalTime = Duration.zero;
+    eventBus.fire(CurMusicRefreshEvent(curMusic, totalTime));
 
     //获取播放地址
     var playUrl = "";
@@ -202,11 +212,12 @@ class PlayerService {
       print(exp);
       return false;
     }
+    await audioPlayer.setReleaseMode(ReleaseMode.STOP);
     await audioPlayer.setPlaybackRate(playbackRate: 0.0);
 
     //获取时长
     curTime = Duration.zero;
-    var duration = Duration(milliseconds: await audioPlayer.getDuration());
+    totalTime = Duration(milliseconds: await audioPlayer.getDuration());
 
     // 设置IOS锁屏
     if (platform == TargetPlatform.iOS)
@@ -215,13 +226,13 @@ class PlayerService {
           artist: curMusic?.artist ?? "未知歌手",
           albumTitle: curMusic?.album ?? "未知专辑",
           imageUrl: '',
-          duration: duration,
+          duration: totalTime,
           elapsedTime: Duration(seconds: 0),
           hasNextTrack: true,
           hasPreviousTrack: true);
 
     //广播当前播放歌曲
-    eventBus.fire(CurMusicRefreshEvent(curMusic, duration));
+    eventBus.fire(CurMusicRefreshEvent(curMusic, totalTime));
 
     //当前进度获取 发广播
     _onPositionChanged =
@@ -238,6 +249,7 @@ class PlayerService {
         next();
       }
 
+      isPlaying = state == AudioPlayerState.PLAYING;
       //调整进度条速率
       audioPlayer?.setPlaybackRate(
           playbackRate: state == AudioPlayerState.PLAYING ? 1.0 : 0.0);
@@ -253,6 +265,7 @@ class PlayerService {
     //ios 锁屏通知发起状态变化 接收播放暂停
     _onNotifyStateChanged =
         audioPlayer.onNotificationPlayerStateChanged.listen((state) {
+      isPlaying = state == AudioPlayerState.PLAYING;
       //调整进度条速率
       audioPlayer.setPlaybackRate(
           playbackRate: state == AudioPlayerState.PLAYING ? 1.0 : 0.0);
@@ -271,6 +284,10 @@ class PlayerService {
       }
     });
     return true;
+  }
+
+  static void setRoundMode() {
+    roundMode = CurPlayDataService.curPlay.roundMode;
   }
 
   //私有 获取当前播放位置
@@ -296,9 +313,9 @@ class PlayerService {
     if (isForce) return ((curIdx == (curList.length - 1)) ? 0 : curIdx + 1);
 
     switch (roundMode) {
-      case RoundModeEnum.listRound://列表循环
+      case RoundModeEnum.listRound: //列表循环
         return ((curIdx == (curList.length - 1)) ? 0 : curIdx + 1);
-      case RoundModeEnum.randomRound://随机循环
+      case RoundModeEnum.randomRound: //随机循环
         var nextIdx = 0;
         if (curList.length == 1) return nextIdx;
         var random = new Random();
@@ -306,7 +323,7 @@ class PlayerService {
           nextIdx = random.nextInt(curList.length);
         } while (nextIdx == curIdx);
         return nextIdx;
-      case RoundModeEnum.singleRound://单曲循环
+      case RoundModeEnum.singleRound: //单曲循环
         return curIdx;
       default:
         return -1;
