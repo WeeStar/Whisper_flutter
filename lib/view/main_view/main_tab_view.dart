@@ -127,7 +127,7 @@ class _IndexState extends State<MainTab> with TickerProviderStateMixin {
         iconSize: 28.0,
         selectedFontSize: 8.0,
         unselectedFontSize: 8.0,
-        elevation: 10.0,
+        elevation: 20.0,
         type: BottomNavigationBarType.fixed,
         onTap: (int index) {
           setState(() {
@@ -146,7 +146,7 @@ class _IndexState extends State<MainTab> with TickerProviderStateMixin {
     return Scaffold(
       appBar: _buildAppBar(),
       body: _body,
-      bottomNavigationBar: bottomNavigationBar,
+      bottomNavigationBar:bottomNavigationBar
     );
   }
 }
