@@ -60,6 +60,7 @@ class _PlayerRingViewState extends State<PlayerRingView>
       });
     });
 
+    //播放状态变化
     eventBus.on<PlayStateRefreshEvent>().listen((event) {
       setState(() {
         if (event.state == AudioPlayerState.PLAYING) {
@@ -115,9 +116,10 @@ class _PlayerRingViewState extends State<PlayerRingView>
           height: 30,
           child: CircularProgressIndicator(
             strokeWidth: 2,
-            value: totalTime == null
+            value: (totalTime == null || totalTime.inMilliseconds == 0)
                 ? 0.0
-                : (curTime?.inMilliseconds ?? 0).toDouble() / totalTime.inMilliseconds,
+                : (curTime?.inMilliseconds ?? 0).toDouble() /
+                    totalTime.inMilliseconds,
             backgroundColor: Colors.grey[300].withOpacity(0.6),
             valueColor: AlwaysStoppedAnimation(Colors.white),
           ),

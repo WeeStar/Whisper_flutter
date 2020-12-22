@@ -7,6 +7,7 @@ import 'package:whisper/view/main_view/main_view_my.dart';
 import 'package:whisper/view/main_view/main_view_recom.dart';
 import 'package:whisper/view/main_view/nav_icon_view.dart';
 import 'package:whisper/view/player_view/player_ring.dart';
+import 'package:whisper/view/player_view/player_view.dart';
 import 'package:whisper/view/search_view/search_view.dart';
 
 //导航tab
@@ -111,7 +112,19 @@ class _IndexState extends State<MainTab> with TickerProviderStateMixin {
 
     return PreferredSize(
       preferredSize: Size.fromHeight(50),
-      child: AppBar(title: Text(title), actions: actions,leading: PlayerRingView(),),
+      child: AppBar(
+        title: Text(title),
+        actions: actions,
+        //左上角播放环形进度
+        leading: InkWell(
+          child: PlayerRingView(),
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return PlayerView();
+            }));
+          },
+        ),
+      ),
     );
   }
 
@@ -144,9 +157,8 @@ class _IndexState extends State<MainTab> with TickerProviderStateMixin {
     );
 
     return Scaffold(
-      appBar: _buildAppBar(),
-      body: _body,
-      bottomNavigationBar:bottomNavigationBar
-    );
+        appBar: _buildAppBar(),
+        body: _body,
+        bottomNavigationBar: bottomNavigationBar);
   }
 }
