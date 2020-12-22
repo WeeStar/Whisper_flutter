@@ -42,8 +42,15 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
         onTabChanged: (source) {
           //执行切换tab
           _search(_keyWord, source);
+        },
+        onCleared: () {
+          //清空跳出搜索
+          setState(() {
+            _searchHis = HisDataService.searchHis;
+            _isInSearch = false;
+          });
         });
-    
+
     //初始化搜索历史
     _searchHis = HisDataService.searchHis;
     _controller = EasyRefreshController();
