@@ -35,6 +35,8 @@ class AppColor {
 
   //亮主题
   static final ThemeData themeDataLight = ThemeData(
+    appBarTheme: AppBarTheme(brightness: Brightness.light),
+
     brightness: Brightness.light,
 
     //主题色
@@ -76,6 +78,8 @@ class AppColor {
 
   //暗主题
   static final ThemeData themeDataDark = ThemeData(
+    appBarTheme: AppBarTheme(brightness: Brightness.dark),
+
     brightness: Brightness.dark,
 
     //主题色
