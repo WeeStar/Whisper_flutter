@@ -8,7 +8,7 @@ class DialogView {
       {IconData icon = Icons.check_circle_outline,
       int dissmissMilliseconds = 0}) {
     var notice = YYDialog().build()
-      ..width = 120
+      ..width = 160
       ..height = 110
       ..borderRadius = 10.0;
 
@@ -22,20 +22,20 @@ class DialogView {
               .textTheme
               .bodyText1
               .color
-              .withOpacity(0.9),
+              .withOpacity(0.7),
         )))
       ..widget(Padding(
-        padding: EdgeInsets.only(top: 10),
+        padding: EdgeInsets.only(top: 15),
         child: Text(
           noticeMsg,
           style: TextStyle(
               fontSize: 14,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w400,
               color: Theme.of(notice.context)
                   .textTheme
                   .bodyText1
                   .color
-                  .withOpacity(0.9)),
+                  .withOpacity(0.7)),
         ),
       ))
       ..backgroundColor =
