@@ -8,6 +8,7 @@ import 'package:whisper/view/common_view/common_view.dart';
 import 'package:whisper/view/common_view/dialog.dart';
 import 'package:whisper/view/music_view/music_item_view.dart';
 import 'package:whisper/view/sheet_view/info/sheet_info_cover.dart';
+import 'package:whisper/view/player_view/player_view.dart';
 
 class SheetInfoView extends StatefulWidget {
   SheetInfoView(this._sheetInfo);
@@ -190,16 +191,20 @@ class _SheetInfoViewState extends State<SheetInfoView>
                     _coverImg, _title, _sheetInfo.tracks?.length ?? 0);
               } else if (idx == 1) {
                 //播放全部 行
-                return Container(
-                  padding: EdgeInsets.fromLTRB(20, 10, 0, 10),
-                  alignment: Alignment.centerLeft,
-                  child: InkWell(
+                return InkWell(
+                  child: Container(
+                    padding: EdgeInsets.fromLTRB(20, 10, 0, 10),
+                    alignment: Alignment.centerLeft,
                     child: playAll,
-                    onTap: () {
-                      //播放全部歌曲
-                      PlayerService.play(sheet: _sheetInfo);
-                    },
                   ),
+                  onTap: () {
+                    //播放全部歌曲
+                    PlayerService.play(sheet: _sheetInfo);
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return PlayerView();
+                    }));
+                  },
                 );
               } else if (idx == 2) {
                 return Divider(
@@ -223,6 +228,10 @@ class _SheetInfoViewState extends State<SheetInfoView>
                         PlayerService.play(
                             music: _sheetInfo.tracks[idx - 3],
                             sheet: _sheetInfo);
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return PlayerView();
+                        }));
                       });
                 }
               }
