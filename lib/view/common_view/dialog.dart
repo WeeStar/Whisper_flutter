@@ -40,7 +40,6 @@ class DialogView {
       ))
       ..backgroundColor =
           Theme.of(notice.context).backgroundColor.withOpacity(0.8)
-      // ..barrierColor = Theme.of(notice.context).backgroundColor.withOpacity(0.2)
 
       //定时消失
       ..showCallBack = dissmissMilliseconds > 0
@@ -59,25 +58,25 @@ class DialogView {
   static YYDialog showDialogView(String text, String tab1Text, String tab2Text,
       VoidCallback onTap1, VoidCallback onTap2) {
     var dialog = YYDialog().build()
-      ..width = 220
-      ..borderRadius = 4.0;
+      ..width = 200
+      ..borderRadius = 10.0;
 
     var theme = Theme.of(dialog.context);
 
     return dialog
       ..text(
-        padding: EdgeInsets.all(25.0),
+        padding: EdgeInsets.all(20.0),
         alignment: Alignment.center,
         text: text,
         color: theme.textTheme.bodyText1.color,
-        fontSize: 14.0,
-        fontWeight: FontWeight.w500,
+        fontSize: 13.0,
+        fontWeight: FontWeight.w400,
       )
-      ..divider()
+      ..divider(color: Theme.of(dialog.context).dividerColor)
       ..doubleButton(
-        padding: EdgeInsets.only(top: 10.0),
         gravity: Gravity.center,
         withDivider: true,
+
         text1: tab1Text,
         color1: theme.primaryColor,
         fontSize1: 14.0,
@@ -88,11 +87,13 @@ class DialogView {
         text2: tab2Text,
         color2: theme.primaryColor,
         fontSize2: 14.0,
-        fontWeight2: FontWeight.bold,
+        fontWeight2: FontWeight.w400,
         onTap2: () {
           onTap2?.call();
         },
       )
+      ..backgroundColor =
+          Theme.of(dialog.context).scaffoldBackgroundColor
       ..show();
   }
 }

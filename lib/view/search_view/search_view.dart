@@ -4,6 +4,7 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:whisper/model/music_model.dart';
 import 'package:whisper/service/data/his_data_service.dart';
 import 'package:whisper/service/http/api_service.dart';
+import 'package:whisper/view/common_view/dialog.dart';
 import 'package:whisper/view/music_view/music_search_item.dart';
 import 'package:whisper/view/search_view/search_app_bar.dart';
 
@@ -172,11 +173,16 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
             ],
           ),
           onTap: () {
-            if (_searchHis.length == 0) return;
-            //清空搜索历史
-            HisDataService.clearHis();
-            setState(() {
-              _searchHis = new List<String>();
+            //十次失败 弹提示 可重试
+            DialogView.showDialogView("是否清空搜索历史", "确定", "取消", () {
+              if (_searchHis.length == 0) return;
+              //清空搜索历史
+              HisDataService.clearHis();
+              setState(() {
+                _searchHis = new List<String>();
+              });
+            }, () {
+              return;
             });
           },
         )
