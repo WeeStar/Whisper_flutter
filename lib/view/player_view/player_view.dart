@@ -327,15 +327,17 @@ class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
 
         //标题 副标题
         SizedBox(
-          child: Column(
-            children: [
-              _buildTitle(context),
-              SizedBox(
-                height: 10,
+          child: Padding(
+              child: Column(
+                children: [
+                  _buildTitle(context),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  _buildSubTitle(context),
+                ],
               ),
-              _buildSubTitle(context),
-            ],
-          ),
+              padding: EdgeInsets.fromLTRB(10, 0, 10, 0)),
           height: 70,
         ),
 
