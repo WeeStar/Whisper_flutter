@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:whisper/model/data_model/cur_play_model.dart';
 import 'package:whisper/model/music_model.dart';
 import 'package:whisper/service/event_service.dart';
-import 'package:whisper/service/player_service.dart';
+import 'package:whisper/service/play/curlist_service.dart';
+import 'package:whisper/service/play/player_service.dart';
 import 'package:whisper/view/music_view/music_item_view.dart';
 
 class PlayerBottomSheet extends StatefulWidget {
@@ -17,9 +18,9 @@ class _PlayerBottomSheetState extends State<PlayerBottomSheet>
   String curMusicId;
 
   _PlayerBottomSheetState() {
-    curList = PlayerService.curList;
-    roundMode = PlayerService.roundMode;
-    var curMusic = PlayerService.curMusic;
+    curList = CurListService.curList;
+    roundMode = CurListService.roundMode;
+    var curMusic = CurListService.curMusic;
     curMusicId = curMusic?.id ?? "";
   }
 

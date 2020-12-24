@@ -3,7 +3,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:whisper/service/data/cur_play_data_service.dart';
 import 'package:whisper/service/http/api_service.dart';
-import 'package:whisper/service/player_service.dart';
+import 'package:whisper/service/play/curlist_service.dart';
+import 'package:whisper/service/play/player_service.dart';
 import 'package:whisper/view/common_view/dialog.dart';
 import 'package:whisper/view/main_view/main_tab_view.dart';
 
@@ -82,6 +83,7 @@ class _WelcomeViewState extends State<WelcomeView>
         //初始化播放服务
         var platform =  Theme.of(context).platform;
         PlayerService.build(platform);
+        CurListService.build();
       });
     });
 

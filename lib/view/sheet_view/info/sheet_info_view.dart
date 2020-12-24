@@ -3,7 +3,7 @@ import 'package:flutter_custom_dialog/flutter_custom_dialog.dart';
 import 'package:whisper/model/sheet_model.dart';
 import 'package:whisper/service/data/my_sheets_data_service.dart';
 import 'package:whisper/service/http/api_service.dart';
-import 'package:whisper/service/player_service.dart';
+import 'package:whisper/service/play/player_service.dart';
 import 'package:whisper/view/common_view/common_view.dart';
 import 'package:whisper/view/common_view/dialog.dart';
 import 'package:whisper/view/music_view/music_item_view.dart';

@@ -7,7 +7,8 @@ import 'package:whisper/model/data_model/cur_play_model.dart';
 import 'package:whisper/model/music_model.dart';
 import 'package:whisper/service/data/cur_play_data_service.dart';
 import 'package:whisper/service/event_service.dart';
-import 'package:whisper/service/player_service.dart';
+import 'package:whisper/service/play/curlist_service.dart';
+import 'package:whisper/service/play/player_service.dart';
 import 'package:whisper/view/player_view/player_bottom_sheet.dart';
 
 //播放页
@@ -31,7 +32,7 @@ class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
 
   _PlayerViewState() {
     curMusic = PlayerService.curMusic;
-    roundMode = PlayerService.roundMode;
+    roundMode = CurListService.roundMode;
 
     curMusicId = curMusic?.id ?? "";
     curMusicImg = curMusic?.img_url ?? "";
@@ -52,6 +53,7 @@ class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
         curMusicId = curMusic?.id ?? "";
         curMusicImg = event.music?.img_url ?? "";
         //进度置空
+        print("212");
         curTime = Duration.zero;
         totalTime = event.totalTime;
       });
@@ -237,7 +239,7 @@ class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
             setState(() {
               roundMode = CurPlayDataService.curPlay.roundMode;
             });
-            PlayerService.setRoundMode();
+            CurListService.setRoundMode();
           },
         ),
         //上一曲

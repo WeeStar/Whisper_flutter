@@ -56,9 +56,9 @@ class DialogView {
 
   //构造对话框
   static YYDialog showDialogView(String text, String tab1Text, String tab2Text,
-      VoidCallback onTap1, VoidCallback onTap2) {
+      VoidCallback onTap1, VoidCallback onTap2,{double width = 200}) {
     var dialog = YYDialog().build()
-      ..width = 200
+      ..width = width
       ..borderRadius = 10.0;
 
     var theme = Theme.of(dialog.context);
