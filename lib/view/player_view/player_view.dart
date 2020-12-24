@@ -8,6 +8,7 @@ import 'package:whisper/model/music_model.dart';
 import 'package:whisper/service/data/cur_play_data_service.dart';
 import 'package:whisper/service/event_service.dart';
 import 'package:whisper/service/player_service.dart';
+import 'package:whisper/view/player_view/player_bottom_sheet.dart';
 
 //播放页
 class PlayerView extends StatefulWidget {
@@ -17,9 +18,9 @@ class PlayerView extends StatefulWidget {
 
 class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
   MusicModel curMusic;
-  List<MusicModel> curList;
   RoundModeEnum roundMode;
 
+  String curMusicId;
   String curMusicImg;
 
   Duration totalTime;
@@ -30,9 +31,9 @@ class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
 
   _PlayerViewState() {
     curMusic = PlayerService.curMusic;
-    curList = PlayerService.curList;
     roundMode = PlayerService.roundMode;
 
+    curMusicId = curMusic?.id ?? "";
     curMusicImg = curMusic?.img_url ?? "";
 
     curTime = PlayerService.curTime;
@@ -48,6 +49,7 @@ class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
     eventBus.on<CurMusicRefreshEvent>().listen((event) {
       setState(() {
         curMusic = event.music;
+        curMusicId = curMusic?.id ?? "";
         curMusicImg = event.music?.img_url ?? "";
         //进度置空
         curTime = Duration.zero;
@@ -294,7 +296,17 @@ class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
                 size: width * 0.1,
                 color: Theme.of(context).textTheme.bodyText1.color),
           ),
-          onTap: () {},
+          onTap: () {
+            showModalBottomSheet(
+              elevation: 20,
+              context: context,
+              builder: (BuildContext context) {
+                return PlayerBottomSheet();
+              },
+            ).then((val) {
+              print(val);
+            });
+          },
         ),
       ],
     );
