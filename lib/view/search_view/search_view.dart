@@ -4,9 +4,11 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:whisper/model/music_model.dart';
 import 'package:whisper/service/data/his_data_service.dart';
 import 'package:whisper/service/http/api_service.dart';
+import 'package:whisper/service/play/player_service.dart';
 import 'package:whisper/view/common_view/dialog.dart';
 import 'package:whisper/view/music_view/music_search_item.dart';
 import 'package:whisper/view/search_view/search_app_bar.dart';
+import 'package:whisper/view/player_view/player_view.dart';
 
 class SearchView extends StatefulWidget {
   @override
@@ -121,7 +123,16 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
         SliverList(
           delegate: SliverChildBuilderDelegate(
             (context, index) {
-              return MusicSearchItemView(_searchRes[index]);
+              return InkWell(
+                child: MusicSearchItemView(_searchRes[index]),
+                onTap: () {
+                  PlayerService.play(music: _searchRes[index]);
+                  //打开播放页面
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return PlayerView();
+                  }));
+                },
+              );
             },
             childCount: _searchRes.length,
           ),
