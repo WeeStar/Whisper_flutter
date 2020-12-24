@@ -305,9 +305,7 @@ class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
               builder: (BuildContext context) {
                 return PlayerBottomSheet();
               },
-            ).then((val) {
-              print(val);
-            });
+            );
           },
         ),
       ],

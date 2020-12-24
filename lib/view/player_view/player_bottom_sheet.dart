@@ -39,11 +39,26 @@ class _PlayerBottomSheetState extends State<PlayerBottomSheet>
 
   //构造歌单列表
   Widget _buildList() {
-    //确定初始滚动位置
-    var curIdx = curList.indexWhere((element) => element.id == curMusicId);
-    curIdx = curIdx < 0 ? 0 : curIdx;
+    //计算初始滚动位置
+    var offset = 0.0;
+    if (curList.length <= 4) {
+      //不够4个 不滚动
+      offset = 0;
+    } else {
+      var curIdx = curList.indexWhere((element) => element.id == curMusicId);
+      curIdx = curIdx < 0 ? 0 : curIdx;
+
+      if (curIdx <= curList.length - 5) {
+        //倒数前4之前 正常滚动
+        offset = curIdx * 54.0;
+      } else {
+        //倒数前4之后 滚动所有
+        offset = (curList.length * 54.0 + 48) - 300;
+      }
+    }
+
     ScrollController _scrollController =
-        ScrollController(initialScrollOffset: curIdx * 54.0);//索引乘单个歌曲的高度
+        ScrollController(initialScrollOffset: offset);
 
     return ListView.builder(
       controller: _scrollController,
