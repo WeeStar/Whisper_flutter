@@ -78,7 +78,7 @@ class _SheetInfoViewState extends State<SheetInfoView>
         setState(() {
           _sheetInfo = mySheet;
         });
-        DialogView.showNoticeView("同步完成", dissmissMilliseconds: 1000);
+        DialogView.showNoticeView("同步完成", dissmissMilliseconds: 1000,width: 120);
       });
     });
   }
@@ -100,7 +100,7 @@ class _SheetInfoViewState extends State<SheetInfoView>
           _isFav = false;
         });
 
-        DialogView.showNoticeView("已取消", dissmissMilliseconds: 1000);
+        DialogView.showNoticeView("已取消", dissmissMilliseconds: 1000,width: 120);
       });
     } else {
       //未收藏 添加收藏
@@ -110,7 +110,7 @@ class _SheetInfoViewState extends State<SheetInfoView>
           _isFav = true;
         });
 
-        DialogView.showNoticeView("已收藏", dissmissMilliseconds: 1000);
+        DialogView.showNoticeView("已收藏", dissmissMilliseconds: 1000,width: 120);
       });
     }
   }

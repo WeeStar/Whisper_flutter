@@ -6,7 +6,7 @@ import 'package:flutter_custom_dialog/flutter_custom_dialog.dart';
 class DialogView {
   static YYDialog showNoticeView(String noticeMsg,
       {IconData icon = Icons.check_circle_outline,
-      int dissmissMilliseconds = 0}) {
+      int dissmissMilliseconds = 0,double width = 160}) {
     var notice = YYDialog().build()
       ..width = 160
       ..height = 110
