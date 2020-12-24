@@ -53,7 +53,6 @@ class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
         curMusicId = curMusic?.id ?? "";
         curMusicImg = event.music?.img_url ?? "";
         //进度置空
-        print("212");
         curTime = Duration.zero;
         totalTime = event.totalTime;
       });

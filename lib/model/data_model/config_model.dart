@@ -17,8 +17,7 @@ class ConfigModel extends Object {
     MusicSource.tencent,
     MusicSource.xiami,
     MusicSource.migu,
-    MusicSource.kugou,
-    MusicSource.bilibili
+    MusicSource.kugou
   ];
 
   ConfigModel(this.colorMode, this.isReplaceCurList, this.musicSourcSeq);
