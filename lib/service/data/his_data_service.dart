@@ -82,7 +82,7 @@ class HisDataService {
     var newSheet = new SheetModel.fromJson(sheet.toJson());
     newSheet.tracks = List<MusicModel>.empty();
 
-    //深拷贝对象
+    //加入歌单 先新建变量进行操作
     await read();
     var newSheetHis = new List<SheetModel>();
     newSheetHis.add(sheet);
@@ -92,6 +92,9 @@ class HisDataService {
       }
       newSheetHis.add(item);
     }
+
+    //前20个
+    if (newSheetHis.length > 20) newSheetHis = newSheetHis.sublist(0, 19);
 
     //对象赋值
     playSheetHis = newSheetHis;
