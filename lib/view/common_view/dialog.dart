@@ -69,7 +69,7 @@ class DialogView {
         alignment: Alignment.center,
         text: text,
         color: theme.textTheme.bodyText1.color,
-        fontSize: 13.0,
+        fontSize: 15.0,
         fontWeight: FontWeight.w400,
       )
       ..divider(color: Theme.of(dialog.context).dividerColor)
@@ -80,14 +80,14 @@ class DialogView {
         text1: tab1Text,
         color1: theme.primaryColor,
         fontSize1: 14.0,
-        fontWeight1: FontWeight.bold,
+        fontWeight1: FontWeight.w500,
         onTap1: () {
           onTap1?.call();
         },
         text2: tab2Text,
         color2: theme.primaryColor,
         fontSize2: 14.0,
-        fontWeight2: FontWeight.w400,
+        fontWeight2: FontWeight.w500,
         onTap2: () {
           onTap2?.call();
         },
