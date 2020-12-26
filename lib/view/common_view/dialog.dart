@@ -6,8 +6,10 @@ import 'package:flutter_custom_dialog/flutter_custom_dialog.dart';
 class DialogView {
   static YYDialog showNoticeView(String noticeMsg,
       {IconData icon = Icons.check_circle_outline,
-      int dissmissMilliseconds = 0,double width = 160}) {
-    var notice = YYDialog().build()
+      int dissmissMilliseconds = 0,
+      double width = 160,
+      BuildContext context}) {
+    var notice = YYDialog().build(context)
       ..width = width
       ..height = 100
       ..borderRadius = 10.0
@@ -56,7 +58,8 @@ class DialogView {
 
   //构造对话框
   static YYDialog showDialogView(String text, String tab1Text, String tab2Text,
-      VoidCallback onTap1, VoidCallback onTap2,{double width = 200}) {
+      VoidCallback onTap1, VoidCallback onTap2,
+      {double width = 200}) {
     var dialog = YYDialog().build()
       ..width = width
       ..borderRadius = 10.0;
@@ -76,7 +79,6 @@ class DialogView {
       ..doubleButton(
         gravity: Gravity.center,
         withDivider: true,
-
         text1: tab1Text,
         color1: theme.primaryColor,
         fontSize1: 14.0,
@@ -92,8 +94,7 @@ class DialogView {
           onTap2?.call();
         },
       )
-      ..backgroundColor =
-          Theme.of(dialog.context).scaffoldBackgroundColor
+      ..backgroundColor = Theme.of(dialog.context).scaffoldBackgroundColor
       ..show();
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_dialog/flutter_custom_dialog.dart';
 import 'package:whisper/model/music_model.dart';
@@ -116,7 +118,7 @@ class _IndexState extends State<MainTab> with TickerProviderStateMixin {
             tooltip: '添加我的歌单',
             onPressed: () {
               //弹出添加歌单界面
-              addSheet(context, _addSheetCallback);
+              _addSheet(context, _addSheetCallback);
             })
       ];
     }
@@ -174,7 +176,7 @@ class _IndexState extends State<MainTab> with TickerProviderStateMixin {
   }
 
   //添加歌单弹窗
-  YYDialog addSheet(
+  YYDialog _addSheet(
       BuildContext context, Function(String, MusicSource) callback) {
     var theme = Theme.of(context);
     var url = '';
@@ -224,8 +226,6 @@ class _IndexState extends State<MainTab> with TickerProviderStateMixin {
   Future<void> _addSheetCallback(url, source) async {
     //参数错误
     if (url == null || url == '' || source == MusicSource.unknow) {
-      DialogView.showNoticeView('填写正确的歌单地址并选择歌单类型',
-          icon: Icons.error_outline, dissmissMilliseconds: 1000);
       return;
     }
     try {
@@ -239,9 +239,15 @@ class _IndexState extends State<MainTab> with TickerProviderStateMixin {
       Navigator.push(context, MaterialPageRoute(builder: (context) {
         return SheetInfoView(mySheetInfo);
       }));
+
+      DialogView.showNoticeView('已添加至我的歌单',
+          dissmissMilliseconds: 1000,
+          context: context);
     } catch (exp) {
       DialogView.showNoticeView('歌单信息获取失败',
-          icon: Icons.error_outline, dissmissMilliseconds: 1000);
+          icon: Icons.error_outline,
+          dissmissMilliseconds: 1000,
+          context: context);
     }
   }
 }
