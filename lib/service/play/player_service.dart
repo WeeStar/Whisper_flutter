@@ -19,6 +19,8 @@ class PlayerService {
   //播放器
   static AudioPlayer audioPlayer;
   static bool isPlaying = false;
+  static bool isLoading = false;
+  static Timer _timer;
 
   //平台
   static TargetPlatform platform;
@@ -31,7 +33,7 @@ class PlayerService {
   static StreamSubscription _onPlayerCommand;
 
   //初始化
-  static build (TargetPlatform _platform) async{
+  static build(TargetPlatform _platform) async {
     platform = _platform;
     curMusic = CurPlayDataService.curPlay.curMusic;
   }
@@ -44,11 +46,17 @@ class PlayerService {
 
   //播放
   static Future<void> play({MusicModel music, SheetModel sheet}) async {
+    audioPlayer?.pause();
+
     //直接恢复播放的 尝试恢复
     if (music == null && sheet == null && audioPlayer != null) {
       await audioPlayer.resume();
       return;
     }
+
+    //开关阻塞
+    if (isLoading) return;
+    _timer?.cancel();
 
     //获取要播放的音乐
     var playMusic = CurListService.play(music: music, sheet: sheet);
@@ -65,9 +73,15 @@ class PlayerService {
 
   //上一首
   static pre() {
+    audioPlayer?.pause();
+
     //获取要播放的音乐
     var playMusic = CurListService.pre();
     if (playMusic == null) return;
+
+    //开关阻塞
+    if (isLoading) return;
+    _timer?.cancel();
 
     //播放
     _playService(playMusic);
@@ -75,9 +89,15 @@ class PlayerService {
 
   //下一首
   static next([bool isForce = false]) {
+    audioPlayer?.pause();
+
     //获取要播放的音乐
     var playMusic = CurListService.next();
     if (playMusic == null) return;
+
+    //开关阻塞
+    if (isLoading) return;
+    _timer?.cancel();
 
     //播放
     _playService(playMusic);
@@ -96,31 +116,38 @@ class PlayerService {
       await audioPlayer.resume();
       return;
     }
+
     //非重复 对curMusic赋值
     curMusic = playMusic;
 
-    //释放旧播放器
-    await _releasePlayer();
+    _timer = Timer(Duration(milliseconds: 400), () async {
+      isLoading = true;
 
-    try {
-      //获取播放地址
-      var playUrl = await _getPlayUrl(playMusic);
-      if (playUrl == "") throw Exception("地址获取失败");
+      //释放旧播放器
+      await _releasePlayer();
 
-      //初始化播放器
-      var initRes = await _initPlayer(playUrl);
-      if (!initRes) throw Exception("初始化播放器失败");
+      try {
+        //获取播放地址
+        var playUrl = await _getPlayUrl(playMusic);
+        if (playUrl == "") throw Exception("地址获取失败");
 
-      //绑定播放器事件
-      _bindPlayerEvent();
+        //初始化播放器
+        var initRes = await _initPlayer(playUrl);
+        if (!initRes) throw Exception("初始化播放器失败");
 
-      //播放
-      audioPlayer.resume();
-    } catch (exp) {
-      //初始化失败 跳下一首
-      print(exp);
-      _errNext();
-    }
+        //绑定播放器事件
+        _bindPlayerEvent();
+
+        //播放
+        await audioPlayer.resume();
+        isLoading = false;
+      } catch (exp) {
+        //初始化失败 跳下一首
+        print(exp);
+        isLoading = false;
+        _errNext();
+      }
+    });
   }
 
   // 私有 初始化播放器

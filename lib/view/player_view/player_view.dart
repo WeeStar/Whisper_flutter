@@ -156,7 +156,9 @@ class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
     var progNum = new Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(curTime.toString().substring(2, 7),
+        Text((totalTime == null || totalTime.inMilliseconds == 0)
+              ? Duration.zero.toString().substring(2, 7)
+              : curTime.toString().substring(2, 7),
             style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w400,

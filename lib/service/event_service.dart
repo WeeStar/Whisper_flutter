@@ -27,7 +27,7 @@ class SheetHisRefreshEvent {
 class CurMusicRefreshEvent {
   MusicModel music;
   Duration totalTime;
-  CurMusicRefreshEvent(this.music,this.totalTime);
+  CurMusicRefreshEvent(this.music, this.totalTime);
 }
 
 //播放时长刷新
