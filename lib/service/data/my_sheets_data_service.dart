@@ -6,6 +6,8 @@ import 'package:whisper/model/music_model.dart';
 import 'package:whisper/model/sheet_model.dart';
 import 'package:whisper/service/data/his_data_service.dart';
 
+import '../event_service.dart';
+
 ///我的歌单配置读写
 class MySheetsDataService {
   static List<SheetModel> mySheets;
@@ -41,10 +43,11 @@ class MySheetsDataService {
   }
 
   ///添加我的歌单
-  static Future<SheetModel> addMySheet(SheetModel sheet) async {
-    if (sheet == null) {
-      return null;
-    }
+  static Future<SheetModel> addMySheet(SheetModel inSheet) async {
+    if (inSheet == null) return null;
+
+    //深copy歌单
+    var sheet = SheetModel.fromJson(inSheet.toJson());
     sheet.is_my = true;
 
     //检查相同歌单
@@ -56,6 +59,7 @@ class MySheetsDataService {
       //不存在相同歌单 直接新增
       mySheets.insert(0, sheet);
       await _write();
+      eventBus.fire(MySheetsRefreshEvent("add"));
       return sheet;
     } else {
       //存在相同歌单 歌曲merge
@@ -65,15 +69,14 @@ class MySheetsDataService {
         }
       }
       await _write();
+      eventBus.fire(MySheetsRefreshEvent("add"));
       return mySheet;
     }
   }
 
   ///更新我的歌单
   static Future<bool> updateMySheet(SheetModel sheet) async {
-    if (sheet == null) {
-      return false;
-    }
+    if (sheet == null) return false;
 
     //校验
     await read();
@@ -91,6 +94,7 @@ class MySheetsDataService {
 
     //保存数据
     await _write();
+    eventBus.fire(MySheetsRefreshEvent("update"));
     return true;
   }
 
@@ -111,6 +115,7 @@ class MySheetsDataService {
 
     //保存数0
     await _write();
+    eventBus.fire(MySheetsRefreshEvent("del"));
     return true;
   }
 

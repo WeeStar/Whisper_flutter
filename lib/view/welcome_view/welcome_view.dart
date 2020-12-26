@@ -2,6 +2,8 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:whisper/service/data/cur_play_data_service.dart';
+import 'package:whisper/service/data/his_data_service.dart';
+import 'package:whisper/service/data/my_sheets_data_service.dart';
 import 'package:whisper/service/http/api_service.dart';
 import 'package:whisper/service/play/curlist_service.dart';
 import 'package:whisper/service/play/player_service.dart';
@@ -67,27 +69,8 @@ class _WelcomeViewState extends State<WelcomeView>
   }
 
   bool _isReqestOver = false;
-  _getRecom() {
-    //请求推荐歌单
-    ApiService.getRecomSheets().then((value) {
-      _isReqestOver = true;
-
-      //获取最近播放
-      CurPlayDataService.read().then((cur) {
-        //跳转
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) {
-          return MainTab(value);
-        }), (route) => route == null);
-
-        //初始化播放服务
-        var platform =  Theme.of(context).platform;
-        PlayerService.build(platform);
-        CurListService.build();
-      });
-    });
-
-    // 延时5s执行
+  _getRecom() async {
+    // 延时5s执行检测
     Future.delayed(Duration(seconds: 5), () {
       var times = 0;
 
@@ -107,5 +90,25 @@ class _WelcomeViewState extends State<WelcomeView>
         }
       }
     });
+
+    //请求推荐歌单
+    var recomSheets = await ApiService.getRecomSheets();
+    _isReqestOver = true;
+
+    //获取最近播放
+    await CurPlayDataService.read();
+
+    //初始化播放服务
+    var platform = Theme.of(context).platform;
+    PlayerService.build(platform);
+    CurListService.build();
+
+    //打开主页
+    await HisDataService.read();
+    await MySheetsDataService.read();
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) {
+      return MainTab(recomSheets);
+    }), (route) => route == null);
   }
 }

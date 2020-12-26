@@ -43,7 +43,7 @@ class _SheetInfoViewState extends State<SheetInfoView>
     super.initState();
 
     //网络歌单 请求信息
-    if ((_sheetInfo.tracks?.length ?? 0) == 0 && _sheetInfo.is_my != null) {
+    if ((_sheetInfo.tracks?.length ?? 0) == 0 && !_sheetInfo.is_my) {
       _isLoadingData = true;
       ApiService.getSheetInfo(_sheetInfo.sheet_source, _sheetInfo.id)
           .then((sheetRes) {

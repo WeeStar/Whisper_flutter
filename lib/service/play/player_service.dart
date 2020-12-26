@@ -31,7 +31,7 @@ class PlayerService {
   static StreamSubscription _onPlayerCommand;
 
   //初始化
-  static build(TargetPlatform _platform) {
+  static build (TargetPlatform _platform) async{
     platform = _platform;
     curMusic = CurPlayDataService.curPlay.curMusic;
   }

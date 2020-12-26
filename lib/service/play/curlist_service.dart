@@ -17,7 +17,7 @@ class CurListService {
   static RoundModeEnum roundMode;
 
   //初始化
-  static build() {
+  static build() async{
     curMusic = CurPlayDataService.curPlay.curMusic;
     curList = CurPlayDataService.curPlay.curList;
     roundMode = CurPlayDataService.curPlay.roundMode;

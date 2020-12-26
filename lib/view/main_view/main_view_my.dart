@@ -23,19 +23,9 @@ class _MainViewMyState extends State<MainViewMy> with TickerProviderStateMixin {
   void initState() {
     super.initState();
 
-    //获取歌单历史
-    var f1 = HisDataService.read();
-    //获取收藏歌单 我的歌单
-    var f2 = MySheetsDataService.read();
-
-    //等待全部完成设置值
-    Future.wait<void>([f1, f2]).then((value) {
-      setState(() {
-        _hisSheets = HisDataService.playSheetHis;
-        _favSheets = MySheetsDataService.favSheets;
-        _mySheets = MySheetsDataService.mySheets;
-      });
-    });
+    _hisSheets = HisDataService.playSheetHis;
+    _favSheets = MySheetsDataService.favSheets;
+    _mySheets = MySheetsDataService.mySheets;
 
     _controller = TabController(
         initialIndex: _mySheets.length > 0 ? 0 : 1, length: 2, vsync: this);
@@ -44,6 +34,13 @@ class _MainViewMyState extends State<MainViewMy> with TickerProviderStateMixin {
     eventBus.on<SheetHisRefreshEvent>().listen((event) {
       setState(() {
         _hisSheets = HisDataService.playSheetHis;
+      });
+    });
+
+    //监听我的歌单刷新
+    eventBus.on<MySheetsRefreshEvent>().listen((event) {
+      setState(() {
+        _mySheets = MySheetsDataService.mySheets;
       });
     });
   }

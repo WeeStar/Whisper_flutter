@@ -6,10 +6,10 @@ import 'package:whisper/service/http/http_service.dart';
 // 业务接口
 class ApiService {
   // 获取歌单信息
-  static Future<SheetModel> getSheetInfo(
-      MusicSource source, String sheetId) async {
+  static Future<SheetModel> getSheetInfo(MusicSource source, String sheetId,
+      {bool showNotice = true}) async {
     var resData = await HttpService.get(
-        "music", "sheet_info", source, {"sheet_id": sheetId});
+        "music", "sheet_info", source, {"sheet_id": sheetId}, showNotice);
     if (resData == null) {
       return null;
     }

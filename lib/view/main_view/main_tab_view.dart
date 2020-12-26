@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_custom_dialog/flutter_custom_dialog.dart';
+import 'package:whisper/model/music_model.dart';
 import 'package:whisper/service/data/config_data_service.dart';
 import 'package:whisper/service/data/his_data_service.dart';
+import 'package:whisper/service/data/my_sheets_data_service.dart';
 import 'package:whisper/service/http/api_service.dart';
+import 'package:whisper/view/common_view/dialog.dart';
 import 'package:whisper/view/main_view/main_view_setting.dart';
 import 'package:whisper/view/main_view/main_view_my.dart';
 import 'package:whisper/view/main_view/main_view_recom.dart';
@@ -9,6 +13,8 @@ import 'package:whisper/view/main_view/nav_icon_view.dart';
 import 'package:whisper/view/player_view/player_ring.dart';
 import 'package:whisper/view/player_view/player_view.dart';
 import 'package:whisper/view/search_view/search_view.dart';
+import 'package:whisper/view/sheet_view/add/sheet_add_view.dart';
+import 'package:whisper/view/sheet_view/info/sheet_info_view.dart';
 
 //导航tab
 class MainTab extends StatefulWidget {
@@ -106,7 +112,12 @@ class _IndexState extends State<MainTab> with TickerProviderStateMixin {
     } else if (_currentIndex == 1) {
       actions = <Widget>[
         new IconButton(
-            icon: new Icon(Icons.add), tooltip: '添加我的歌单', onPressed: () {})
+            icon: new Icon(Icons.add),
+            tooltip: '添加我的歌单',
+            onPressed: () {
+              //弹出添加歌单界面
+              addSheet(context, _addSheetCallback);
+            })
       ];
     }
 
@@ -160,5 +171,77 @@ class _IndexState extends State<MainTab> with TickerProviderStateMixin {
         appBar: _buildAppBar(),
         body: _body,
         bottomNavigationBar: bottomNavigationBar);
+  }
+
+  //添加歌单弹窗
+  YYDialog addSheet(
+      BuildContext context, Function(String, MusicSource) callback) {
+    var theme = Theme.of(context);
+    var url = '';
+    var source = MusicSource.unknow;
+
+    return YYDialog().build(context)
+      ..width = 240
+      ..borderRadius = 10.0
+      ..gravity = Gravity.center
+      ..text(
+        padding: EdgeInsets.fromLTRB(20, 20, 0, 0),
+        alignment: Alignment.topLeft,
+        text: "添加歌单",
+        color: theme.textTheme.bodyText1.color,
+        fontSize: 14.0,
+        fontWeight: FontWeight.w500,
+      )
+
+      //来源选择
+      ..widget(
+          SheetAddView((text) => {url = text}, (value) => {source = value}))
+
+      //确定取消按钮
+      ..divider(color: theme.dividerColor)
+      ..doubleButton(
+        padding: EdgeInsets.only(top: 10.0),
+        gravity: Gravity.center,
+        withDivider: true,
+        text1: "取消",
+        color1: theme.primaryColor,
+        fontSize1: 14.0,
+        fontWeight1: FontWeight.w500,
+        onTap1: () {},
+        text2: "确定",
+        color2: theme.primaryColor,
+        fontSize2: 14.0,
+        fontWeight2: FontWeight.w500,
+        onTap2: () {
+          callback.call(url, source);
+        },
+      )
+      ..backgroundColor = theme.scaffoldBackgroundColor
+      ..show();
+  }
+
+  //添加歌单回调
+  Future<void> _addSheetCallback(url, source) async {
+    //参数错误
+    if (url == null || url == '' || source == MusicSource.unknow) {
+      DialogView.showNoticeView('填写正确的歌单地址并选择歌单类型',
+          icon: Icons.error_outline, dissmissMilliseconds: 1000);
+      return;
+    }
+    try {
+      //请求歌单信息
+      var sheetInfo =
+          await ApiService.getSheetInfo(source, url, showNotice: false);
+      //添加到我的歌单
+      var mySheetInfo = await MySheetsDataService.addMySheet(sheetInfo);
+      sheetInfo = null;
+      //打开歌单详情
+      Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return SheetInfoView(mySheetInfo);
+      }));
+    } catch (exp) {
+      DialogView.showNoticeView('歌单信息获取失败',
+          icon: Icons.error_outline, dissmissMilliseconds: 1000);
+    }
   }
 }
