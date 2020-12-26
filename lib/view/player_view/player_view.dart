@@ -29,6 +29,7 @@ class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
   bool isPlaying;
 
   double width;
+  double height;
 
   _PlayerViewState() {
     curMusic = PlayerService.curMusic;
@@ -314,6 +315,7 @@ class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
+    height = MediaQuery.of(context).size.height;
 
     return Scaffold(
         body: new Column(
@@ -327,14 +329,21 @@ class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
               height: 15,
             ),
             _buildBackBar(context),
+
+            SizedBox(
+              height: height * 0.01,
+            ),
+            //封面
+            _buildCover(context),
+
+            SizedBox(
+              height: height * 0.04,
+            ),
+
+            //进度
+            _buildProgress(context),
           ],
         ),
-
-        //封面
-        _buildCover(context),
-
-        //进度
-        _buildProgress(context),
 
         //标题 副标题
         SizedBox(
