@@ -85,7 +85,7 @@ class HisDataService {
     //加入歌单 先新建变量进行操作
     await read();
     var newSheetHis = new List<SheetModel>();
-    newSheetHis.add(sheet);
+    newSheetHis.add(newSheet);
     for (var item in playSheetHis) {
       if (item.id == sheet.id) {
         continue;
