@@ -32,6 +32,7 @@ class _SheetInfoViewState extends State<SheetInfoView>
 
   bool _isFav = false; //是否收藏
   bool _isFavSaving = false; //收藏节流
+  bool _isDeleting = false; //删除节流
 
   _SheetInfoViewState(this._sheetInfo) {
     _coverImg = this._sheetInfo.cover_img_url;
@@ -78,7 +79,8 @@ class _SheetInfoViewState extends State<SheetInfoView>
         setState(() {
           _sheetInfo = mySheet;
         });
-        DialogView.showNoticeView("同步完成", dissmissMilliseconds: 1000,width: 120);
+        DialogView.showNoticeView("同步完成",
+            dissmissMilliseconds: 1000, width: 120);
       });
     });
   }
@@ -100,7 +102,8 @@ class _SheetInfoViewState extends State<SheetInfoView>
           _isFav = false;
         });
 
-        DialogView.showNoticeView("已取消", dissmissMilliseconds: 1000,width: 120);
+        DialogView.showNoticeView("已取消",
+            dissmissMilliseconds: 1000, width: 120);
       });
     } else {
       //未收藏 添加收藏
@@ -110,9 +113,28 @@ class _SheetInfoViewState extends State<SheetInfoView>
           _isFav = true;
         });
 
-        DialogView.showNoticeView("已收藏", dissmissMilliseconds: 1000,width: 120);
+        DialogView.showNoticeView("已收藏",
+            dissmissMilliseconds: 1000, width: 120);
       });
     }
+  }
+
+  void _delSheet() {
+    if (!_sheetInfo.is_my) return;
+
+    //节流
+    if (_isLoadingData || _isDeleting) return;
+    _isDeleting = true;
+
+    DialogView.showDialogView("是否删除歌单", "确定", "取消", () {
+      //删除歌单
+      MySheetsDataService.delMySheet(_sheetInfo.id);
+      //跳出
+      Navigator.pop(context);
+      _isDeleting = false;
+    }, () {
+      _isDeleting = false;
+    });
   }
 
   @override
@@ -146,9 +168,9 @@ class _SheetInfoViewState extends State<SheetInfoView>
                 actions: <Widget>[
                   _sheetInfo.is_my
                       ? new IconButton(
-                          icon: new Icon(Icons.edit),
-                          tooltip: '编辑歌单',
-                          onPressed: () {})
+                          icon: new Icon(Icons.delete),
+                          tooltip: '删除歌单',
+                          onPressed: _delSheet)
                       : new IconButton(
                           icon:
                               new Icon(_isFav ? Icons.star : Icons.star_border),

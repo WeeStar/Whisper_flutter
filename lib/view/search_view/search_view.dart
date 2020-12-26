@@ -184,7 +184,6 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
             ],
           ),
           onTap: () {
-            //十次失败 弹提示 可重试
             DialogView.showDialogView("是否清空搜索历史", "确定", "取消", () {
               if (_searchHis.length == 0) return;
               //清空搜索历史
