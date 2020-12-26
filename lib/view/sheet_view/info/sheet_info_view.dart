@@ -44,22 +44,28 @@ class _SheetInfoViewState extends State<SheetInfoView>
     super.initState();
 
     //网络歌单 请求信息
-    if ((_sheetInfo.tracks?.length ?? 0) == 0 && !_sheetInfo.is_my) {
+    if (!_sheetInfo.is_my && (_sheetInfo.tracks?.length ?? 0) == 0) {
       _isLoadingData = true;
       ApiService.getSheetInfo(_sheetInfo.sheet_source, _sheetInfo.id)
           .then((sheetRes) {
-        MySheetsDataService.isFavSheets(this._sheetInfo.id).then((value) {
-          setState(() {
-            _isLoadingData = false;
-            _sheetInfo = sheetRes;
-            _isFav = value;
-          });
+        setState(() {
+          _isLoadingData = false;
+          _sheetInfo = sheetRes;
         });
       }).catchError((error) {
         return;
       });
     } else {
       _isLoadingData = false;
+    }
+
+    //判断是否我的歌单
+    if (!_sheetInfo.is_my) {
+      MySheetsDataService.isFavSheets(this._sheetInfo.id).then((value) {
+        setState(() {
+          _isFav = value;
+        });
+      });
     }
   }
 
