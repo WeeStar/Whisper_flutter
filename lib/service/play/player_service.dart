@@ -46,8 +46,6 @@ class PlayerService {
 
   //播放
   static Future<void> play({MusicModel music, SheetModel sheet}) async {
-    audioPlayer?.pause();
-
     //直接恢复播放的 尝试恢复
     if (music == null && sheet == null && audioPlayer != null) {
       await audioPlayer.resume();
@@ -56,6 +54,7 @@ class PlayerService {
 
     //开关阻塞
     if (isLoading) return;
+    audioPlayer?.pause();
     _timer?.cancel();
 
     //获取要播放的音乐
@@ -73,15 +72,14 @@ class PlayerService {
 
   //上一首
   static pre() {
+    //开关阻塞
+    if (isLoading) return;
     audioPlayer?.pause();
+    _timer?.cancel();
 
     //获取要播放的音乐
     var playMusic = CurListService.pre();
     if (playMusic == null) return;
-
-    //开关阻塞
-    if (isLoading) return;
-    _timer?.cancel();
 
     //播放
     _playService(playMusic);
@@ -89,15 +87,14 @@ class PlayerService {
 
   //下一首
   static next([bool isForce = false]) {
+    //开关阻塞
+    if (isLoading) return;
     audioPlayer?.pause();
+    _timer?.cancel();
 
     //获取要播放的音乐
     var playMusic = CurListService.next();
     if (playMusic == null) return;
-
-    //开关阻塞
-    if (isLoading) return;
-    _timer?.cancel();
 
     //播放
     _playService(playMusic);
