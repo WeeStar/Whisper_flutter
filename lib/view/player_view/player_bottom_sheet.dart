@@ -74,6 +74,7 @@ class _PlayerBottomSheetState extends State<PlayerBottomSheet>
               curList[idx - 1],
               musicIdx: idx,
               isPlaying: curList[idx - 1].id == curMusicId,
+              showMore: false,
             ),
             onTap: () {
               //无效歌曲跳出

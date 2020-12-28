@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:whisper/model/music_model.dart';
+import 'package:whisper/view/common_view/common_view.dart';
 
 ///单个音乐 搜索结果
 class MusicSearchItemView extends StatelessWidget {
@@ -101,6 +102,32 @@ class MusicSearchItemView extends StatelessWidget {
                 )
               ],
             ),
+          ),
+          //更多 点击展示歌曲菜单
+          InkWell(
+            child: Container(
+              alignment: Alignment.center,
+              width: 30,
+              margin: EdgeInsets.only(left: 5),
+              child: Icon(Icons.more_vert,
+                  size: 20, color: Theme.of(context).disabledColor),
+            ),
+            onTap: () {
+              showModalBottomSheet(
+                elevation: 20,
+                context: context,
+                builder: (BuildContext context) {
+                  return CommonView.buildMenuSheetView(
+                      context,
+                      musicInfo.title + " - " + musicInfo.artist,
+                      <MenuSheetItemModel>[
+                        MenuSheetItemModel(
+                            "下一首播放", Icons.play_circle_outline, () {}),
+                        MenuSheetItemModel("添加到歌单", Icons.playlist_add, () {}),
+                      ]);
+                },
+              );
+            },
           ),
         ],
       ),

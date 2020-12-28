@@ -1,27 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:whisper/model/music_model.dart';
+import 'package:whisper/view/common_view/common_view.dart';
 
 ///单个音乐
-class MusicItemView extends StatefulWidget {
+class MusicItemView extends StatelessWidget {
   final MusicModel musicInfo;
   final int musicIdx;
   final bool isPlaying;
-  final delCallBack;
+  final bool showMore;
+  final Function delCallBack;
 
   MusicItemView(this.musicInfo,
       {Key key,
       this.musicIdx,
       this.isPlaying = false,
-      this.delCallBack })
+      this.showMore = true,
+      this.delCallBack})
       : super(key: key);
 
-  @override
-  _MusicItemViewState createState() => _MusicItemViewState();
-}
-
-class _MusicItemViewState extends State<MusicItemView>
-    with SingleTickerProviderStateMixin {
-  @override
   Widget build(BuildContext context) {
     //左侧序号
     var idx = Container(
@@ -29,10 +25,10 @@ class _MusicItemViewState extends State<MusicItemView>
       width: 32,
       margin: EdgeInsets.only(right: 8),
       child: Text(
-        widget.musicIdx.toString(),
+        this.musicIdx.toString(),
         maxLines: 1,
         style: new TextStyle(
-            fontSize: widget.musicIdx.toString().length > 2 ? 12 : 16,
+            fontSize: this.musicIdx.toString().length > 2 ? 12 : 16,
             fontWeight: FontWeight.w400,
             color: Theme.of(context).disabledColor),
       ),
@@ -40,15 +36,15 @@ class _MusicItemViewState extends State<MusicItemView>
 
     //标题
     var title = Expanded(
-      child: Text(widget.musicInfo.title,
+      child: Text(this.musicInfo.title,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: new TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w400,
-              color: widget.isPlaying
+              color: this.isPlaying
                   ? Theme.of(context).primaryColor
-                  : (widget.musicInfo.isPlayable()
+                  : (this.musicInfo.isPlayable()
                       ? Theme.of(context).textTheme.bodyText1.color
                       : Theme.of(context).disabledColor))),
     );
@@ -76,7 +72,7 @@ class _MusicItemViewState extends State<MusicItemView>
 
     //来源图标
     var sourceImg = Image.asset(
-      "images/icon/${widget.musicInfo.source.name}.png",
+      "images/icon/${this.musicInfo.source.name}.png",
       fit: BoxFit.fill,
       width: 14,
       height: 14,
@@ -84,7 +80,7 @@ class _MusicItemViewState extends State<MusicItemView>
 
     //描述
     var desc = Expanded(
-        child: Text(widget.musicInfo.getDesc(),
+        child: Text(this.musicInfo.getDesc(),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: new TextStyle(
@@ -108,7 +104,7 @@ class _MusicItemViewState extends State<MusicItemView>
                 Row(
                   children: [
                     //失效标记
-                    if (!widget.musicInfo.isPlayable()) unPlay,
+                    if (!this.musicInfo.isPlayable()) unPlay,
                     //主标题
                     title
                   ],
@@ -134,9 +130,35 @@ class _MusicItemViewState extends State<MusicItemView>
               ],
             ),
           ),
+          //更多标记
+          InkWell(
+            child: Container(
+              alignment: Alignment.center,
+              width: 30,
+              margin: EdgeInsets.only(left: 5),
+              child: Icon(Icons.more_vert,
+                  size: 20, color: Theme.of(context).disabledColor),
+            ),
+            onTap: () {
+              showModalBottomSheet(
+                elevation: 20,
+                context: context,
+                builder: (BuildContext context) {
+                  return CommonView.buildMenuSheetView(
+                      context,
+                      musicInfo.title + " - " + musicInfo.artist,
+                      <MenuSheetItemModel>[
+                        MenuSheetItemModel(
+                            "下一首播放", Icons.play_circle_outline, () {}),
+                        MenuSheetItemModel("添加到歌单", Icons.playlist_add, () {}),
+                      ]);
+                },
+              );
+            },
+          ),
 
           //删除标记
-          if (widget.delCallBack != null)
+          if (this.delCallBack != null)
             InkWell(
               child: Container(
                 alignment: Alignment.center,
@@ -146,7 +168,7 @@ class _MusicItemViewState extends State<MusicItemView>
                     size: 20, color: Theme.of(context).disabledColor),
               ),
               onTap: () {
-                widget.delCallBack();
+                this.delCallBack();
               },
             )
         ],
