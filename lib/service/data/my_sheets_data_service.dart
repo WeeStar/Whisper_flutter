@@ -145,6 +145,16 @@ class MySheetsDataService {
     return true;
   }
 
+  ///判断歌曲存在
+  static Future<bool> existMusicMySheet(String sheetId, String musicId) async {
+    var mySheet = mySheets.firstWhere((element) => element.id == sheetId,
+        orElse: () => null);
+    if (mySheet == null) {
+      return false;
+    }
+    return mySheet.tracks.any((element) => element.id == musicId);
+  }
+
   ///我的歌单删除歌曲
   static Future<bool> delMusicMySheet(String sheetId, String musicId) async {
     //校验
