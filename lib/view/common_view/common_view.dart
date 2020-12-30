@@ -53,8 +53,9 @@ class CommonView {
         color: Colors.black54,
       ),
 
-      //歌单列表部分
+      //列表部分
       Container(
+        height: 51 + 45.0 * menuItems.length,
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.only(
@@ -62,35 +63,26 @@ class CommonView {
             topRight: Radius.circular(25),
           ),
         ),
-        height: 50.0 + menuItems.length * 45,
-        child: ListView.builder(
-          itemExtent: 45,
-          scrollDirection: Axis.vertical,
-          itemBuilder: (context, idx) {
-            if (idx == 0) {
-              return SizedBox(
-                height: 50,
-              );
-            }
-            return _buildMenuSheetItem(context, menuItems[idx - 1]);
-          },
-          itemCount: menuItems.length + 1,
+        child: Column(
+          children: [
+            _buildMenuSheetHeader(context, title),
+            Divider(
+              height: 1,
+            ),
+            Container(
+              height: 45.0 * menuItems.length,
+              child: ListView.builder(
+                itemExtent: 45,
+                scrollDirection: Axis.vertical,
+                itemBuilder: (context, idx) {
+                  return _buildMenuSheetItem(context, menuItems[idx]);
+                },
+                itemCount: menuItems.length,
+              ),
+            )
+          ],
         ),
       ),
-
-      //头部
-      Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(25),
-            topRight: Radius.circular(25),
-          ),
-        ),
-        width: double.infinity,
-        height: 48,
-        child: _buildMenuSheetHeader(context, title),
-      )
     ]);
   }
 
@@ -99,7 +91,7 @@ class CommonView {
     return Column(
       children: [
         Container(
-          margin: EdgeInsets.fromLTRB(0, 6, 0, 6),
+          margin: EdgeInsets.fromLTRB(0, 4, 0, 10),
           width: 45,
           height: 4,
           decoration: BoxDecoration(
@@ -127,16 +119,19 @@ class CommonView {
               width: 25,
             ),
           ],
+        ),
+        SizedBox(
+          height: 5,
         )
       ],
     );
   }
 
+  //创建菜单项
   static Widget _buildMenuSheetItem(
       BuildContext context, MenuSheetItemModel item) {
     return InkWell(
       child: Container(
-        width: 45,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -162,7 +157,10 @@ class CommonView {
           ],
         ),
       ),
-      onTap: item.callBack,
+      onTap: () {
+        item.callBack?.call();
+        Navigator.pop(context);
+      },
     );
   }
 }
