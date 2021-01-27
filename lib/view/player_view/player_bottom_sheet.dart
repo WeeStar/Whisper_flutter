@@ -38,7 +38,7 @@ class _PlayerBottomSheetState extends State<PlayerBottomSheet>
   }
 
   //构造歌单列表
-  Widget _buildList() {
+  Widget _buildList(double totalHeight) {
     //计算初始滚动位置
     var offset = 0.0;
     if (curList.length <= 4) {
@@ -53,7 +53,7 @@ class _PlayerBottomSheetState extends State<PlayerBottomSheet>
         offset = curIdx * 54.0;
       } else {
         //倒数前4之后 滚动所有
-        offset = (curList.length * 54.0 + 48) - 300;
+        offset = (curList.length * 54.0 + 48) - totalHeight;
       }
     }
 
@@ -125,6 +125,8 @@ class _PlayerBottomSheetState extends State<PlayerBottomSheet>
 
   @override
   Widget build(BuildContext context) {
+    double totalHeight = MediaQuery.of(context).size.height * 0.5;
+
     return Stack(children: <Widget>[
       //背景头部
       Container(
@@ -142,8 +144,8 @@ class _PlayerBottomSheetState extends State<PlayerBottomSheet>
             topRight: Radius.circular(25),
           ),
         ),
-        height: 300.0,
-        child: _buildList(),
+        height: totalHeight,
+        child: _buildList(totalHeight),
       ),
 
       //头部

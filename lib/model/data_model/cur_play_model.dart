@@ -9,7 +9,7 @@ class CurPlayModel {
   var curList = List<MusicModel>();
 
   /// 当前音乐
-  MusicModel curMusic;
+  MusicModel curMusic = MusicModel.empty();
 
   /// 循环模式
   var roundMode = RoundModeEnum.listRound;

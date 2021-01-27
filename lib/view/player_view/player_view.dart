@@ -156,9 +156,10 @@ class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
     var progNum = new Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text((totalTime == null || totalTime.inMilliseconds == 0)
-              ? Duration.zero.toString().substring(2, 7)
-              : curTime.toString().substring(2, 7),
+        Text(
+            (totalTime == null || totalTime.inMilliseconds == 0)
+                ? Duration.zero.toString().substring(2, 7)
+                : curTime.toString().substring(2, 7),
             style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w400,
@@ -187,7 +188,7 @@ class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
 
   //标题
   Widget _buildTitle(BuildContext context) {
-    return Text(curMusic.title,
+    return Text(curMusic?.title ?? "暂无歌曲",
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
@@ -198,7 +199,7 @@ class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
 
   //副标题
   Widget _buildSubTitle(BuildContext context) {
-    return Text(curMusic.getDesc(),
+    return Text(curMusic?.getDesc() ?? "未知",
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
@@ -328,7 +329,7 @@ class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
         Column(
           children: [
             SizedBox(
-              height: 15,
+              height: height * 0.04,
             ),
             _buildBackBar(context),
 
@@ -368,7 +369,7 @@ class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
           children: [
             _buildButtons(context),
             SizedBox(
-              height: 15,
+              height: height * 0.08,
             ),
           ],
         ),
