@@ -321,7 +321,8 @@ class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
     height = MediaQuery.of(context).size.height;
 
     return Scaffold(
-        body: new Column(
+        body: SafeArea(
+            child: new Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -329,7 +330,7 @@ class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
         Column(
           children: [
             SizedBox(
-              height: height * 0.04,
+              height: 15,
             ),
             _buildBackBar(context),
 
@@ -374,6 +375,6 @@ class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
           ],
         ),
       ],
-    ));
+    )));
   }
 }

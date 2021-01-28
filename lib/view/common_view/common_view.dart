@@ -45,7 +45,8 @@ class CommonView {
   //创建sheet菜单组件
   static buildMenuSheetView(
       BuildContext context, String title, List<MenuSheetItemModel> menuItems) {
-    return Stack(children: <Widget>[
+    return SafeArea(
+        child: Stack(children: <Widget>[
       //背景头部
       Container(
         height: 25,
@@ -83,7 +84,7 @@ class CommonView {
           ],
         ),
       ),
-    ]);
+    ]));
   }
 
   //创建头部
