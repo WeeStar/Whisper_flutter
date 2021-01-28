@@ -25,7 +25,7 @@ class _SheetAddViewState extends State<SheetAddView>
       children: [
         Padding(
           child: _buildTextField(),
-          padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+          padding: EdgeInsets.all(15),
         ),
         _buildSelector(),
       ],

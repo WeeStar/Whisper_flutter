@@ -13,7 +13,7 @@ class DialogView {
   static YYDialog showNoticeView(String noticeMsg,
       {IconData icon = Icons.check_circle_outline,
       int dissmissMilliseconds = 0,
-      double width = 160,
+      double width = 200,
       BuildContext context}) {
     var notice = YYDialog().build(context)
       ..width = width
@@ -33,7 +33,7 @@ class DialogView {
               .withOpacity(0.7),
         )))
       ..widget(Padding(
-        padding: EdgeInsets.only(top: 5),
+        padding: EdgeInsets.only(top: 6),
         child: Text(
           noticeMsg,
           style: TextStyle(
@@ -64,27 +64,24 @@ class DialogView {
 
   //显示对话框
   static YYDialog showDialogView(String text, String tab1Text, String tab2Text,
-      VoidCallback onTap1, VoidCallback onTap2,
-      {double width = 200}) {
-    var dialog = YYDialog().build()
-      ..width = width
-      ..borderRadius = 10.0;
+      VoidCallback onTap1, VoidCallback onTap2) {
+    var dialog = YYDialog().build()..borderRadius = 5.0;
 
     var theme = Theme.of(dialog.context);
+    var width = MediaQuery.of(dialog.context).size.width;
 
     return dialog
+      ..width = width * 0.7
       ..text(
         padding: EdgeInsets.all(20.0),
-        alignment: Alignment.center,
         text: text,
         color: theme.textTheme.bodyText1.color,
-        fontSize: 15.0,
+        fontSize: 16.0,
         fontWeight: FontWeight.w400,
       )
-      ..divider(color: Theme.of(dialog.context).dividerColor)
       ..doubleButton(
-        gravity: Gravity.center,
-        withDivider: true,
+        gravity: Gravity.right,
+        padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
         text1: tab1Text,
         color1: theme.primaryColor,
         fontSize1: 15.0,
@@ -112,8 +109,8 @@ class DialogView {
     var source = MusicSource.unknow;
 
     return YYDialog().build(context)
-      ..width = width * 0.8
-      ..borderRadius = 10.0
+      ..width = width * 0.7
+      ..borderRadius = 5.0
       ..gravity = Gravity.center
       ..text(
         padding: EdgeInsets.fromLTRB(20, 20, 0, 0),
@@ -129,23 +126,21 @@ class DialogView {
           SheetAddView((text) => {url = text}, (value) => {source = value}))
 
       //确定取消按钮
-      ..divider(color: theme.dividerColor)
       ..doubleButton(
-        padding: EdgeInsets.only(top: 10.0),
-        gravity: Gravity.center,
-        withDivider: true,
-        text1: "取消",
+        gravity: Gravity.right,
+        padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
+        text1: "确定",
         color1: theme.primaryColor,
         fontSize1: 15.0,
         fontWeight1: FontWeight.w500,
-        onTap1: () {},
-        text2: "确定",
+        onTap1: () {
+          _addSheetCallback.call(context, url, source);
+        },
+        text2: "取消",
         color2: theme.primaryColor,
         fontSize2: 15.0,
         fontWeight2: FontWeight.w500,
-        onTap2: () {
-          _addSheetCallback.call(context, url, source);
-        },
+        onTap2: () {},
       )
       ..backgroundColor = theme.scaffoldBackgroundColor
       ..show();

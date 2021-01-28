@@ -77,12 +77,12 @@ class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
   //返回栏
   Widget _buildBackBar(BuildContext context) {
     return SizedBox(
-      height: 55,
+      height: 45,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           SizedBox(
-            width: 10,
+            width: 15,
           ),
           InkWell(
             child: Container(
@@ -330,7 +330,7 @@ class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
         Column(
           children: [
             SizedBox(
-              height: 15,
+              height: 10,
             ),
             _buildBackBar(context),
 

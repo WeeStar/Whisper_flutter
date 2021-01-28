@@ -43,8 +43,8 @@ class _SheetInfoViewState extends State<SheetInfoView>
   void initState() {
     super.initState();
 
-    //网络歌单 请求信息
     if (!_sheetInfo.is_my && (_sheetInfo.tracks?.length ?? 0) == 0) {
+      //网络歌单 请求信息
       _isLoadingData = true;
       ApiService.getSheetInfo(_sheetInfo.sheet_source, _sheetInfo.id)
           .then((sheetRes) {
@@ -55,6 +55,17 @@ class _SheetInfoViewState extends State<SheetInfoView>
       }).catchError((error) {
         return;
       });
+    } else if (_sheetInfo.is_my && (_sheetInfo.tracks?.length ?? 0) == 0) {
+      //本地歌单历史记录 请求信息
+      var sheetRes = MySheetsDataService.mySheets.firstWhere(
+          (element) => element.id == _sheetInfo.id,
+          orElse: () => null);
+      if (sheetRes != null) {
+        setState(() {
+          _isLoadingData = false;
+          _sheetInfo = sheetRes;
+        });
+      }
     } else {
       _isLoadingData = false;
     }
