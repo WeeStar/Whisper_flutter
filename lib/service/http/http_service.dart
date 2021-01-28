@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:whisper/model/music_model.dart';
 import 'package:whisper/service/http/response_model.dart';
-import 'package:whisper/view/common_view/dialog.dart';
+import 'package:whisper/view/common_view/dialog_view.dart';
 
 ///网络请求服务
 class HttpService {

@@ -7,7 +7,7 @@ import 'package:whisper/service/data/my_sheets_data_service.dart';
 import 'package:whisper/service/http/api_service.dart';
 import 'package:whisper/service/play/curlist_service.dart';
 import 'package:whisper/service/play/player_service.dart';
-import 'package:whisper/view/common_view/dialog.dart';
+import 'package:whisper/view/common_view/dialog_view.dart';
 import 'package:whisper/view/main_view/main_tab_view.dart';
 
 class WelcomeView extends StatefulWidget {

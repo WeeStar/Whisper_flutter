@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:whisper/service/data/config_data_service.dart';
 import 'package:whisper/service/data/his_data_service.dart';
 import 'package:whisper/service/http/api_service.dart';
-import 'package:whisper/view/common_view/dialog.dart';
+import 'package:whisper/view/common_view/dialog_view.dart';
 import 'package:whisper/view/main_view/main_view_setting.dart';
 import 'package:whisper/view/main_view/main_view_my.dart';
 import 'package:whisper/view/main_view/main_view_recom.dart';

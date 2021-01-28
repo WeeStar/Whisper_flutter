@@ -5,7 +5,7 @@ import 'package:whisper/model/music_model.dart';
 import 'package:whisper/service/data/his_data_service.dart';
 import 'package:whisper/service/http/api_service.dart';
 import 'package:whisper/service/play/player_service.dart';
-import 'package:whisper/view/common_view/dialog.dart';
+import 'package:whisper/view/common_view/dialog_view.dart';
 import 'package:whisper/view/music_view/music_search_item.dart';
 import 'package:whisper/view/search_view/search_app_bar.dart';
 import 'package:whisper/view/player_view/player_view.dart';

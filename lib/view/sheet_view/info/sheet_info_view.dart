@@ -5,7 +5,7 @@ import 'package:whisper/service/data/my_sheets_data_service.dart';
 import 'package:whisper/service/http/api_service.dart';
 import 'package:whisper/service/play/player_service.dart';
 import 'package:whisper/view/common_view/common_view.dart';
-import 'package:whisper/view/common_view/dialog.dart';
+import 'package:whisper/view/common_view/dialog_view.dart';
 import 'package:whisper/view/music_view/music_item_view.dart';
 import 'package:whisper/view/sheet_view/info/sheet_info_cover.dart';
 import 'package:whisper/view/player_view/player_view.dart';
