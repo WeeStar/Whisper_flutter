@@ -147,7 +147,7 @@ class MusicItemView extends StatelessWidget {
                 builder: (BuildContext context) {
                   return CommonView.buildMenuSheetView(
                       context,
-                      musicInfo.title + " - " + musicInfo.artist,
+                      musicInfo,
                       <MenuSheetItemModel>[
                         MenuSheetItemModel(
                             "下一首播放", Icons.play_circle_outline, () {}),

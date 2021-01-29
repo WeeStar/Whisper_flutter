@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:whisper/model/music_model.dart';
 
 class CommonView {
   //创建loading等待组件
@@ -43,8 +44,8 @@ class CommonView {
   }
 
   //创建sheet菜单组件
-  static buildMenuSheetView(
-      BuildContext context, String title, List<MenuSheetItemModel> menuItems) {
+  static buildMenuSheetView(BuildContext context, MusicModel music,
+      List<MenuSheetItemModel> menuItems) {
     return SafeArea(
         child: Stack(children: <Widget>[
       //背景头部
@@ -56,7 +57,7 @@ class CommonView {
 
       //列表部分
       Container(
-        height: 51 + 45.0 * menuItems.length,
+        height: 84 + 45.0 * menuItems.length,
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.only(
@@ -66,14 +67,14 @@ class CommonView {
         ),
         child: Column(
           children: [
-            _buildMenuSheetHeader(context, title),
+            _buildMenuSheetHeader(context, music),
             Divider(
               height: 1,
             ),
             Container(
-              height: 45.0 * menuItems.length,
+              height: 47.0 * menuItems.length,
               child: ListView.builder(
-                itemExtent: 45,
+                itemExtent: 47,
                 scrollDirection: Axis.vertical,
                 itemBuilder: (context, idx) {
                   return _buildMenuSheetItem(context, menuItems[idx]);
@@ -88,18 +89,21 @@ class CommonView {
   }
 
   //创建头部
-  static Widget _buildMenuSheetHeader(BuildContext context, String title) {
+  static Widget _buildMenuSheetHeader(BuildContext context, MusicModel music) {
     return Column(
       children: [
+        //拖动提示
         Container(
-          margin: EdgeInsets.fromLTRB(0, 4, 0, 10),
-          width: 45,
-          height: 4,
+          margin: EdgeInsets.fromLTRB(0, 8, 0, 10),
+          width: 60,
+          height: 5,
           decoration: BoxDecoration(
             color: Theme.of(context).disabledColor,
-            borderRadius: BorderRadius.all(Radius.circular(4.0)),
+            borderRadius: BorderRadius.all(Radius.circular(5.0)),
           ),
         ),
+
+        //标题行
         Row(
           textBaseline: TextBaseline.ideographic,
           mainAxisAlignment: MainAxisAlignment.start,
@@ -109,20 +113,57 @@ class CommonView {
               width: 25,
             ),
             Expanded(
-                child: Text(title,
+                child: Text(music.title,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
                         color: Theme.of(context).textTheme.bodyText1.color))),
             SizedBox(
               width: 25,
             ),
           ],
         ),
+
         SizedBox(
-          height: 5,
+          height: 3,
+        ),
+
+        //副标题行
+        Row(
+          textBaseline: TextBaseline.ideographic,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.baseline,
+          children: [
+            SizedBox(
+              width: 25,
+            ),
+            Image.asset(
+              "images/icon/${music.source.name}.png",
+              fit: BoxFit.fill,
+              width: 14,
+              height: 14,
+            ),
+            SizedBox(
+              width: 5,
+            ),
+            Expanded(
+                child: Text(music.getDesc(),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: new TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        color: Theme.of(context).disabledColor))),
+            SizedBox(
+              width: 25,
+            ),
+          ],
+        ),
+        
+        SizedBox(
+          height: 8,
         )
       ],
     );
@@ -135,23 +176,28 @@ class CommonView {
       child: Container(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(
               width: 20,
             ),
+
+            //图标
             Container(
               child: Icon(item.icon,
-                  size: 30, color: Theme.of(context).disabledColor),
+                  size: 25, color: Theme.of(context).textTheme.bodyText1.color),
               alignment: Alignment.center,
               width: 40,
             ),
             SizedBox(
-              width: 10,
+              width: 5,
             ),
+
+            //功能文字
             Text(
               item.title,
               style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 17,
                   fontWeight: FontWeight.w400,
                   color: Theme.of(context).textTheme.bodyText1.color),
             )
@@ -159,8 +205,8 @@ class CommonView {
         ),
       ),
       onTap: () {
-        item.callBack?.call();
         Navigator.pop(context);
+        item.callBack?.call();
       },
     );
   }
