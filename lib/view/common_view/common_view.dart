@@ -57,7 +57,7 @@ class CommonView {
 
       //列表部分
       Container(
-        height: 80 + 45.0 * menuItems.length,
+        height: 80 + 47.0 * menuItems.length,
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.only(
@@ -92,14 +92,13 @@ class CommonView {
   static Widget _buildMenuSheetHeader(BuildContext context, MusicModel music) {
     return Column(
       children: [
-        //拖动提示
         Container(
-          margin: EdgeInsets.fromLTRB(0, 8, 0, 8),
-          width: 60,
-          height: 5,
+          margin: EdgeInsets.fromLTRB(0, 6, 0, 6),
+          width: 45,
+          height: 4,
           decoration: BoxDecoration(
             color: Theme.of(context).disabledColor,
-            borderRadius: BorderRadius.all(Radius.circular(5.0)),
+            borderRadius: BorderRadius.all(Radius.circular(4.0)),
           ),
         ),
 
@@ -197,7 +196,7 @@ class CommonView {
             Text(
               item.title,
               style: TextStyle(
-                  fontSize: 17,
+                  fontSize: 16,
                   fontWeight: FontWeight.w400,
                   color: Theme.of(context).textTheme.bodyText1.color),
             )
