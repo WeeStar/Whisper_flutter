@@ -57,7 +57,7 @@ class CommonView {
 
       //列表部分
       Container(
-        height: 84 + 45.0 * menuItems.length,
+        height: 80 + 45.0 * menuItems.length,
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.only(
@@ -94,7 +94,7 @@ class CommonView {
       children: [
         //拖动提示
         Container(
-          margin: EdgeInsets.fromLTRB(0, 8, 0, 10),
+          margin: EdgeInsets.fromLTRB(0, 8, 0, 8),
           width: 60,
           height: 5,
           decoration: BoxDecoration(
@@ -134,7 +134,7 @@ class CommonView {
         Row(
           textBaseline: TextBaseline.ideographic,
           mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.baseline,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(
               width: 25,
@@ -163,7 +163,7 @@ class CommonView {
         ),
         
         SizedBox(
-          height: 8,
+          height: 10,
         )
       ],
     );

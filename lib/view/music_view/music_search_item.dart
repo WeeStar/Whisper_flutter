@@ -114,25 +114,24 @@ class MusicSearchItemView extends StatelessWidget {
                   size: 20, color: Theme.of(context).disabledColor),
             ),
             onTap: () {
+              if (!musicInfo.isPlayable()) return;
               showModalBottomSheet(
                 elevation: 20,
                 context: context,
                 builder: (BuildContext context) {
                   return CommonView.buildMenuSheetView(
-                      context,
-                      musicInfo,
-                      <MenuSheetItemModel>[
-                        MenuSheetItemModel(
-                            "下一首播放", Icons.play_circle_outline, () {}),
-                        MenuSheetItemModel("添加到歌单", Icons.playlist_add, () {
-                          showModalBottomSheet(
-                              elevation: 20,
-                              context: context,
-                              builder: (_) {
-                                return MusicAddView(musicInfo);
-                              });
-                        }),
-                      ]);
+                      context, musicInfo, <MenuSheetItemModel>[
+                    MenuSheetItemModel(
+                        "下一首播放", Icons.play_circle_outline, () {}),
+                    MenuSheetItemModel("添加到歌单", Icons.playlist_add, () {
+                      showModalBottomSheet(
+                          elevation: 20,
+                          context: context,
+                          builder: (_) {
+                            return MusicAddView(musicInfo);
+                          });
+                    }),
+                  ]);
                 },
               );
             },
