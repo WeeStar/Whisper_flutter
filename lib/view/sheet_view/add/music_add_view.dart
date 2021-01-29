@@ -9,10 +9,13 @@ import 'package:whisper/view/common_view/dialog_view.dart';
 class MusicAddView extends StatelessWidget {
   final List<SheetModel> sheetList = MySheetsDataService.mySheets;
   final MusicModel music;
+  final Function(bool res) callback;
 
-  MusicAddView(this.music);
+  MusicAddView(this.music, this.callback);
 
   Widget build(BuildContext context) {
+    double totalHeight = MediaQuery.of(context).size.height * 0.5;
+
     return Stack(children: <Widget>[
       //背景头部
       Container(
@@ -21,9 +24,9 @@ class MusicAddView extends StatelessWidget {
         color: Colors.black54,
       ),
 
-      //列表部分
+      //前景
       Container(
-        height: 500,
+        height: totalHeight,
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.only(
@@ -33,35 +36,11 @@ class MusicAddView extends StatelessWidget {
         ),
         child: Column(
           children: [
+            //头部
             _buildHeader(context),
-            Divider(
-              height: 1,
-            ),
-            Container(
-              height: 450,
-              child: ListView.builder(
-                itemBuilder: (context, idx) {
-                  return InkWell(
-                    child: _buildItem(context, sheetList[idx]),
-                    onTap: () async {
-                      var exist = await MySheetsDataService.existMusicMySheet(
-                          sheetList[idx].id, music.id);
-                      if (exist) {
-                        DialogView.showNoticeView('当前歌曲已存在',
-                            dissmissMilliseconds: 1000, context: context);
-                      } else {
-                        await MySheetsDataService.insertMusicMySheet(
-                            sheetList[idx].id, music);
-                        DialogView.showNoticeView('已添加',
-                            dissmissMilliseconds: 1000, context: context);
-                      }
-                      Navigator.pop(context);
-                    },
-                  );
-                },
-                itemCount: sheetList.length,
-              ),
-            )
+
+            //列表部分
+            _buildList(context, totalHeight - 60)
           ],
         ),
       ),
@@ -69,11 +48,12 @@ class MusicAddView extends StatelessWidget {
   }
 
   //创建头部
-  static Widget _buildHeader(BuildContext context) {
+  Widget _buildHeader(BuildContext context) {
     return Column(
       children: [
+        //拖动提示
         Container(
-          margin: EdgeInsets.fromLTRB(0, 4, 0, 10),
+          margin: EdgeInsets.fromLTRB(0, 6, 0, 6),
           width: 45,
           height: 4,
           decoration: BoxDecoration(
@@ -81,6 +61,7 @@ class MusicAddView extends StatelessWidget {
             borderRadius: BorderRadius.all(Radius.circular(4.0)),
           ),
         ),
+
         Row(
           textBaseline: TextBaseline.ideographic,
           mainAxisAlignment: MainAxisAlignment.start,
@@ -89,27 +70,54 @@ class MusicAddView extends StatelessWidget {
             SizedBox(
               width: 25,
             ),
-            Expanded(
-                child: Text("添加到歌单",
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: Theme.of(context).textTheme.bodyText1.color))),
+            Text("添加到歌单",
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Theme.of(context).textTheme.bodyText1.color)),
             SizedBox(
               width: 25,
             ),
           ],
         ),
         SizedBox(
-          height: 5,
+          height: 10,
         )
       ],
     );
   }
 
-  //构造单个
+  Widget _buildList(BuildContext context, double listHeight) {
+    return Container(
+      height: listHeight,
+      child: ListView.builder(
+        itemExtent: 70,
+        scrollDirection: Axis.vertical,
+        itemBuilder: (context, idx) {
+          return InkWell(
+            child: _buildItem(context, sheetList[idx]),
+            onTap: () async {
+              Navigator.pop(context);
+              var exist = await MySheetsDataService.existMusicMySheet(
+                  sheetList[idx].id, music.id);
+              if (exist) {
+                this.callback?.call(false);
+              } else {
+                await MySheetsDataService.insertMusicMySheet(
+                    sheetList[idx].id, music);
+                this.callback?.call(true);
+              }
+            },
+          );
+        },
+        itemCount: sheetList.length,
+      ),
+    );
+  }
+
+  //构造单个歌单
   Widget _buildItem(BuildContext context, SheetModel sheet) {
     //歌单封面
     var cover = OctoImage(
@@ -134,11 +142,14 @@ class MusicAddView extends StatelessWidget {
         style: Theme.of(context).textTheme.bodyText1);
 
     return Container(
+        padding: EdgeInsets.symmetric(vertical: 5),
         alignment: Alignment.centerLeft,
-        height: 68,
-        padding: EdgeInsets.fromLTRB(10, 0, 10, 8),
+        height: 70,
         child: Row(
           children: [
+            SizedBox(
+              width: 20,
+            ),
             //封面图
             Container(
               alignment: Alignment.center,
@@ -154,6 +165,7 @@ class MusicAddView extends StatelessWidget {
                 borderRadius: BorderRadius.circular(5),
               ),
             ),
+
             SizedBox(
               width: 10,
             ),

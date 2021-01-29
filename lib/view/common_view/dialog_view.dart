@@ -13,7 +13,7 @@ class DialogView {
   static YYDialog showNoticeView(String noticeMsg,
       {IconData icon = Icons.check_circle_outline,
       int dissmissMilliseconds = 0,
-      double width = 200,
+      double width = 150,
       BuildContext context}) {
     var notice = YYDialog().build(context)
       ..width = width

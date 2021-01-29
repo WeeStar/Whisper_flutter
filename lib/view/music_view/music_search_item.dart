@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:whisper/model/music_model.dart';
 import 'package:whisper/view/common_view/common_view.dart';
+import 'package:whisper/view/common_view/dialog_view.dart';
 import 'package:whisper/view/sheet_view/add/music_add_view.dart';
 
 ///单个音乐 搜索结果
@@ -128,7 +129,15 @@ class MusicSearchItemView extends StatelessWidget {
                           elevation: 20,
                           context: context,
                           builder: (_) {
-                            return MusicAddView(musicInfo);
+                            return MusicAddView(musicInfo, (res) {
+                              if (res) {
+                                DialogView.showNoticeView('已添加',
+                                    dissmissMilliseconds: 1000);
+                              } else {
+                                DialogView.showNoticeView('当前歌曲已存在',
+                                    dissmissMilliseconds: 1000);
+                              }
+                            });
                           });
                     }),
                   ]);
