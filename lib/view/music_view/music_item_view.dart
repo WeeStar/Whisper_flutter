@@ -92,7 +92,7 @@ class MusicItemView extends StatelessWidget {
 
     return Container(
       alignment: Alignment.center,
-      height: 54,
+      height: 58,
       margin: EdgeInsets.fromLTRB(8, 0, 8, 0),
       child: Row(
         children: [
@@ -113,7 +113,7 @@ class MusicItemView extends StatelessWidget {
                 ),
 
                 SizedBox(
-                  height: 3,
+                  height: 4,
                 ),
 
                 //副标题行

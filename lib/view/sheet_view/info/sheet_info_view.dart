@@ -210,11 +210,11 @@ class _SheetInfoViewState extends State<SheetInfoView>
             var offset = note.metrics.pixels.toInt();
 
             //变化标题
-            if (offset > width * 0.4 && title == "歌单") {
+            if (offset > width * 0.25 && title == "歌单") {
               setState(() {
                 title = _title;
               });
-            } else if (offset < width * 0.4 && title != "歌单") {
+            } else if (offset < width * 0.25 && title != "歌单") {
               setState(() {
                 title = "歌单";
               });
@@ -246,8 +246,7 @@ class _SheetInfoViewState extends State<SheetInfoView>
                   },
                 );
               } else if (idx == 2) {
-                return Divider(
-                    height: 0.1, color: Theme.of(context).disabledColor);
+                return Divider(height: 1);
               } else {
                 if (_isLoadingData) {
                   //等待图

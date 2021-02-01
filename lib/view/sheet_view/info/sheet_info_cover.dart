@@ -65,7 +65,7 @@ class SheetInfoCoverView extends StatelessWidget {
     return Container(
       alignment: Alignment.center,
       width: double.infinity,
-      height: width * 0.70,
+      height: width * 0.5,
       child: Stack(
         fit: StackFit.expand,
         children: [
