@@ -159,22 +159,22 @@ class _SheetInfoViewState extends State<SheetInfoView>
     YYDialog.init(context);
     var width = MediaQuery.of(context).size.width;
 
-    //播放全部 行
-    var playAll = Row(
-      children: [
-        Icon(
-          Icons.play_circle_outline,
-          color: Theme.of(context).textTheme.bodyText1.color,
-          size: 20,
-        ),
-        SizedBox(
-          width: 9,
-        ),
-        Text("播放全部", style: Theme.of(context).textTheme.bodyText1)
-      ],
-    );
-
     return Scaffold(
+        floatingActionButton: FloatingActionButton(
+          tooltip: "播放全部",
+          child: Icon(
+            Icons.play_arrow,
+            size: 35,
+          ),
+          onPressed: () {
+            //播放全部歌曲
+            PlayerService.play(sheet: _sheetInfo);
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return PlayerView();
+            }));
+          },
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         appBar: PreferredSize(
             preferredSize: Size.fromHeight(50),
             child: AppBar(
@@ -223,48 +223,33 @@ class _SheetInfoViewState extends State<SheetInfoView>
           },
           child: ListView.builder(
             itemCount:
-                _isLoadingData ? 4 : ((_sheetInfo.tracks?.length ?? 0) + 3),
+                _isLoadingData ? 3 : ((_sheetInfo.tracks?.length ?? 0) + 2),
             itemBuilder: (context, idx) {
               if (idx == 0) {
                 return SheetInfoCoverView(
                     _coverImg, _title, _sheetInfo.tracks?.length ?? 0);
               } else if (idx == 1) {
-                //播放全部 行
-                return InkWell(
-                  child: Container(
-                    padding: EdgeInsets.fromLTRB(20, 10, 0, 10),
-                    alignment: Alignment.centerLeft,
-                    child: playAll,
-                  ),
-                  onTap: () {
-                    //播放全部歌曲
-                    PlayerService.play(sheet: _sheetInfo);
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return PlayerView();
-                    }));
-                  },
+                return Divider(
+                  height: 1,
                 );
-              } else if (idx == 2) {
-                return Divider(height: 1);
               } else {
                 if (_isLoadingData) {
                   //等待图
                   return CommonView.buildLoadingView(context);
                 } else {
                   return InkWell(
-                      child: MusicItemView(_sheetInfo.tracks[idx - 3],
-                          musicIdx: idx - 2),
+                      child: MusicItemView(_sheetInfo.tracks[idx - 2],
+                          musicIdx: idx - 1),
                       onTap: () {
                         if (_sheetInfo.tracks == null ||
                             _sheetInfo.tracks.length == 0) return;
 
                         //无效歌曲跳出
-                        if (!_sheetInfo.tracks[idx - 3].isPlayable()) return;
+                        if (!_sheetInfo.tracks[idx - 2].isPlayable()) return;
 
                         //播放选中歌曲
                         PlayerService.play(
-                            music: _sheetInfo.tracks[idx - 3],
+                            music: _sheetInfo.tracks[idx - 2],
                             sheet: _sheetInfo);
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {

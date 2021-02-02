@@ -68,9 +68,7 @@ class CommonView {
         child: Column(
           children: [
             _buildMenuSheetHeader(context, music),
-            Divider(
-              height: 1,
-            ),
+            Divider(height: 1,),
             Container(
               height: 47.0 * menuItems.length,
               child: ListView.builder(
@@ -160,7 +158,7 @@ class CommonView {
             ),
           ],
         ),
-        
+
         SizedBox(
           height: 10,
         )

@@ -28,9 +28,8 @@ class MainViewRecom extends StatelessWidget {
         itemCount: recomSheets.length + 1,
         separatorBuilder: (context, index) {
           return Divider(
-            height: 0.1,
+            height: 1,
             indent: 20,
-            color: Theme.of(context).disabledColor,
           );
         },
       ),

@@ -70,10 +70,8 @@ class AppColor {
             fontSize: 14,
             fontWeight: FontWeight.w400,
             decoration: TextDecoration.none)),
-
-    //分割线颜色
-    dividerTheme: DividerThemeData(
-        color: Colors.grey[200], space: 0.6, thickness: 0.6),
+    
+    dividerColor: Colors.grey[300],
   );
 
   //暗主题
@@ -114,8 +112,6 @@ class AppColor {
             fontWeight: FontWeight.w400,
             decoration: TextDecoration.none)),
 
-    //分割线颜色
-    dividerTheme: DividerThemeData(
-        color: Colors.grey[700], space: 0.6, thickness: 0.6),
+    dividerColor: Colors.grey[700],
   );
 }

@@ -214,7 +214,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
               borderRadius: BorderRadius.circular(20),
               child: Container(
                 padding: EdgeInsets.fromLTRB(10, 3, 10, 3),
-                color: Theme.of(context).dividerTheme.color,
+                color: Theme.of(context).dividerColor,
                 child: Text(
                   childNode,
                   style: TextStyle(
@@ -245,10 +245,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
                     SizedBox(
                       height: 5,
                     ),
-                    Divider(
-                      color: Theme.of(context).disabledColor,
-                      height: 0.1,
-                    ), //分割线
+                    Divider(height: 1,), //分割线
                     SizedBox(
                       height: 10,
                     ),
