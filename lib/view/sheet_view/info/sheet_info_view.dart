@@ -245,6 +245,7 @@ class _SheetInfoViewState extends State<SheetInfoView>
   //构造fab
   Widget _buildFab() {
     return Container(
+        margin: EdgeInsets.fromLTRB(0, 0, 30, 30),
         child: ScaleTransition(
             scale: Tween(begin: 1.0, end: 0.0).animate(_hideFabAnimation)
               ..addListener(() {
