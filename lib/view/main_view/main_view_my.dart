@@ -99,4 +99,10 @@ class _MainViewMyState extends State<MainViewMy> with TickerProviderStateMixin {
           children: [SheetMyListView(_mySheets), SheetMyListView(_favSheets)],
         ));
   }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 }

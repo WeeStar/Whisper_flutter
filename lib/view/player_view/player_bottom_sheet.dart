@@ -16,6 +16,7 @@ class _PlayerBottomSheetState extends State<PlayerBottomSheet>
   List<MusicModel> curList;
   RoundModeEnum roundMode;
   String curMusicId;
+  ScrollController _scrollController;
 
   _PlayerBottomSheetState() {
     curList = CurListService.curList;
@@ -57,8 +58,7 @@ class _PlayerBottomSheetState extends State<PlayerBottomSheet>
       }
     }
 
-    ScrollController _scrollController =
-        ScrollController(initialScrollOffset: offset);
+    _scrollController = ScrollController(initialScrollOffset: offset);
 
     return ListView.builder(
       controller: _scrollController,
@@ -162,5 +162,11 @@ class _PlayerBottomSheetState extends State<PlayerBottomSheet>
         child: _buildHeader(),
       )
     ]);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 }

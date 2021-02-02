@@ -88,7 +88,7 @@ class AppBarSearch {
 
   //设置搜索文字
   setSearchText(String searchText) {
-    _controller.text = searchText; 
+    _controller.text = searchText;
     //展示tab
     setState(() {
       _isShowTab = true;
@@ -149,5 +149,10 @@ class AppBarSearch {
                   child: _buildSearchTab(context))
               : null,
         ));
+  }
+
+  void dispose() {
+    _controller.dispose();
+    _tabController.dispose();
   }
 }

@@ -92,4 +92,10 @@ class _SheetRecomMoreViewState extends State<SheetRecomMoreView>
       ),
     );
   }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 }

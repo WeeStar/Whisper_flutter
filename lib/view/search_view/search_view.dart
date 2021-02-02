@@ -266,4 +266,11 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
                 ),
               ));
   }
+
+  @override
+  void dispose() {
+    _searchBar.dispose();
+    _controller.dispose();
+    super.dispose();
+  }
 }

@@ -77,6 +77,7 @@ class _PlayerRingViewState extends State<PlayerRingView>
 
   @override
   void dispose() {
+    controller.dispose();
     super.dispose();
   }
 
