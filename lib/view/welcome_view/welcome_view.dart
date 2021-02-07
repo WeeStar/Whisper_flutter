@@ -37,7 +37,8 @@ class _WelcomeViewState extends State<WelcomeView>
       children: [
         new Image.asset('images/welcome/welcome_1.png',
             alignment: Alignment.center, fit: BoxFit.fitHeight),
-        new Column(
+        new SafeArea(
+        child: Column(
           children: [
             new Padding(
               padding: new EdgeInsets.fromLTRB(0, 110, 0, 30),
@@ -63,7 +64,7 @@ class _WelcomeViewState extends State<WelcomeView>
             ),
           ],
           crossAxisAlignment: CrossAxisAlignment.center,
-        )
+        ))
       ],
     );
   }

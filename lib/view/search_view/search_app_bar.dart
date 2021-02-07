@@ -69,7 +69,7 @@ class AppBarSearch {
   //构造tab
   TabBar _buildSearchTab(BuildContext context) {
     return TabBar(
-      isScrollable: true,
+      isScrollable: false,
       labelPadding: EdgeInsets.fromLTRB(8, 0, 8, 0),
       labelColor: Colors.white,
       labelStyle: TextStyle(fontSize: 12),
