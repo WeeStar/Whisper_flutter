@@ -42,13 +42,13 @@ class ApiService {
   static Future<List<RecomModel>> getRecomSheets() async {
     var f1 = getRecomSheetSingle(MusicSource.netease);
     var f2 = getRecomSheetSingle(MusicSource.tencent);
-    var f3 = getRecomSheetSingle(MusicSource.bilibili);
+    // var f3 = getRecomSheetSingle(MusicSource.bilibili);
     var f4 = getRecomSheetSingle(MusicSource.migu);
     var f5 = getRecomSheetSingle(MusicSource.kugou);
-    var f6 = getRecomSheetSingle(MusicSource.xiami);
+    // var f6 = getRecomSheetSingle(MusicSource.xiami);
     await ConfigDataService.read();
 
-    var res = await Future.wait<RecomModel>([f1, f2, f3, f4, f5, f6]);
+    var res = await Future.wait<RecomModel>([f1, f2,  f4, f5]);
     var sequence = ConfigDataService.config.musicSourcSeq;
 
     var resWithSeq = new List<RecomModel>();

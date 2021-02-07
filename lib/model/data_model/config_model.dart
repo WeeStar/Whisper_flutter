@@ -15,7 +15,6 @@ class ConfigModel extends Object {
   var musicSourcSeq = [
     MusicSource.netease,
     MusicSource.tencent,
-    MusicSource.xiami,
     MusicSource.migu,
     MusicSource.kugou
   ];
