@@ -105,14 +105,10 @@ class CurListService {
 
   //删除当前播放列表中的歌曲
   static bool del(String id) {
-    //需插入当前播放列表 获取插入位置
-    if (!curList.any((element) => element.id == id)) {
-      return false;
-    }
-    curList.remove((element) => element.id == id);
+    curList.removeWhere((element) => element.id == id);
     CurPlayDataService.curPlay.curList = curList;
     CurPlayDataService.write();
-    
+
     return true;
   }
 

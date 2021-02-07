@@ -165,7 +165,7 @@ class MusicItemView extends StatelessWidget {
             ),
           ),
 
-//删除标记
+          //删除标记
           if (this.delCallBack != null)
             InkWell(
               child: Container(
