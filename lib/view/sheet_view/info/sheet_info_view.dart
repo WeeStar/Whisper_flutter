@@ -182,9 +182,24 @@ class _SheetInfoViewState extends State<SheetInfoView>
             //等待图
             return CommonView.buildLoadingView(context);
           } else {
+            //单个歌曲
             return InkWell(
-                child: MusicItemView(_sheetInfo.tracks[idx - 2],
-                    musicIdx: idx - 1),
+                child: MusicItemView(
+                  _sheetInfo.tracks[idx - 2],
+                  musicIdx: idx - 1,
+                  delInMySheet: _sheetInfo.is_my
+                      ? () {
+                          //从我的歌单删除
+                          DialogView.showDialogView("是否从歌单中删除歌曲", "确定", "取消",
+                              () {
+                            MySheetsDataService.delMusicMySheet(
+                                _sheetInfo.id, _sheetInfo.tracks[idx - 2].id);
+                            setState(() {
+                            });
+                          }, () {});
+                        }
+                      : null,
+                ),
                 onTap: () {
                   if (_sheetInfo.tracks == null ||
                       _sheetInfo.tracks.length == 0) return;

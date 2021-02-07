@@ -9,16 +9,45 @@ class MusicItemView extends StatelessWidget {
   final MusicModel musicInfo;
   final int musicIdx;
   final bool isPlaying;
-  final bool showMore;
+  final Function delInMySheet;
   final Function delCallBack;
 
   MusicItemView(this.musicInfo,
       {Key key,
       this.musicIdx,
       this.isPlaying = false,
-      this.showMore = true,
+      this.delInMySheet,
       this.delCallBack})
       : super(key: key);
+
+  //构造菜单
+  List<MenuSheetItemModel> _buildMenus(BuildContext context) {
+    var menus = <MenuSheetItemModel>[
+      MenuSheetItemModel("下一首播放", Icons.play_circle_outline, () {}),
+      MenuSheetItemModel("添加到歌单", Icons.playlist_add, () {
+        showModalBottomSheet(
+            elevation: 20,
+            context: context,
+            builder: (_) {
+              return MusicAddView(musicInfo, (res) {
+                if (res) {
+                  DialogView.showNoticeView('已添加', dissmissMilliseconds: 1000);
+                } else {
+                  DialogView.showNoticeView('当前歌曲已存在',
+                      dissmissMilliseconds: 1000);
+                }
+              });
+            });
+      }),
+    ];
+
+    //我的歌单中的歌曲 可删除
+    if (delInMySheet != null) {
+      menus.add(MenuSheetItemModel("删除", Icons.delete_outline, this.delInMySheet));
+    }
+
+    return menus;
+  }
 
   Widget build(BuildContext context) {
     //左侧序号
@@ -132,6 +161,7 @@ class MusicItemView extends StatelessWidget {
               ],
             ),
           ),
+
           //更多标记
           InkWell(
             child: Container(
@@ -148,26 +178,7 @@ class MusicItemView extends StatelessWidget {
                 context: context,
                 builder: (BuildContext context) {
                   return CommonView.buildMenuSheetView(
-                      context, musicInfo, <MenuSheetItemModel>[
-                    MenuSheetItemModel(
-                        "下一首播放", Icons.play_circle_outline, () {}),
-                    MenuSheetItemModel("添加到歌单", Icons.playlist_add, () {
-                      showModalBottomSheet(
-                          elevation: 20,
-                          context: context,
-                          builder: (_) {
-                            return MusicAddView(musicInfo, (res) {
-                              if (res) {
-                                DialogView.showNoticeView('已添加',
-                                    dissmissMilliseconds: 1000);
-                              } else {
-                                DialogView.showNoticeView('当前歌曲已存在',
-                                    dissmissMilliseconds: 1000);
-                              }
-                            });
-                          });
-                    }),
-                  ]);
+                      context, musicInfo, _buildMenus(context));
                 },
               );
             },
