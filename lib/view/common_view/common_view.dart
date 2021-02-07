@@ -68,7 +68,9 @@ class CommonView {
         child: Column(
           children: [
             _buildMenuSheetHeader(context, music),
-            Divider(height: 1,),
+            Divider(
+              height: 1,
+            ),
             Container(
               height: 47.0 * menuItems.length,
               child: ListView.builder(
@@ -182,7 +184,10 @@ class CommonView {
             //图标
             Container(
               child: Icon(item.icon,
-                  size: 25, color: Theme.of(context).textTheme.bodyText1.color),
+                  size: 25,
+                  color: item.enable
+                      ? Theme.of(context).textTheme.bodyText1.color
+                      : Theme.of(context).disabledColor),
               alignment: Alignment.center,
               width: 40,
             ),
@@ -196,13 +201,16 @@ class CommonView {
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w400,
-                  color: Theme.of(context).textTheme.bodyText1.color),
+                  color: item.enable
+                      ? Theme.of(context).textTheme.bodyText1.color
+                      : Theme.of(context).disabledColor),
             )
           ],
         ),
       ),
       onTap: () {
         Navigator.pop(context);
+        if (!item.enable) return;
         item.callBack?.call();
       },
     );
@@ -210,9 +218,11 @@ class CommonView {
 }
 
 class MenuSheetItemModel {
-  MenuSheetItemModel(this.title, this.icon, this.callBack);
+  MenuSheetItemModel(this.title, this.icon, this.callBack,
+      {this.enable = true});
 
   String title;
   IconData icon;
   Function callBack;
+  bool enable;
 }

@@ -23,27 +23,30 @@ class MusicItemView extends StatelessWidget {
   //构造菜单
   List<MenuSheetItemModel> _buildMenus(BuildContext context) {
     var menus = <MenuSheetItemModel>[
-      MenuSheetItemModel("下一首播放", Icons.play_circle_outline, () {}),
+      MenuSheetItemModel("下一首播放", Icons.play_circle_outline, () {},
+          enable: musicInfo.isPlayable()),
       MenuSheetItemModel("添加到歌单", Icons.playlist_add, () {
         showModalBottomSheet(
-            elevation: 20,
-            context: context,
-            builder: (_) {
-              return MusicAddView(musicInfo, (res) {
-                if (res) {
-                  DialogView.showNoticeView('已添加', dissmissMilliseconds: 1000);
-                } else {
-                  DialogView.showNoticeView('当前歌曲已存在',
-                      dissmissMilliseconds: 1000);
-                }
-              });
+          elevation: 20,
+          context: context,
+          builder: (_) {
+            return MusicAddView(musicInfo, (res) {
+              if (res) {
+                DialogView.showNoticeView('已添加', dissmissMilliseconds: 1000);
+              } else {
+                DialogView.showNoticeView('当前歌曲已存在',
+                    dissmissMilliseconds: 1000);
+              }
             });
-      }),
+          },
+        );
+      }, enable: musicInfo.isPlayable()),
     ];
 
     //我的歌单中的歌曲 可删除
     if (delInMySheet != null) {
-      menus.add(MenuSheetItemModel("删除", Icons.delete_outline, this.delInMySheet));
+      menus.add(
+          MenuSheetItemModel("删除", Icons.delete_outline, this.delInMySheet));
     }
 
     return menus;
@@ -172,7 +175,6 @@ class MusicItemView extends StatelessWidget {
                   size: 20, color: Theme.of(context).disabledColor),
             ),
             onTap: () {
-              if (!musicInfo.isPlayable()) return;
               showModalBottomSheet(
                 elevation: 20,
                 context: context,
