@@ -165,6 +165,21 @@ class MusicItemView extends StatelessWidget {
             ),
           ),
 
+//删除标记
+          if (this.delCallBack != null)
+            InkWell(
+              child: Container(
+                alignment: Alignment.center,
+                width: 30,
+                margin: EdgeInsets.only(left: 5),
+                child: Icon(Icons.clear,
+                    size: 20, color: Theme.of(context).disabledColor),
+              ),
+              onTap: () {
+                this.delCallBack();
+              },
+            ),
+
           //更多标记
           InkWell(
             child: Container(
@@ -185,21 +200,6 @@ class MusicItemView extends StatelessWidget {
               );
             },
           ),
-
-          //删除标记
-          if (this.delCallBack != null)
-            InkWell(
-              child: Container(
-                alignment: Alignment.center,
-                width: 30,
-                margin: EdgeInsets.only(left: 5),
-                child: Icon(Icons.clear,
-                    size: 20, color: Theme.of(context).disabledColor),
-              ),
-              onTap: () {
-                this.delCallBack();
-              },
-            )
         ],
       ),
     );

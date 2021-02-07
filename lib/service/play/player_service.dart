@@ -100,6 +100,17 @@ class PlayerService {
     _playService(playMusic);
   }
 
+  //删除当前播放歌单中的音乐
+  static del(String id) {
+    var res = CurListService.del(id);
+    if (!res) return;
+
+    //若删除的为当前正在播放的 下一首
+    if(id == CurListService.curMusic.id){
+      next(true);
+    }
+  }
+
   //跳转
   static Future<void> seek(Duration seekTo) async {
     await audioPlayer.seek(seekTo);

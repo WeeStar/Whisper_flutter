@@ -74,6 +74,9 @@ class _PlayerBottomSheetState extends State<PlayerBottomSheet>
               curList[idx - 1],
               musicIdx: idx,
               isPlaying: curList[idx - 1].id == curMusicId,
+              delCallBack: () {
+                PlayerService.del(curList[idx - 1].id);
+              },
             ),
             onTap: () {
               //无效歌曲跳出

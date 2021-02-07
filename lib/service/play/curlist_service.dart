@@ -17,7 +17,7 @@ class CurListService {
   static RoundModeEnum roundMode;
 
   //初始化
-  static build() async{
+  static build() async {
     curMusic = CurPlayDataService.curPlay.curMusic;
     curList = CurPlayDataService.curPlay.curList;
     roundMode = CurPlayDataService.curPlay.roundMode;
@@ -101,6 +101,19 @@ class CurListService {
   //设置循环方式
   static void setRoundMode() {
     roundMode = CurPlayDataService.curPlay.roundMode;
+  }
+
+  //删除当前播放列表中的歌曲
+  static bool del(String id) {
+    //需插入当前播放列表 获取插入位置
+    if (!curList.any((element) => element.id == id)) {
+      return false;
+    }
+    curList.remove((element) => element.id == id);
+    CurPlayDataService.curPlay.curList = curList;
+    CurPlayDataService.write();
+    
+    return true;
   }
 
   //私有 更新当前音乐
