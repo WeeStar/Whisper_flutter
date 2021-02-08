@@ -56,21 +56,24 @@ class AppColor {
 
     textTheme: new TextTheme(
         bodyText1: new TextStyle(
+            fontFamily: 'PingFangSC',
             color: AppColor.textColorMainLight,
             fontSize: 16,
             fontWeight: FontWeight.w400,
             decoration: TextDecoration.none),
         bodyText2: new TextStyle(
+            fontFamily: 'PingFangSC',
             color: AppColor.textColorSubLight,
             fontSize: 14,
             fontWeight: FontWeight.w400,
             decoration: TextDecoration.none),
         subtitle1: new TextStyle(
+            fontFamily: 'PingFangSC',
             color: AppColor.textColorOnImgLight,
             fontSize: 14,
             fontWeight: FontWeight.w400,
             decoration: TextDecoration.none)),
-    
+
     dividerColor: Colors.grey[300],
   );
 
@@ -97,16 +100,19 @@ class AppColor {
 
     textTheme: new TextTheme(
         bodyText1: new TextStyle(
+            fontFamily: 'PingFangSC',
             color: AppColor.textColorMainDark,
             fontSize: 16,
             fontWeight: FontWeight.w400,
             decoration: TextDecoration.none),
         bodyText2: new TextStyle(
+            fontFamily: 'PingFangSC',
             color: AppColor.textColorSubDark,
             fontSize: 14,
             fontWeight: FontWeight.w400,
             decoration: TextDecoration.none),
         subtitle1: new TextStyle(
+            fontFamily: 'PingFangSC',
             color: AppColor.textColorOnImgDark,
             fontSize: 14,
             fontWeight: FontWeight.w400,

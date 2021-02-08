@@ -87,5 +87,13 @@ flutter:
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
   #
+  fonts:
+    - family: PingFangSC
+      fonts:
+        - asset: fonts/PingFangSC-Regular.ttf
+        - asset: fonts/PingFangSC-Medium.ttf
+          weight: 500
+        - asset: fonts/PingFangSC-Semibold.ttf
+          weight: 700
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
