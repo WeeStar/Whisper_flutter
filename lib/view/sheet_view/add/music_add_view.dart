@@ -4,7 +4,6 @@ import 'package:octo_image/octo_image.dart';
 import 'package:whisper/model/music_model.dart';
 import 'package:whisper/model/sheet_model.dart';
 import 'package:whisper/service/data/my_sheets_data_service.dart';
-import 'package:whisper/view/common_view/dialog_view.dart';
 
 class MusicAddView extends StatelessWidget {
   final List<SheetModel> sheetList = MySheetsDataService.mySheets;

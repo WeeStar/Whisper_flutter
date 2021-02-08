@@ -18,7 +18,7 @@ class MusicSearchItemView extends StatelessWidget {
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: new TextStyle(
-              fontSize: 16,
+              fontSize: 18,
               fontWeight: FontWeight.w400,
               color: (musicInfo.isPlayable()
                   ? Theme.of(context).textTheme.bodyText1.color
@@ -66,7 +66,7 @@ class MusicSearchItemView extends StatelessWidget {
 
     return Container(
       alignment: Alignment.center,
-      height: 58,
+      height: 56,
       margin: EdgeInsets.fromLTRB(15, 0, 8, 0),
       child: Row(
         children: [
@@ -83,10 +83,6 @@ class MusicSearchItemView extends StatelessWidget {
                     //主标题
                     title
                   ],
-                ),
-
-                SizedBox(
-                  height: 4,
                 ),
 
                 //副标题行

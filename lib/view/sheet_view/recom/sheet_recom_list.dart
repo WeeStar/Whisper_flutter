@@ -51,7 +51,7 @@ class SheetRecomListView extends StatelessWidget {
       style: TextStyle(
           fontSize: 20,
           color: Theme.of(context).textTheme.bodyText1.color,
-          fontWeight: FontWeight.w500),
+          fontWeight: FontWeight.w600),
     );
 
     //查看更多
