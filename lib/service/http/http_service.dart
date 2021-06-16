@@ -33,7 +33,7 @@ class HttpService {
 
     //请求
     try {
-      http.Response response = await http.get(uri.toString(), // post地址
+      http.Response response = await http.get(uri, // post地址
           headers: {
             "content-type": "application/json;charset=UTF-8"
           } //设置content-type为json
@@ -81,7 +81,7 @@ class HttpService {
 
     try {
       // post请求
-      http.Response response = await http.post(uri.toString(), // post地址
+      http.Response response = await http.post(uri, // post地址
           headers: {
             "content-type": "application/json;charset=UTF-8"
           }, //设置content-type为json

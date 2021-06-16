@@ -69,7 +69,7 @@ class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
     //播放状态变化
     eventBus.on<PlayStateRefreshEvent>().listen((event) {
       setState(() {
-        isPlaying = event.state == AudioPlayerState.PLAYING;
+        isPlaying = event.state == PlayerState.PLAYING;
       });
     });
   }

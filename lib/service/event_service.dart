@@ -39,7 +39,7 @@ class PlayTimeRefreshEvent {
 
 //播放状态刷新
 class PlayStateRefreshEvent {
-  AudioPlayerState state;
+  PlayerState state;
 
   PlayStateRefreshEvent(this.state);
 }

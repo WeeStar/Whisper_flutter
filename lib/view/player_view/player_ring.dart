@@ -63,11 +63,11 @@ class _PlayerRingViewState extends State<PlayerRingView>
     //播放状态变化
     eventBus.on<PlayStateRefreshEvent>().listen((event) {
       setState(() {
-        if (event.state == AudioPlayerState.PLAYING) {
+        if (event.state == PlayerState.PLAYING) {
           //动画执行
           controller.forward();
-        } else if (event.state == AudioPlayerState.PAUSED ||
-            event.state == AudioPlayerState.STOPPED) {
+        } else if (event.state == PlayerState.PAUSED ||
+            event.state == PlayerState.STOPPED) {
           //动画停止
           controller.stop();
         }

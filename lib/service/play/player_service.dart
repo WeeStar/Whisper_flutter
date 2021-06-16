@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:audioplayers/notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:whisper/model/music_model.dart';
 import 'package:whisper/model/sheet_model.dart';
@@ -180,15 +181,15 @@ class PlayerService {
 
     // 设置IOS锁屏
     if (platform == TargetPlatform.iOS)
-      await audioPlayer.setNotification(
+      await audioPlayer.notificationService.setNotification(
           title: curMusic?.title ?? "未知歌曲",
           artist: curMusic?.artist ?? "未知歌手",
           albumTitle: curMusic?.album ?? "未知专辑",
           imageUrl: '',
           duration: totalTime,
           elapsedTime: Duration(seconds: 0),
-          hasNextTrack: true,
-          hasPreviousTrack: true);
+          enableNextTrackButton: true,
+          enablePreviousTrackButton: true);
     return true;
   }
 
@@ -234,14 +235,14 @@ class PlayerService {
     //播放状态变化 发广播
     _onPlayerStateChanged = audioPlayer.onPlayerStateChanged.listen((state) {
       //播放完成 下一首
-      if (state == AudioPlayerState.COMPLETED) {
+      if (state == PlayerState.COMPLETED) {
         next();
       }
 
-      isPlaying = state == AudioPlayerState.PLAYING;
+      isPlaying = state == PlayerState.PLAYING;
       //调整进度条速率
       audioPlayer?.setPlaybackRate(
-          playbackRate: state == AudioPlayerState.PLAYING ? 1.0 : 0.0);
+          playbackRate: state == PlayerState.PLAYING ? 1.0 : 0.0);
       //广播播放状态
       eventBus.fire(PlayStateRefreshEvent(state));
     });
@@ -254,10 +255,10 @@ class PlayerService {
     //ios 锁屏通知发起状态变化 接收播放暂停
     _onNotifyStateChanged =
         audioPlayer.onNotificationPlayerStateChanged.listen((state) {
-      isPlaying = state == AudioPlayerState.PLAYING;
+      isPlaying = state == PlayerState.PLAYING;
       //调整进度条速率
       audioPlayer.setPlaybackRate(
-          playbackRate: state == AudioPlayerState.PLAYING ? 1.0 : 0.0);
+          playbackRate: state == PlayerState.PLAYING ? 1.0 : 0.0);
 
       //广播播放状态
       eventBus.fire(PlayStateRefreshEvent(state));
@@ -265,7 +266,7 @@ class PlayerService {
 
     //接收远端操作 耳机线控 锁屏按钮等 接收上一曲 下一曲
     _onPlayerCommand =
-        audioPlayer.onPlayerCommand.listen((PlayerControlCommand event) {
+        audioPlayer.notificationService.onPlayerCommand.listen((PlayerControlCommand event) {
       if (event == PlayerControlCommand.NEXT_TRACK) {
         next(true);
       } else if (event == PlayerControlCommand.PREVIOUS_TRACK) {
