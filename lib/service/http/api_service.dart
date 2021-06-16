@@ -30,7 +30,7 @@ class ApiService {
       return List<MusicModel>.empty();
     }
 
-    var musicList = new List<MusicModel>();
+    var musicList = <MusicModel>[];
     var resList = resData as List<dynamic>;
     for (var item in resList) {
       musicList.add(MusicModel.fromJson(item));
@@ -51,7 +51,7 @@ class ApiService {
     var res = await Future.wait<RecomModel>([f1, f2,  f4, f5]);
     var sequence = ConfigDataService.config.musicSourcSeq;
 
-    var resWithSeq = new List<RecomModel>();
+    var resWithSeq = <RecomModel>[];
     for (var item in sequence) {
       var recom = res.firstWhere((element) => element.source == item,
           orElse: () => null);
@@ -78,7 +78,7 @@ class ApiService {
       return new RecomModel(source, List<SheetModel>.empty());
     }
 
-    var sheetList = new List<SheetModel>();
+    var sheetList = <SheetModel>[];
     var resList = resData as List<dynamic>;
     for (var item in resList) {
       sheetList.add(SheetModel.fromJson(item));

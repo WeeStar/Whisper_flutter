@@ -10,7 +10,7 @@ import 'package:whisper/view/common_view/dialog_view.dart';
 ///网络请求服务
 class HttpService {
   // 服务器地址
-  static var _baseUrl = "47.105.57.58:8077";
+  static var _baseUrl = "1.117.191.187:8077";
   static Utf8Decoder decoder = new Utf8Decoder();
 
   ///拼接url
