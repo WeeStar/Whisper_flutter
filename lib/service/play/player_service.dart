@@ -28,6 +28,7 @@ class PlayerService {
 
   //监听事件
   static StreamSubscription _onPositionChanged;
+  static StreamSubscription _onDurationChanged;
   static StreamSubscription _onPlayerStateChanged;
   static StreamSubscription _onPlayError;
   static StreamSubscription _onNotifyStateChanged;
@@ -107,7 +108,7 @@ class PlayerService {
     if (!res) return;
 
     //若删除的为当前正在播放的 下一首
-    if(id == CurListService.curMusic.id){
+    if (id == CurListService.curMusic.id) {
       next(true);
     }
   }
@@ -174,13 +175,15 @@ class PlayerService {
 
     //获取时长
     curTime = Duration.zero;
-    totalTime = Duration(milliseconds: await audioPlayer.getDuration());
 
-    //广播时长
-    eventBus.fire(CurMusicRefreshEvent(curMusic, totalTime));
+    if (platform == TargetPlatform.iOS) {
+      //ios 此时即可获取时长
+      totalTime = Duration(milliseconds: await audioPlayer.getDuration());
 
-    // 设置IOS锁屏
-    if (platform == TargetPlatform.iOS)
+      //广播时长
+      eventBus.fire(CurMusicRefreshEvent(curMusic, totalTime));
+
+      // 设置IOS锁屏
       await audioPlayer.notificationService.setNotification(
           title: curMusic?.title ?? "未知歌曲",
           artist: curMusic?.artist ?? "未知歌手",
@@ -190,6 +193,7 @@ class PlayerService {
           elapsedTime: Duration(seconds: 0),
           enableNextTrackButton: true,
           enablePreviousTrackButton: true);
+    }
     return true;
   }
 
@@ -211,6 +215,7 @@ class PlayerService {
   // 私有 释放播放器
   static Future<void> _releasePlayer() async {
     //释放上个监听
+    await _onDurationChanged?.cancel();
     await _onPositionChanged?.cancel();
     await _onPlayerStateChanged?.cancel();
     await _onPlayError?.cancel();
@@ -224,6 +229,15 @@ class PlayerService {
 
   // 私有 绑定播放器事件
   static void _bindPlayerEvent() {
+    //总时长变化 发广播 安卓此时发广播
+    _onDurationChanged = audioPlayer.onDurationChanged.listen((Duration c) {
+      if (platform == TargetPlatform.iOS) return;
+      //获取时长
+      totalTime = c;
+      //广播时长
+      eventBus.fire(CurMusicRefreshEvent(curMusic, totalTime));
+    });
+
     //当前进度获取 发广播
     _onPositionChanged =
         audioPlayer.onAudioPositionChanged.listen((Duration c) {
@@ -265,8 +279,8 @@ class PlayerService {
     });
 
     //接收远端操作 耳机线控 锁屏按钮等 接收上一曲 下一曲
-    _onPlayerCommand =
-        audioPlayer.notificationService.onPlayerCommand.listen((PlayerControlCommand event) {
+    _onPlayerCommand = audioPlayer.notificationService.onPlayerCommand
+        .listen((PlayerControlCommand event) {
       if (event == PlayerControlCommand.NEXT_TRACK) {
         next(true);
       } else if (event == PlayerControlCommand.PREVIOUS_TRACK) {
