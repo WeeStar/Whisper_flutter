@@ -42,36 +42,39 @@ class _PlayerRingViewState extends State<PlayerRingView>
 
     //当前音乐变化 监听 改变封面
     eventBus.on<CurMusicRefreshEvent>().listen((event) {
-      setState(() {
-        curMusicImg = event.music?.img_url ?? "";
-        //进度置空
-        curTime = Duration.zero;
-        totalTime = event.totalTime;
+      if (mounted)
+        setState(() {
+          curMusicImg = event.music?.img_url ?? "";
+          //进度置空
+          curTime = Duration.zero;
+          totalTime = event.totalTime;
 
-        //重置动画
-        controller.reset();
-      });
+          //重置动画
+          controller.reset();
+        });
     });
 
     //当前时长变化 改变进度
     eventBus.on<PlayTimeRefreshEvent>().listen((event) {
-      setState(() {
-        curTime = event.curTime;
-      });
+      if (mounted)
+        setState(() {
+          curTime = event.curTime;
+        });
     });
 
     //播放状态变化
     eventBus.on<PlayStateRefreshEvent>().listen((event) {
-      setState(() {
-        if (event.state == PlayerState.PLAYING) {
-          //动画执行
-          controller.forward();
-        } else if (event.state == PlayerState.PAUSED ||
-            event.state == PlayerState.STOPPED) {
-          //动画停止
-          controller.stop();
-        }
-      });
+      if (mounted)
+        setState(() {
+          if (event.state == PlayerState.PLAYING) {
+            //动画执行
+            controller.forward();
+          } else if (event.state == PlayerState.PAUSED ||
+              event.state == PlayerState.STOPPED) {
+            //动画停止
+            controller.stop();
+          }
+        });
     });
   }
 

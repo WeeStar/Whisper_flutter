@@ -32,16 +32,18 @@ class _MainViewMyState extends State<MainViewMy> with TickerProviderStateMixin {
 
     //监听歌单历史刷新
     eventBus.on<SheetHisRefreshEvent>().listen((event) {
-      setState(() {
-        _hisSheets = HisDataService.playSheetHis;
-      });
+      if (mounted)
+        setState(() {
+          _hisSheets = HisDataService.playSheetHis;
+        });
     });
 
     //监听我的歌单刷新
     eventBus.on<MySheetsRefreshEvent>().listen((event) {
-      setState(() {
-        _mySheets = MySheetsDataService.mySheets;
-      });
+      if (mounted)
+        setState(() {
+          _mySheets = MySheetsDataService.mySheets;
+        });
     });
   }
 

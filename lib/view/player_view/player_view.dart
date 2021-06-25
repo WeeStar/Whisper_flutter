@@ -49,28 +49,34 @@ class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
 
     //当前音乐变化 监听 改变封面
     eventBus.on<CurMusicRefreshEvent>().listen((event) {
-      setState(() {
-        curMusic = event.music;
-        curMusicId = curMusic?.id ?? "";
-        curMusicImg = event.music?.img_url ?? "";
-        //进度置空
-        curTime = Duration.zero;
-        totalTime = event.totalTime;
-      });
+      if (mounted) {
+        setState(() {
+          curMusic = event.music;
+          curMusicId = curMusic?.id ?? "";
+          curMusicImg = event.music?.img_url ?? "";
+          //进度置空
+          curTime = Duration.zero;
+          totalTime = event.totalTime;
+        });
+      }
     });
 
     //当前时长变化 改变进度
     eventBus.on<PlayTimeRefreshEvent>().listen((event) {
-      setState(() {
-        curTime = event.curTime;
-      });
+      if (mounted) {
+        setState(() {
+          curTime = event.curTime;
+        });
+      }
     });
 
     //播放状态变化
     eventBus.on<PlayStateRefreshEvent>().listen((event) {
-      setState(() {
-        isPlaying = event.state == PlayerState.PLAYING;
-      });
+      if (mounted) {
+        setState(() {
+          isPlaying = event.state == PlayerState.PLAYING;
+        });
+      }
     });
   }
 
@@ -239,9 +245,11 @@ class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
             //保存循环方式配置
             CurPlayDataService.write();
             //设置页面与播放器循环方式
-            setState(() {
-              roundMode = CurPlayDataService.curPlay.roundMode;
-            });
+            if (mounted) {
+              setState(() {
+                roundMode = CurPlayDataService.curPlay.roundMode;
+              });
+            }
             CurListService.setRoundMode();
           },
         ),

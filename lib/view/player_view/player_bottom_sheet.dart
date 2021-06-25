@@ -28,13 +28,14 @@ class _PlayerBottomSheetState extends State<PlayerBottomSheet>
   @override
   void initState() {
     super.initState();
-
     //当前音乐变化 监听 改变封面
     eventBus.on<CurMusicRefreshEvent>().listen((event) {
-      setState(() {
-        var curMusic = event.music;
-        curMusicId = curMusic?.id ?? "";
-      });
+      if (mounted) {
+        setState(() {
+          var curMusic = event.music;
+          curMusicId = curMusic?.id ?? "";
+        });
+      }
     });
   }
 
@@ -76,9 +77,11 @@ class _PlayerBottomSheetState extends State<PlayerBottomSheet>
               isPlaying: curList[idx - 1].id == curMusicId,
               delCallBack: () {
                 PlayerService.del(curList[idx - 1].id);
-                setState(() {
-                  curList = CurListService.curList;
-                });
+                if (mounted) {
+                  setState(() {
+                    curList = CurListService.curList;
+                  });
+                }
               },
             ),
             onTap: () {
