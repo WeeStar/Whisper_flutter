@@ -19,6 +19,9 @@ class _MainViewMyState extends State<MainViewMy> with TickerProviderStateMixin {
   List<SheetModel> _favSheets = List<SheetModel>.empty(); //收藏歌单
   List<SheetModel> _mySheets = List<SheetModel>.empty(); //我的歌单
 
+  var event1;
+  var event2;
+
   @override
   void initState() {
     super.initState();
@@ -31,7 +34,7 @@ class _MainViewMyState extends State<MainViewMy> with TickerProviderStateMixin {
         initialIndex: _mySheets.length > 0 ? 0 : 1, length: 2, vsync: this);
 
     //监听歌单历史刷新
-    eventBus.on<SheetHisRefreshEvent>().listen((event) {
+    event1 = eventBus.on<SheetHisRefreshEvent>().listen((event) {
       if (mounted)
         setState(() {
           _hisSheets = HisDataService.playSheetHis;
@@ -39,7 +42,7 @@ class _MainViewMyState extends State<MainViewMy> with TickerProviderStateMixin {
     });
 
     //监听我的歌单刷新
-    eventBus.on<MySheetsRefreshEvent>().listen((event) {
+    event2 = eventBus.on<MySheetsRefreshEvent>().listen((event) {
       if (mounted)
         setState(() {
           _mySheets = MySheetsDataService.mySheets;
@@ -104,6 +107,8 @@ class _MainViewMyState extends State<MainViewMy> with TickerProviderStateMixin {
 
   @override
   void dispose() {
+    this.event1.cancel(); //取消事件监听
+    this.event2.cancel(); //取消事件监听
     _controller.dispose();
     super.dispose();
   }

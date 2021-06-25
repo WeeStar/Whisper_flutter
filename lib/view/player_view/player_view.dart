@@ -31,6 +31,10 @@ class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
   double width;
   double height;
 
+  var event1;
+  var event2;
+  var event3;
+
   _PlayerViewState() {
     curMusic = PlayerService.curMusic;
     roundMode = CurListService.roundMode;
@@ -48,7 +52,7 @@ class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
     super.initState();
 
     //当前音乐变化 监听 改变封面
-    eventBus.on<CurMusicRefreshEvent>().listen((event) {
+    event1 = eventBus.on<CurMusicRefreshEvent>().listen((event) {
       if (mounted) {
         setState(() {
           curMusic = event.music;
@@ -62,7 +66,7 @@ class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
     });
 
     //当前时长变化 改变进度
-    eventBus.on<PlayTimeRefreshEvent>().listen((event) {
+    event2 = eventBus.on<PlayTimeRefreshEvent>().listen((event) {
       if (mounted) {
         setState(() {
           curTime = event.curTime;
@@ -71,13 +75,21 @@ class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
     });
 
     //播放状态变化
-    eventBus.on<PlayStateRefreshEvent>().listen((event) {
+    event3 = eventBus.on<PlayStateRefreshEvent>().listen((event) {
       if (mounted) {
         setState(() {
           isPlaying = event.state == PlayerState.PLAYING;
         });
       }
     });
+  }
+
+  @override
+  void dispose() {
+    event1.cancel();
+    event2.cancel();
+    event3.cancel();
+    super.dispose();
   }
 
   //返回栏

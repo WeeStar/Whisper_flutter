@@ -18,6 +18,10 @@ class _PlayerRingViewState extends State<PlayerRingView>
   Duration curTime;
   AnimationController controller;
 
+  var event1;
+  var event2;
+  var event3;
+
   _PlayerRingViewState() {
     var curMusic = CurPlayDataService.curPlay.curMusic;
     curMusicImg = curMusic?.img_url ?? "";
@@ -41,7 +45,7 @@ class _PlayerRingViewState extends State<PlayerRingView>
     super.initState();
 
     //当前音乐变化 监听 改变封面
-    eventBus.on<CurMusicRefreshEvent>().listen((event) {
+    event1 = eventBus.on<CurMusicRefreshEvent>().listen((event) {
       if (mounted)
         setState(() {
           curMusicImg = event.music?.img_url ?? "";
@@ -55,7 +59,7 @@ class _PlayerRingViewState extends State<PlayerRingView>
     });
 
     //当前时长变化 改变进度
-    eventBus.on<PlayTimeRefreshEvent>().listen((event) {
+    event2 = eventBus.on<PlayTimeRefreshEvent>().listen((event) {
       if (mounted)
         setState(() {
           curTime = event.curTime;
@@ -63,7 +67,7 @@ class _PlayerRingViewState extends State<PlayerRingView>
     });
 
     //播放状态变化
-    eventBus.on<PlayStateRefreshEvent>().listen((event) {
+    event3 = eventBus.on<PlayStateRefreshEvent>().listen((event) {
       if (mounted)
         setState(() {
           if (event.state == PlayerState.PLAYING) {
@@ -80,6 +84,9 @@ class _PlayerRingViewState extends State<PlayerRingView>
 
   @override
   void dispose() {
+    event1.cancel();
+    event2.cancel();
+    event3.cancel();
     controller.dispose();
     super.dispose();
   }

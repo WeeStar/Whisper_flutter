@@ -17,6 +17,7 @@ class _PlayerBottomSheetState extends State<PlayerBottomSheet>
   RoundModeEnum roundMode;
   String curMusicId;
   ScrollController _scrollController;
+  var event1;
 
   _PlayerBottomSheetState() {
     curList = CurListService.curList;
@@ -29,7 +30,7 @@ class _PlayerBottomSheetState extends State<PlayerBottomSheet>
   void initState() {
     super.initState();
     //当前音乐变化 监听 改变封面
-    eventBus.on<CurMusicRefreshEvent>().listen((event) {
+    event1 = eventBus.on<CurMusicRefreshEvent>().listen((event) {
       if (mounted) {
         setState(() {
           var curMusic = event.music;
@@ -174,6 +175,7 @@ class _PlayerBottomSheetState extends State<PlayerBottomSheet>
 
   @override
   void dispose() {
+    this.event1.cancel(); //取消事件监听
     _scrollController.dispose();
     super.dispose();
   }
