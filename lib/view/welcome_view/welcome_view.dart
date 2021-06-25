@@ -38,7 +38,7 @@ class _WelcomeViewState extends State<WelcomeView>
         new Image.asset('images/welcome/welcome_1.png',
             alignment: Alignment.center, fit: BoxFit.fitHeight),
         new SafeArea(
-        child: Column(
+            child: Column(
           children: [
             new Padding(
               padding: new EdgeInsets.fromLTRB(0, 110, 0, 30),
@@ -69,47 +69,40 @@ class _WelcomeViewState extends State<WelcomeView>
     );
   }
 
-  bool _isReqestOver = false;
   _getRecom() async {
-    // 延时5s执行检测
-    Future.delayed(Duration(seconds: 5), () {
-      var times = 0;
-
-      //检查结果
-      while (!_isReqestOver) {
-        sleep(Duration(microseconds: 500));
-        times += 1;
-        if (times == 10) {
-          //十次失败 弹提示 可重试
-          DialogView.showDialogView(
-              "无法连接到网络，请在“设置”中允许Whisper访问网络后，点击重试", "重试", "取消", () {
-            _getRecom();
-          }, () {
-            return;
-          });
-          break;
-        }
-      }
-    });
+    var recomSheets = [];
 
     //请求推荐歌单
-    var recomSheets = await ApiService.getRecomSheets();
-    _isReqestOver = true;
-
-    //获取最近播放
-    await CurPlayDataService.read();
+    var fgetRecom = new Future(() async {
+      recomSheets = await ApiService.getRecomSheets();
+    }).timeout(new Duration(seconds: 15));
 
     //初始化播放服务
-    var platform = Theme.of(context).platform;
-    PlayerService.build(platform);
-    CurListService.build();
+    var finitPlay = new Future(() async {
+      await CurPlayDataService.read(); //获取最近播放
+      var platform = Theme.of(context).platform;
+      PlayerService.build(platform);
+      CurListService.build();
+    });
+
+    //读取数据
+    var freadHis = HisDataService.read();
+    var freadMy = MySheetsDataService.read();
 
     //打开主页
-    await HisDataService.read();
-    await MySheetsDataService.read();
-    Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) {
-      return MainTab(recomSheets);
-    }), (route) => route == null);
+    Future.wait<dynamic>([fgetRecom, finitPlay, freadHis, freadMy])
+        .then((value) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) {
+        return MainTab(recomSheets);
+      }), (route) => route == null);
+    }).catchError((error) {
+      DialogView.showDialogView(
+          "无法连接到网络，请在“设置”中允许Whisper访问网络后，点击重试", "重试", "取消", () {
+        _getRecom();
+      }, () {
+        return;
+      });
+    });
   }
 }
