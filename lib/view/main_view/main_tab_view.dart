@@ -34,17 +34,17 @@ class _IndexState extends State<MainTab> with TickerProviderStateMixin {
     _navigationViews = <NavigationIconView>[
       new NavigationIconView(
         icon: new Icon(Icons.track_changes),
-        title: new Text("推荐"),
+        title: "推荐",
         vsync: this,
       ),
       new NavigationIconView(
         icon: new Icon(Icons.audiotrack),
-        title: new Text("我的"),
+        title: "我的",
         vsync: this,
       ),
       new NavigationIconView(
         icon: new Icon(Icons.person),
-        title: new Text("设置"),
+        title: "设置",
         vsync: this,
       ),
     ];

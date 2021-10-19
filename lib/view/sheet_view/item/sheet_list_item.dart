@@ -36,7 +36,7 @@ class SheetListItemView extends StatelessWidget {
         style: Theme.of(context).textTheme.bodyText1);
 
     //描述
-    var descChilden = new List<Widget>();
+    var descChilden = <Widget>[];
     if (sheet.is_my) {
       //我的歌单 展示歌曲数量
       descChilden.add(Text(

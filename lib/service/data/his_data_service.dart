@@ -24,8 +24,8 @@ class HisDataService {
 
     //文件为空 返回空对象
     if (jsonStr == null || jsonStr == "") {
-      searchHis = new List<String>();
-      playSheetHis = new List<SheetModel>();
+      searchHis = <String>[];
+      playSheetHis = <SheetModel>[];
     } else {
       Map mySheetsMap = jsonDecode(jsonStr);
       var sheetsData = new HisModel.fromJson(mySheetsMap);
@@ -49,7 +49,7 @@ class HisDataService {
 
     //深拷贝对象
     await read();
-    var newSearchHis = new List<String>();
+    var newSearchHis = <String>[];
     newSearchHis.add(keyWord);
     for (var item in searchHis) {
       if (item == keyWord) {
@@ -68,7 +68,7 @@ class HisDataService {
     await read();
 
     //对象赋值
-    searchHis = new List<String>();
+    searchHis = <String>[];
     await _write();
   }
 
@@ -84,7 +84,7 @@ class HisDataService {
 
     //加入歌单 先新建变量进行操作
     await read();
-    var newSheetHis = new List<SheetModel>();
+    var newSheetHis = <SheetModel>[];
     newSheetHis.add(newSheet);
     for (var item in playSheetHis) {
       if (item.id == sheet.id) {

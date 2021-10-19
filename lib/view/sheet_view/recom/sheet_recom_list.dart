@@ -11,13 +11,13 @@ class SheetRecomListView extends StatelessWidget {
 
   //满三个拆分
   List<List<SheetModel>> _splitRecomList() {
-    var sheetGroup = new List<List<SheetModel>>();
-    var sheetList = new List<SheetModel>();
+    var sheetGroup = <List<SheetModel>>[];
+    var sheetList = <SheetModel>[];
     for (var item in recomList.sheets) {
       sheetList.add(item);
       if (sheetList.length == 3) {
         sheetGroup.add(sheetList);
-        sheetList = new List<SheetModel>();
+        sheetList = <SheetModel>[];
       }
     }
     if (sheetList.length > 0) {
@@ -28,9 +28,9 @@ class SheetRecomListView extends StatelessWidget {
 
   //满三个拆分
   List<List<Widget>> _getListItems(List<List<SheetModel>> sheetGroup) {
-    var listItems = new List<List<Widget>>();
+    var listItems = <List<Widget>>[];
     for (var group in sheetGroup) {
-      var columnItems = new List<Widget>();
+      var columnItems = <Widget>[];
       for (var item in group) {
         columnItems.add(new SheetListItemView(item));
       }

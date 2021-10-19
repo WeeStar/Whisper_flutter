@@ -9,10 +9,10 @@ part 'my_sheets_model.g.dart';
 class MySheetsModel
 {
     /// 我的歌单
-    var mySheets=List<SheetModel>();
+    var mySheets=<SheetModel>[];
     
     /// 收藏歌单
-    var favSheets=List<SheetModel>();
+    var favSheets=<SheetModel>[];
     
     MySheetsModel(this.mySheets, this.favSheets);
     MySheetsModel.empty();

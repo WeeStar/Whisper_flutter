@@ -29,7 +29,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
   int _pageSize = 30;
   MusicSource _source;
   String _keyWord;
-  List<MusicModel> _searchRes = new List<MusicModel>();
+  List<MusicModel> _searchRes = <MusicModel>[];
   bool _isInSearch = false;
 
   _SearchViewState() {
@@ -74,7 +74,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
 
     //在搜索内
     setState(() {
-      _searchRes = new List<MusicModel>();
+      _searchRes = <MusicModel>[];
       _isInSearch = true;
     });
 
@@ -189,7 +189,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
               //清空搜索历史
               HisDataService.clearHis();
               setState(() {
-                _searchHis = new List<String>();
+                _searchHis = <String>[];
               });
             }, () {
               return;

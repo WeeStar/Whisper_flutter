@@ -6,7 +6,7 @@ part 'cur_play_model.g.dart';
 @JsonSerializable()
 class CurPlayModel {
   /// 当前音乐列表
-  var curList = List<MusicModel>();
+  var curList = <MusicModel>[];
 
   /// 当前音乐
   MusicModel curMusic = MusicModel.empty();

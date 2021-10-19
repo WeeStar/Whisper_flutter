@@ -26,7 +26,7 @@ class SheetModel {
   MusicSource sheet_source;
 
   /// 歌曲列表
-  var tracks = new List<MusicModel>();
+  var tracks = <MusicModel>[];
 
   /// 是否我的
   bool is_my = false;

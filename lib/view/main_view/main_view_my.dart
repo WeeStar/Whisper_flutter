@@ -69,7 +69,7 @@ class _MainViewMyState extends State<MainViewMy> with TickerProviderStateMixin {
   }
 
   List<Widget> _buildHeader() {
-    var list = new List<Widget>();
+    var list = <Widget>[];
     if (_hisSheets.length > 0) {
       //头部 历史播放
       list.add(SliverAppBar(

@@ -25,8 +25,8 @@ class MySheetsDataService {
 
     //文件为空 返回空对象
     if (jsonStr == null || jsonStr == "") {
-      mySheets = new List<SheetModel>();
-      favSheets = new List<SheetModel>();
+      mySheets = <SheetModel>[];
+      favSheets = <SheetModel>[];
     } else {
       Map mySheetsMap = jsonDecode(jsonStr);
       var sheetsData = new MySheetsModel.fromJson(mySheetsMap);

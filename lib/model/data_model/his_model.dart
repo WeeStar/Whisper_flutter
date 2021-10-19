@@ -8,10 +8,10 @@ part 'his_model.g.dart';
 /// 历史模型
 class HisModel {
   /// 搜索历史
-  var searchHis = List<String>();
+  var searchHis = <String>[];
 
   /// 歌单播放历史
-  var playSheetHis = List<SheetModel>();
+  var playSheetHis = <SheetModel>[];
 
   HisModel(this.searchHis, this.playSheetHis);
   HisModel.empty();

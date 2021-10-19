@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 //tab导航单项
 class NavigationIconView {
-  NavigationIconView({Widget icon, Widget title, TickerProvider vsync})
+  NavigationIconView({Widget icon, String title, TickerProvider vsync})
       : item = new BottomNavigationBarItem(
           icon: icon,
-          title: title,
+          label: title,
         ),
         controller = new AnimationController(
             duration: kThemeAnimationDuration, vsync: vsync);
