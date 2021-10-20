@@ -171,7 +171,7 @@ class PlayerService {
       return false;
     }
     await audioPlayer.setReleaseMode(ReleaseMode.STOP);
-    await audioPlayer.setPlaybackRate(playbackRate: 0.0);
+    await audioPlayer.setPlaybackRate(0.0);
 
     //获取时长
     curTime = Duration.zero;
@@ -255,8 +255,7 @@ class PlayerService {
 
       isPlaying = state == PlayerState.PLAYING;
       //调整进度条速率
-      audioPlayer?.setPlaybackRate(
-          playbackRate: state == PlayerState.PLAYING ? 1.0 : 0.0);
+      audioPlayer?.setPlaybackRate(state == PlayerState.PLAYING ? 1.0 : 0.0);
       //广播播放状态
       eventBus.fire(PlayStateRefreshEvent(state));
     });
@@ -271,8 +270,7 @@ class PlayerService {
         audioPlayer.onNotificationPlayerStateChanged.listen((state) {
       isPlaying = state == PlayerState.PLAYING;
       //调整进度条速率
-      audioPlayer.setPlaybackRate(
-          playbackRate: state == PlayerState.PLAYING ? 1.0 : 0.0);
+      audioPlayer.setPlaybackRate(state == PlayerState.PLAYING ? 1.0 : 0.0);
 
       //广播播放状态
       eventBus.fire(PlayStateRefreshEvent(state));
