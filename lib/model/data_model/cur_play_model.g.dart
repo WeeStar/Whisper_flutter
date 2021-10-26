@@ -23,8 +23,8 @@ CurPlayModel _$CurPlayModelFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$CurPlayModelToJson(CurPlayModel instance) =>
     <String, dynamic>{
-      'curList': instance.curList?.map((e) => e.toJson())?.toList() ?? null,
-      'curMusic': instance.curMusic?.toJson() ?? null,
+      'curList': instance.curList.map((e) => e.toJson()).toList(),
+      'curMusic': instance.curMusic.toJson(),
       'roundMode': _$RoundModeEnumEnumMap[instance.roundMode]
     };
 

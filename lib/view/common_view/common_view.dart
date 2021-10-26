@@ -112,7 +112,7 @@ class CommonView {
               width: 25,
             ),
             Expanded(
-                child: Text(music.title ?? "",
+                child: Text(music.title,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
@@ -211,7 +211,7 @@ class CommonView {
       onTap: () {
         Navigator.pop(context);
         if (!item.enable) return;
-        item.callBack?.call();
+        item.callBack.call();
       },
     );
   }

@@ -54,7 +54,7 @@ class DialogView {
       ..showCallBack = dissmissMilliseconds > 0
           ? () {
               Future.delayed(Duration(milliseconds: dissmissMilliseconds), () {
-                notice?.dismiss();
+                notice.dismiss();
               });
             }
           : null
@@ -88,14 +88,14 @@ class DialogView {
         fontSize1: 15.0,
         fontWeight1: FontWeight.w500,
         onTap1: () {
-          onTap1?.call();
+          onTap1.call();
         },
         text2: tab2Text,
         color2: theme.primaryColor,
         fontSize2: 15.0,
         fontWeight2: FontWeight.w500,
         onTap2: () {
-          onTap2?.call();
+          onTap2.call();
         },
       )
       ..backgroundColor = Theme.of(dialog.context!).scaffoldBackgroundColor

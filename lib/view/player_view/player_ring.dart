@@ -24,7 +24,7 @@ class _PlayerRingViewState extends State<PlayerRingView>
 
   _PlayerRingViewState() {
     var curMusic = CurPlayDataService.curPlay!.curMusic;
-    curMusicImg = curMusic?.img_url ?? "";
+    curMusicImg = curMusic.img_url ?? "";
     curTime = Duration.zero;
     totalTime = Duration(minutes: 1);
 
@@ -48,7 +48,7 @@ class _PlayerRingViewState extends State<PlayerRingView>
     event1 = eventBus.on<CurMusicRefreshEvent>().listen((event) {
       if (mounted)
         setState(() {
-          curMusicImg = event.music?.img_url ?? "";
+          curMusicImg = event.music.img_url ?? "";
           //进度置空
           curTime = Duration.zero;
           totalTime = event.totalTime;
@@ -127,9 +127,9 @@ class _PlayerRingViewState extends State<PlayerRingView>
           height: 30,
           child: CircularProgressIndicator(
             strokeWidth: 2,
-            value: (totalTime == null || totalTime.inMilliseconds == 0)
+            value: ( totalTime.inMilliseconds == 0)
                 ? 0.0
-                : (curTime?.inMilliseconds ?? 0).toDouble() /
+                : (curTime.inMilliseconds ?? 0).toDouble() /
                     totalTime.inMilliseconds,
             backgroundColor: Colors.grey[300]!.withOpacity(0.6),
             valueColor: AlwaysStoppedAnimation(Colors.white),

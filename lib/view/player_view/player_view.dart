@@ -162,8 +162,7 @@ class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
       child: new LinearProgressIndicator(
           value: (totalTime.inMilliseconds == 0)
               ? 0.0
-              : (curTime?.inMilliseconds ?? 0).toDouble() /
-                  totalTime.inMilliseconds,
+              : (curTime.inMilliseconds).toDouble() / totalTime.inMilliseconds,
           //背景颜色
           backgroundColor: AppColor.prgBarBackColor,
           //进度颜色
@@ -176,7 +175,7 @@ class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-            (totalTime == null || totalTime.inMilliseconds == 0)
+            (totalTime.inMilliseconds == 0)
                 ? Duration.zero.toString().substring(2, 7)
                 : curTime.toString().substring(2, 7),
             style: TextStyle(
@@ -207,7 +206,7 @@ class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
 
   //标题
   Widget _buildTitle(BuildContext context) {
-    return Text(curMusic?.title ?? "暂无歌曲",
+    return Text(curMusic.title,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
@@ -218,7 +217,7 @@ class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
 
   //副标题
   Widget _buildSubTitle(BuildContext context) {
-    return Text(curMusic?.getDesc() ?? "未知",
+    return Text(curMusic.getDesc(),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(

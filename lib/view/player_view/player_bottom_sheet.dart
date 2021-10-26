@@ -23,7 +23,7 @@ class _PlayerBottomSheetState extends State<PlayerBottomSheet>
     curList = CurListService.curList;
     roundMode = CurListService.roundMode;
     var curMusic = CurListService.curMusic;
-    curMusicId = curMusic?.id ?? "";
+    curMusicId = curMusic.id ?? "";
   }
 
   @override
@@ -34,7 +34,7 @@ class _PlayerBottomSheetState extends State<PlayerBottomSheet>
       if (mounted) {
         setState(() {
           var curMusic = event.music;
-          curMusicId = curMusic?.id ?? "";
+          curMusicId = curMusic.id ?? "";
         });
       }
     });

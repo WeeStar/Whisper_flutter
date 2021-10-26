@@ -49,7 +49,7 @@ class _IndexState extends State<MainTab> with TickerProviderStateMixin {
       ),
     ];
 
-    for (NavigationIconView view in _navigationViews!) {
+    for (NavigationIconView view in _navigationViews) {
       view.controller.addListener(_rebuild);
     }
 
@@ -68,7 +68,7 @@ class _IndexState extends State<MainTab> with TickerProviderStateMixin {
   @override
   void dispose() {
     super.dispose();
-    for (NavigationIconView view in _navigationViews!) {
+    for (NavigationIconView view in _navigationViews) {
       view.controller.dispose();
     }
   }

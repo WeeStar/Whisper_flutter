@@ -8,7 +8,7 @@ part of 'his_model.dart';
 
 HisModel _$HisModelFromJson(Map<String, dynamic> json) {
   return HisModel(
-      (json['searchHis'] as List?)?.map((e) => e as String)?.toList() ?? [],
+      (json['searchHis'] as List?)?.map((e) => e as String).toList() ?? [],
       (json['playSheetHis'] as List?)
               ?.map((e) => e == null
                   ? SheetModel.empty()

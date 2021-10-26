@@ -121,7 +121,7 @@ class PlayerService {
   // 私有 播放服务
   static Future<void> _playService(MusicModel playMusic) async {
     //重复播放当前歌曲 跳转到0:00 重新播放
-    if (playMusic.id == curMusic!.id && audioPlayer != null) {
+    if (playMusic.id == curMusic.id && audioPlayer != null) {
       await seek(Duration.zero);
       await audioPlayer!.resume();
       return;
@@ -181,7 +181,7 @@ class PlayerService {
       totalTime = Duration(milliseconds: await audioPlayer!.getDuration());
 
       //广播时长
-      eventBus.fire(CurMusicRefreshEvent(curMusic!, totalTime));
+      eventBus.fire(CurMusicRefreshEvent(curMusic, totalTime));
 
       // 设置IOS锁屏
       await audioPlayer!.notificationService.setNotification(
@@ -235,7 +235,7 @@ class PlayerService {
       //获取时长
       totalTime = c;
       //广播时长
-      eventBus.fire(CurMusicRefreshEvent(curMusic!, totalTime));
+      eventBus.fire(CurMusicRefreshEvent(curMusic, totalTime));
     });
 
     //当前进度获取 发广播
