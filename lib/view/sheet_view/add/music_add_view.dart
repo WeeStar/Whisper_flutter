@@ -6,7 +6,7 @@ import 'package:whisper/model/sheet_model.dart';
 import 'package:whisper/service/data/my_sheets_data_service.dart';
 
 class MusicAddView extends StatelessWidget {
-  final List<SheetModel> sheetList = MySheetsDataService.mySheets;
+  final List<SheetModel> sheetList = MySheetsDataService.mySheets!;
   final MusicModel music;
   final Function(bool res) callback;
 
@@ -75,7 +75,7 @@ class MusicAddView extends StatelessWidget {
                 style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
-                    color: Theme.of(context).textTheme.bodyText1.color)),
+                    color: Theme.of(context).textTheme.bodyText1!.color)),
             SizedBox(
               width: 25,
             ),
@@ -100,13 +100,13 @@ class MusicAddView extends StatelessWidget {
             onTap: () async {
               Navigator.pop(context);
               var exist = await MySheetsDataService.existMusicMySheet(
-                  sheetList[idx].id, music.id);
+                  sheetList[idx].id ?? "", music.id ?? "");
               if (exist) {
-                this.callback?.call(false);
+                this.callback.call(false);
               } else {
                 await MySheetsDataService.insertMusicMySheet(
-                    sheetList[idx].id, music);
-                this.callback?.call(true);
+                    sheetList[idx].id ?? "", music);
+                this.callback.call(true);
               }
             },
           );
@@ -122,7 +122,7 @@ class MusicAddView extends StatelessWidget {
     var cover = OctoImage(
       width: 60,
       height: 60,
-      image: CachedNetworkImageProvider(sheet.cover_img_url),
+      image: CachedNetworkImageProvider(sheet.cover_img_url ?? ""),
       placeholderBuilder: (_) {
         return Image.asset("images/empty.png",
             alignment: Alignment.center, fit: BoxFit.fill);
@@ -135,7 +135,7 @@ class MusicAddView extends StatelessWidget {
     );
 
     //歌单标题
-    var title = Text(sheet.title,
+    var title = Text(sheet.title ?? "",
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         style: Theme.of(context).textTheme.bodyText1);

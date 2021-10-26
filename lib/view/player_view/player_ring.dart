@@ -13,17 +13,17 @@ class PlayerRingView extends StatefulWidget {
 
 class _PlayerRingViewState extends State<PlayerRingView>
     with TickerProviderStateMixin {
-  String curMusicImg;
-  Duration totalTime;
-  Duration curTime;
-  AnimationController controller;
+  late String curMusicImg;
+  late Duration totalTime;
+  late Duration curTime;
+  late AnimationController controller;
 
   var event1;
   var event2;
   var event3;
 
   _PlayerRingViewState() {
-    var curMusic = CurPlayDataService.curPlay.curMusic;
+    var curMusic = CurPlayDataService.curPlay!.curMusic;
     curMusicImg = curMusic?.img_url ?? "";
     curTime = Duration.zero;
     totalTime = Duration(minutes: 1);
@@ -131,7 +131,7 @@ class _PlayerRingViewState extends State<PlayerRingView>
                 ? 0.0
                 : (curTime?.inMilliseconds ?? 0).toDouble() /
                     totalTime.inMilliseconds,
-            backgroundColor: Colors.grey[300].withOpacity(0.6),
+            backgroundColor: Colors.grey[300]!.withOpacity(0.6),
             valueColor: AlwaysStoppedAnimation(Colors.white),
           ),
         ),

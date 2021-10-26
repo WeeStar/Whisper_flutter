@@ -13,31 +13,31 @@ import 'package:whisper/service/http/api_service.dart';
 // 播放器服务
 class PlayerService {
   //当前音频
-  static MusicModel curMusic;
+  static late MusicModel curMusic;
   static Duration curTime = Duration.zero;
   static Duration totalTime = Duration.zero;
 
   //播放器
-  static AudioPlayer audioPlayer;
+  static AudioPlayer? audioPlayer;
   static bool isPlaying = false;
   static bool isLoading = false;
-  static Timer _timer;
+  static Timer? _timer;
 
   //平台
-  static TargetPlatform platform;
+  static late TargetPlatform platform;
 
   //监听事件
-  static StreamSubscription _onPositionChanged;
-  static StreamSubscription _onDurationChanged;
-  static StreamSubscription _onPlayerStateChanged;
-  static StreamSubscription _onPlayError;
-  static StreamSubscription _onNotifyStateChanged;
-  static StreamSubscription _onPlayerCommand;
+  static  StreamSubscription? _onPositionChanged;
+  static  StreamSubscription? _onDurationChanged;
+  static  StreamSubscription? _onPlayerStateChanged;
+  static  StreamSubscription? _onPlayError;
+  static  StreamSubscription? _onNotifyStateChanged;
+  static  StreamSubscription? _onPlayerCommand;
 
   //初始化
   static build(TargetPlatform _platform) async {
     platform = _platform;
-    curMusic = CurPlayDataService.curPlay.curMusic;
+    curMusic = CurPlayDataService.curPlay!.curMusic;
   }
 
   //释放
@@ -47,10 +47,10 @@ class PlayerService {
   }
 
   //播放
-  static Future<void> play({MusicModel music, SheetModel sheet}) async {
+  static Future<void> play({MusicModel? music, SheetModel? sheet}) async {
     //直接恢复播放的 尝试恢复
     if (music == null && sheet == null && audioPlayer != null) {
-      await audioPlayer.resume();
+      await audioPlayer!.resume();
       return;
     }
 
@@ -115,15 +115,15 @@ class PlayerService {
 
   //跳转
   static Future<void> seek(Duration seekTo) async {
-    await audioPlayer.seek(seekTo);
+    await audioPlayer!.seek(seekTo);
   }
 
   // 私有 播放服务
   static Future<void> _playService(MusicModel playMusic) async {
     //重复播放当前歌曲 跳转到0:00 重新播放
-    if (playMusic.id == curMusic.id && audioPlayer != null) {
+    if (playMusic.id == curMusic!.id && audioPlayer != null) {
       await seek(Duration.zero);
-      await audioPlayer.resume();
+      await audioPlayer!.resume();
       return;
     }
 
@@ -149,7 +149,7 @@ class PlayerService {
         _bindPlayerEvent();
 
         //播放
-        await audioPlayer.resume();
+        await audioPlayer!.resume();
         isLoading = false;
       } catch (exp) {
         //初始化失败 跳下一首
@@ -165,29 +165,29 @@ class PlayerService {
     //初始化Player
     audioPlayer = AudioPlayer();
     try {
-      var res = await audioPlayer.setUrl(Uri.encodeFull(playUrl));
+      var res = await audioPlayer!.setUrl(Uri.encodeFull(playUrl));
       if (res != 1) return false;
     } catch (exp) {
       return false;
     }
-    await audioPlayer.setReleaseMode(ReleaseMode.STOP);
-    await audioPlayer.setPlaybackRate(0.0);
+    await audioPlayer!.setReleaseMode(ReleaseMode.STOP);
+    await audioPlayer!.setPlaybackRate(0.0);
 
     //获取时长
     curTime = Duration.zero;
 
     if (platform == TargetPlatform.iOS) {
       //ios 此时即可获取时长
-      totalTime = Duration(milliseconds: await audioPlayer.getDuration());
+      totalTime = Duration(milliseconds: await audioPlayer!.getDuration());
 
       //广播时长
-      eventBus.fire(CurMusicRefreshEvent(curMusic, totalTime));
+      eventBus.fire(CurMusicRefreshEvent(curMusic!, totalTime));
 
       // 设置IOS锁屏
-      await audioPlayer.notificationService.setNotification(
-          title: curMusic?.title ?? "未知歌曲",
-          artist: curMusic?.artist ?? "未知歌手",
-          albumTitle: curMusic?.album ?? "未知专辑",
+      await audioPlayer!.notificationService.setNotification(
+          title: curMusic.title,
+          artist: curMusic.artist,
+          albumTitle: curMusic.album,
           imageUrl: '',
           duration: totalTime,
           elapsedTime: Duration(seconds: 0),
@@ -202,8 +202,8 @@ class PlayerService {
     //获取播放地址
     var playUrl = "";
     var playInfo =
-        await ApiService.getPlayInfo(playMusic.source, [playMusic.id]);
-    playUrl = playInfo.playUrl;
+        await ApiService.getPlayInfo(playMusic.source, [playMusic.id!]);
+    playUrl = playInfo.playUrl ?? "";
 
     //酷狗的歌曲图片由歌曲播放信息中获取
     if (playMusic.source == MusicSource.kugou)
@@ -230,24 +230,24 @@ class PlayerService {
   // 私有 绑定播放器事件
   static void _bindPlayerEvent() {
     //总时长变化 发广播 安卓此时发广播
-    _onDurationChanged = audioPlayer.onDurationChanged.listen((Duration c) {
+    _onDurationChanged = audioPlayer!.onDurationChanged.listen((Duration c) {
       if (platform == TargetPlatform.iOS) return;
       //获取时长
       totalTime = c;
       //广播时长
-      eventBus.fire(CurMusicRefreshEvent(curMusic, totalTime));
+      eventBus.fire(CurMusicRefreshEvent(curMusic!, totalTime));
     });
 
     //当前进度获取 发广播
     _onPositionChanged =
-        audioPlayer.onAudioPositionChanged.listen((Duration c) {
+        audioPlayer!.onAudioPositionChanged.listen((Duration c) {
       //广播进度
       curTime = c;
       eventBus.fire(PlayTimeRefreshEvent(c));
     });
 
     //播放状态变化 发广播
-    _onPlayerStateChanged = audioPlayer.onPlayerStateChanged.listen((state) {
+    _onPlayerStateChanged = audioPlayer!.onPlayerStateChanged.listen((state) {
       //播放完成 下一首
       if (state == PlayerState.COMPLETED) {
         next();
@@ -261,23 +261,23 @@ class PlayerService {
     });
 
     //播放失败 下一首
-    _onPlayError = audioPlayer.onPlayerError.listen((event) {
+    _onPlayError = audioPlayer!.onPlayerError.listen((event) {
       next(true);
     });
 
     //ios 锁屏通知发起状态变化 接收播放暂停
     _onNotifyStateChanged =
-        audioPlayer.onNotificationPlayerStateChanged.listen((state) {
+        audioPlayer!.onNotificationPlayerStateChanged.listen((state) {
       isPlaying = state == PlayerState.PLAYING;
       //调整进度条速率
-      audioPlayer.setPlaybackRate(state == PlayerState.PLAYING ? 1.0 : 0.0);
+      audioPlayer!.setPlaybackRate(state == PlayerState.PLAYING ? 1.0 : 0.0);
 
       //广播播放状态
       eventBus.fire(PlayStateRefreshEvent(state));
     });
 
     //接收远端操作 耳机线控 锁屏按钮等 接收上一曲 下一曲
-    _onPlayerCommand = audioPlayer.notificationService.onPlayerCommand
+    _onPlayerCommand = audioPlayer!.notificationService.onPlayerCommand
         .listen((PlayerControlCommand event) {
       if (event == PlayerControlCommand.NEXT_TRACK) {
         next(true);

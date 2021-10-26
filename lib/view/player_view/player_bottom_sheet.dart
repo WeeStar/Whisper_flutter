@@ -13,10 +13,10 @@ class PlayerBottomSheet extends StatefulWidget {
 
 class _PlayerBottomSheetState extends State<PlayerBottomSheet>
     with TickerProviderStateMixin {
-  List<MusicModel> curList;
-  RoundModeEnum roundMode;
-  String curMusicId;
-  ScrollController _scrollController;
+  late List<MusicModel> curList;
+  late RoundModeEnum roundMode;
+  late String curMusicId;
+  late ScrollController _scrollController;
   var event1;
 
   _PlayerBottomSheetState() {
@@ -77,7 +77,7 @@ class _PlayerBottomSheetState extends State<PlayerBottomSheet>
               musicIdx: idx,
               isPlaying: curList[idx - 1].id == curMusicId,
               delCallBack: () {
-                PlayerService.del(curList[idx - 1].id);
+                PlayerService.del(curList[idx - 1].id ?? "");
                 if (mounted) {
                   setState(() {
                     curList = CurListService.curList;
@@ -120,12 +120,12 @@ class _PlayerBottomSheetState extends State<PlayerBottomSheet>
                 style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w500,
-                    color: Theme.of(context).textTheme.bodyText1.color)),
+                    color: Theme.of(context).textTheme.bodyText1!.color)),
             Text("(" + curList.length.toString() + ")",
                 style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
-                    color: Theme.of(context).textTheme.bodyText2.color))
+                    color: Theme.of(context).textTheme.bodyText2!.color))
           ],
         )
       ],

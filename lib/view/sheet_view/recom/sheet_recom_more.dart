@@ -18,7 +18,7 @@ class SheetRecomMoreView extends StatefulWidget {
 
 class _SheetRecomMoreViewState extends State<SheetRecomMoreView>
     with TickerProviderStateMixin {
-  EasyRefreshController _controller;
+  late EasyRefreshController _controller;
   List<SheetModel> _sheetList;
 
   int _pageIndex = 2;
@@ -87,7 +87,7 @@ class _SheetRecomMoreViewState extends State<SheetRecomMoreView>
             loadedText: "正在加载,请稍后...",
             noMoreText: "没有更多了",
             infoText: "音乐无界  万象森罗",
-            textColor: Theme.of(context).textTheme.bodyText1.color,
+            textColor: Theme.of(context).textTheme.bodyText1!.color!,
             infoColor: Theme.of(context).primaryColor),
       ),
     );

@@ -51,7 +51,7 @@ class SheetInfoCoverView extends StatelessWidget {
         style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w400,
-            color: Theme.of(context).textTheme.subtitle1.color));
+            color: Theme.of(context).textTheme.subtitle1?.color));
 
     //描述
     var desc = Text(
@@ -59,7 +59,7 @@ class SheetInfoCoverView extends StatelessWidget {
       style: TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.w400,
-          color: Theme.of(context).textTheme.subtitle1.color),
+          color: Theme.of(context).textTheme.subtitle1?.color),
     );
 
     return Container(

@@ -11,20 +11,20 @@ import 'package:whisper/service/event_service.dart';
 // 用于获取上下曲
 class CurListService {
   //当前音频
-  static MusicModel curMusic;
-  static List<MusicModel> curList;
+  static late MusicModel curMusic;
+  static late List<MusicModel> curList;
   //循环方式
-  static RoundModeEnum roundMode;
+  static late RoundModeEnum roundMode;
 
   //初始化
   static build() async {
-    curMusic = CurPlayDataService.curPlay.curMusic;
-    curList = CurPlayDataService.curPlay.curList;
-    roundMode = CurPlayDataService.curPlay.roundMode;
+    curMusic = CurPlayDataService.curPlay!.curMusic;
+    curList = CurPlayDataService.curPlay!.curList;
+    roundMode = CurPlayDataService.curPlay!.roundMode;
   }
 
   //播放
-  static MusicModel play({MusicModel music, SheetModel sheet}) {
+  static MusicModel? play({MusicModel? music, SheetModel? sheet}) {
     MusicModel playMusic; //要播放音乐
 
     //播放整个歌单
@@ -32,7 +32,7 @@ class CurListService {
       //处理无效歌曲
       var playList =
           sheet.tracks.where((element) => element.isPlayable()).toList();
-      if (playList == null || playList.isEmpty) return null;
+      if (playList.isEmpty) return null;
 
       //设置要播放音乐 当前列表
       curList = playList;
@@ -50,7 +50,7 @@ class CurListService {
       playMusic = music;
 
       //需插入当前播放列表 获取插入位置
-      if (!curList.any((element) => element.id == music.id)) {
+      if (!curList.any((element) => element.id == music!.id)) {
         var curIdx = _getInsertIdx();
         curList.insert(curIdx, music);
       }
@@ -62,7 +62,7 @@ class CurListService {
     }
 
     //要播放为空 跳出
-    if (playMusic == null) return null;
+    if (playMusic.id == null) return null;
 
     //更新当前音乐
     _refreshCurMusic(playMusic);
@@ -70,9 +70,9 @@ class CurListService {
   }
 
   //上一首
-  static MusicModel pre() {
+  static MusicModel? pre() {
     //列表为空 跳出
-    if (curList == null || curList.isEmpty) return null;
+    if (curList.isEmpty) return null;
 
     //获取当前位置 上一曲位置
     var curIdx = _getCurIdx();
@@ -85,9 +85,9 @@ class CurListService {
   }
 
   //下一首
-  static MusicModel next([bool isForce = false]) {
+  static MusicModel? next([bool isForce = false]) {
     //列表为空 跳出
-    if (curList == null || curList.isEmpty) return null;
+    if (curList.isEmpty) return null;
 
     //获取当前位置 下一曲位置
     var nextIdx = _getNextIdx(isForce);
@@ -100,13 +100,13 @@ class CurListService {
 
   //设置循环方式
   static void setRoundMode() {
-    roundMode = CurPlayDataService.curPlay.roundMode;
+    roundMode = CurPlayDataService.curPlay!.roundMode;
   }
 
   //删除当前播放列表中的歌曲
   static bool del(String id) {
     curList.removeWhere((element) => element.id == id);
-    CurPlayDataService.curPlay.curList = curList;
+    CurPlayDataService.curPlay!.curList = curList;
     CurPlayDataService.write();
 
     return true;
@@ -121,14 +121,14 @@ class CurListService {
     eventBus.fire(CurMusicRefreshEvent(curMusic, Duration.zero));
 
     //记录当前播放数据
-    CurPlayDataService.curPlay.curList = curList;
-    CurPlayDataService.curPlay.curMusic = curMusic;
+    CurPlayDataService.curPlay!.curList = curList;
+    CurPlayDataService.curPlay!.curMusic = curMusic;
     CurPlayDataService.write();
   }
 
   //私有 获取当前播放位置
   static int _getCurIdx() {
-    if (curMusic == null || curList == null || curList.isEmpty) return 0;
+    if (curMusic.id == null || curList.isEmpty) return 0;
 
     if (!curList.any((element) => element.id == curMusic.id)) return 0;
 
@@ -137,7 +137,7 @@ class CurListService {
 
   //私有 获取插入位置
   static int _getInsertIdx() {
-    if (curMusic == null || curList == null || curList.isEmpty) return 0;
+    if (curMusic.id == null || curList.isEmpty) return 0;
     return _getCurIdx() + 1;
   }
 

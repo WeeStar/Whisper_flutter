@@ -21,7 +21,7 @@ class MusicSearchItemView extends StatelessWidget {
               fontSize: 18,
               fontWeight: FontWeight.w400,
               color: (musicInfo.isPlayable()
-                  ? Theme.of(context).textTheme.bodyText1.color
+                  ? Theme.of(context).textTheme.bodyText1!.color
                   : Theme.of(context).disabledColor))),
     );
 

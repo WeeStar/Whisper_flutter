@@ -17,18 +17,18 @@ class SearchView extends StatefulWidget {
 
 class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
   //初始化构造searchbar
-  AppBarSearch _searchBar;
+  late AppBarSearch _searchBar;
   //分页列表
-  EasyRefreshController _controller;
+  late EasyRefreshController _controller;
 
   //搜索历史
-  List<String> _searchHis;
+  late List<String> _searchHis;
 
   //搜索结果
   int _page = 1;
   int _pageSize = 30;
-  MusicSource _source;
-  String _keyWord;
+  late MusicSource _source;
+  late String _keyWord;
   List<MusicModel> _searchRes = <MusicModel>[];
   bool _isInSearch = false;
 
@@ -49,13 +49,13 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
         onCleared: () {
           //清空跳出搜索
           setState(() {
-            _searchHis = HisDataService.searchHis;
+            _searchHis = HisDataService.searchHis!;
             _isInSearch = false;
           });
         });
 
     //初始化搜索历史
-    _searchHis = HisDataService.searchHis;
+    _searchHis = HisDataService.searchHis!;
     _controller = EasyRefreshController();
   }
 
@@ -147,7 +147,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
           loadedText: "正在加载,请稍后...",
           noMoreText: "没有更多了",
           infoText: "音乐无界  万象森罗",
-          textColor: Theme.of(context).textTheme.bodyText1.color,
+          textColor: Theme.of(context).textTheme.bodyText1!.color!,
           infoColor: Theme.of(context).primaryColor),
     );
   }
@@ -162,7 +162,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
           style: TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.w400,
-              color: Theme.of(context).textTheme.bodyText1.color),
+              color: Theme.of(context).textTheme.bodyText1!.color),
         ),
         InkWell(
           child: Row(
@@ -219,7 +219,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
                   childNode,
                   style: TextStyle(
                     fontSize: 14,
-                    color: Theme.of(context).textTheme.bodyText1.color,
+                    color: Theme.of(context).textTheme.bodyText1!.color,
                   ),
                 ),
               ),
@@ -231,7 +231,7 @@ class _SearchViewState extends State<SearchView> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        appBar: _searchBar.build(context),
+        appBar: _searchBar.build(context) as PreferredSizeWidget?,
         body: _isInSearch
             ? _buildList() //搜索结果
             //搜索历史

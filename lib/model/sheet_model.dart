@@ -6,24 +6,24 @@ part 'sheet_model.g.dart';
 @JsonSerializable()
 class SheetModel {
   /// 歌单ID
-  String id;
+  String? id;
 
   /// 歌单标题
-  String title;
+  String? title;
 
   /// 歌单描述
-  String description;
+  String? description;
 
   /// 播放次数
-  String play;
+  String? play;
 
   /// 歌单封面
-  String cover_img_url;
-  String ori_cover_img_url;
+  String? cover_img_url;
+  String? ori_cover_img_url;
 
   /// 歌单来源url
-  String source_url;
-  MusicSource sheet_source;
+  String? source_url;
+  MusicSource sheet_source = MusicSource.unknow;
 
   /// 歌曲列表
   var tracks = <MusicModel>[];

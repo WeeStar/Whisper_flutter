@@ -69,7 +69,7 @@ class _WelcomeViewState extends State<WelcomeView>
   }
 
   _getRecom() async {
-    var recomSheets = [];
+    List<RecomModel> recomSheets = [];
 
     //请求推荐歌单
     var fgetRecom = new Future(() async {

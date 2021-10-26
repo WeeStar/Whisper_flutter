@@ -23,14 +23,14 @@ class _SheetInfoViewState extends State<SheetInfoView>
     with TickerProviderStateMixin {
   SheetModel _sheetInfo;
 
-  String _coverImg; //封面图片用于避开setState重新加载
-  String _title; //歌单标题用于避开setState重新加载
+  late String _coverImg; //封面图片用于避开setState重新加载
+  late String _title; //歌单标题用于避开setState重新加载
 
   //滚动检测
   double _width = 100.0;
   String _viewTitle = "歌单"; //用于标题展示
   ScrollController _controller = ScrollController();
-  AnimationController _hideFabAnimation;
+  late AnimationController _hideFabAnimation;
 
   bool _isLoadingData = true; //加载数据节流
   bool _isSyncData = false; //同步歌单节流
@@ -40,8 +40,8 @@ class _SheetInfoViewState extends State<SheetInfoView>
   bool _isDeleting = false; //删除节流
 
   _SheetInfoViewState(this._sheetInfo) {
-    _coverImg = this._sheetInfo.cover_img_url;
-    _title = this._sheetInfo.title;
+    _coverImg = this._sheetInfo.cover_img_url ?? "";
+    _title = this._sheetInfo.title ?? "";
   }
 
   @override
@@ -53,24 +53,24 @@ class _SheetInfoViewState extends State<SheetInfoView>
     _hideFabAnimation =
         AnimationController(vsync: this, duration: kThemeAnimationDuration);
 
-    if (!_sheetInfo.is_my && (_sheetInfo.tracks?.length ?? 0) == 0) {
+    if (!_sheetInfo.is_my && (_sheetInfo.tracks.length) == 0) {
       //网络歌单 请求信息
       _isLoadingData = true;
-      ApiService.getSheetInfo(_sheetInfo.sheet_source, _sheetInfo.id)
+      ApiService.getSheetInfo(_sheetInfo.sheet_source, _sheetInfo.id ?? "")
           .then((sheetRes) {
         setState(() {
           _isLoadingData = false;
-          _sheetInfo = sheetRes;
+          _sheetInfo = sheetRes ?? SheetModel.empty();
         });
       }).catchError((error) {
         return;
       });
-    } else if (_sheetInfo.is_my && (_sheetInfo.tracks?.length ?? 0) == 0) {
+    } else if (_sheetInfo.is_my && (_sheetInfo.tracks.length) == 0) {
       //本地歌单历史记录 请求信息
-      var sheetRes = MySheetsDataService.mySheets.firstWhere(
+      var sheetRes = MySheetsDataService.mySheets!.firstWhere(
           (element) => element.id == _sheetInfo.id,
-          orElse: () => null);
-      if (sheetRes != null) {
+          orElse: () => SheetModel.empty());
+      if (sheetRes.id != null) {
         setState(() {
           _isLoadingData = false;
           _sheetInfo = sheetRes;
@@ -82,7 +82,7 @@ class _SheetInfoViewState extends State<SheetInfoView>
 
     //判断是否我的歌单
     if (!_sheetInfo.is_my) {
-      MySheetsDataService.isFavSheets(this._sheetInfo.id).then((value) {
+      MySheetsDataService.isFavSheets(this._sheetInfo.id ?? "").then((value) {
         setState(() {
           _isFav = value;
         });
@@ -99,12 +99,13 @@ class _SheetInfoViewState extends State<SheetInfoView>
     _isSyncData = true;
 
     //云端歌单数据同步本地
-    ApiService.getSheetInfo(_sheetInfo.sheet_source, _sheetInfo.id)
+    ApiService.getSheetInfo(_sheetInfo.sheet_source, _sheetInfo.id ?? "")
         .then((sheetRes) {
+      if (sheetRes == null) return;
       MySheetsDataService.addMySheet(sheetRes).then((mySheet) {
         _isSyncData = false;
         setState(() {
-          _sheetInfo = mySheet;
+          _sheetInfo = mySheet!;
         });
         DialogView.showNoticeView("同步完成",
             dissmissMilliseconds: 1000, width: 120);
@@ -122,7 +123,7 @@ class _SheetInfoViewState extends State<SheetInfoView>
 
     if (_isFav) {
       //已收藏 取消收藏
-      MySheetsDataService.delFavSheet(_sheetInfo.id).then((value) {
+      MySheetsDataService.delFavSheet(_sheetInfo.id ?? "").then((value) {
         _isFavSaving = false;
         if (!value) return;
         setState(() {
@@ -156,7 +157,7 @@ class _SheetInfoViewState extends State<SheetInfoView>
 
     DialogView.showDialogView("是否删除歌单", "确定", "取消", () {
       //删除歌单
-      MySheetsDataService.delMySheet(_sheetInfo.id);
+      MySheetsDataService.delMySheet(_sheetInfo.id ?? "");
       //跳出
       Navigator.pop(context);
       _isDeleting = false;
@@ -168,11 +169,11 @@ class _SheetInfoViewState extends State<SheetInfoView>
   ListView _buildList() {
     var list = ListView.builder(
       controller: _controller,
-      itemCount: _isLoadingData ? 3 : ((_sheetInfo.tracks?.length ?? 0) + 2),
+      itemCount: _isLoadingData ? 3 : ((_sheetInfo.tracks.length) + 2),
       itemBuilder: (context, idx) {
         if (idx == 0) {
           return SheetInfoCoverView(
-              _coverImg, _title, _sheetInfo.tracks?.length ?? 0);
+              _coverImg, _title, _sheetInfo.tracks.length);
         } else if (idx == 1) {
           return Divider(
             height: 1,
@@ -193,16 +194,15 @@ class _SheetInfoViewState extends State<SheetInfoView>
                           DialogView.showDialogView("是否从歌单中删除歌曲", "确定", "取消",
                               () {
                             MySheetsDataService.delMusicMySheet(
-                                _sheetInfo.id, _sheetInfo.tracks[idx - 2].id);
-                            setState(() {
-                            });
+                                _sheetInfo.id ?? "",
+                                _sheetInfo.tracks[idx - 2].id ?? "");
+                            setState(() {});
                           }, () {});
                         }
                       : null,
                 ),
                 onTap: () {
-                  if (_sheetInfo.tracks == null ||
-                      _sheetInfo.tracks.length == 0) return;
+                  if (_sheetInfo.tracks.length == 0) return;
 
                   //无效歌曲跳出
                   if (!_sheetInfo.tracks[idx - 2].isPlayable()) return;

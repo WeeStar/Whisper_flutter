@@ -16,12 +16,12 @@ SheetModel _$SheetModelFromJson(Map<String, dynamic> json) {
       json['ori_cover_img_url'] as String,
       json['source_url'] as String,
       musicSourceFromString(json['sheet_source'] as String),
-      (json['tracks'] as List)
+      (json['tracks'] as List?)
               ?.map((e) => e == null
-                  ? null
+                  ? MusicModel.empty()
                   : MusicModel.fromJson(e as Map<String, dynamic>))
-              ?.toList() ??
-          null,
+              .toList() ??
+          [],
       (json['is_my'] ?? false) as bool);
 }
 
@@ -35,6 +35,6 @@ Map<String, dynamic> _$SheetModelToJson(SheetModel instance) =>
       'ori_cover_img_url': instance.ori_cover_img_url,
       'source_url': instance.source_url,
       'sheet_source': instance.sheet_source.name,
-      'tracks': instance.tracks?.map((e) => e.toJson())?.toList() ?? null,
+      'tracks': instance.tracks.map((e) => e.toJson()).toList(),
       'is_my': instance.is_my
     };

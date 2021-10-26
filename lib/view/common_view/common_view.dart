@@ -14,7 +14,7 @@ class CommonView {
           children: [
             SpinKitRing(
               lineWidth: 2,
-              color: Theme.of(context).textTheme.bodyText1.color,
+              color: Theme.of(context).textTheme.bodyText1!.color,
               size: 20,
             ),
             SizedBox(
@@ -26,7 +26,7 @@ class CommonView {
                 Text(
                   "正在加载,请稍后...",
                   style: TextStyle(
-                      color: Theme.of(context).textTheme.bodyText1.color,
+                      color: Theme.of(context).textTheme.bodyText1!.color,
                       fontSize: 16),
                 ),
                 SizedBox(
@@ -112,13 +112,13 @@ class CommonView {
               width: 25,
             ),
             Expanded(
-                child: Text(music.title,
+                child: Text(music.title ?? "",
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w400,
-                        color: Theme.of(context).textTheme.bodyText1.color))),
+                        color: Theme.of(context).textTheme.bodyText1!.color))),
             SizedBox(
               width: 25,
             ),
@@ -186,7 +186,7 @@ class CommonView {
               child: Icon(item.icon,
                   size: 25,
                   color: item.enable
-                      ? Theme.of(context).textTheme.bodyText1.color
+                      ? Theme.of(context).textTheme.bodyText1!.color
                       : Theme.of(context).disabledColor),
               alignment: Alignment.center,
               width: 40,
@@ -202,7 +202,7 @@ class CommonView {
                   fontSize: 16,
                   fontWeight: FontWeight.w400,
                   color: item.enable
-                      ? Theme.of(context).textTheme.bodyText1.color
+                      ? Theme.of(context).textTheme.bodyText1!.color
                       : Theme.of(context).disabledColor),
             )
           ],

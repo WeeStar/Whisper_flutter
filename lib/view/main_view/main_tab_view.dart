@@ -22,8 +22,8 @@ class MainTab extends StatefulWidget {
 
 class _IndexState extends State<MainTab> with TickerProviderStateMixin {
   int _currentIndex = 0; //选中index
-  List<NavigationIconView> _navigationViews; //导航图标
-  List<Widget> _pageList; //导航显示页面
+  late List<NavigationIconView> _navigationViews; //导航图标
+  late List<Widget> _pageList; //导航显示页面
   // StatefulWidget _currentPage; //当前页面
 
   @override
@@ -33,23 +33,23 @@ class _IndexState extends State<MainTab> with TickerProviderStateMixin {
     //初始化导航图标
     _navigationViews = <NavigationIconView>[
       new NavigationIconView(
-        icon: new Icon(Icons.track_changes),
-        title: "推荐",
-        vsync: this,
+        new Icon(Icons.track_changes),
+        "推荐",
+        this,
       ),
       new NavigationIconView(
-        icon: new Icon(Icons.audiotrack),
-        title: "我的",
-        vsync: this,
+        new Icon(Icons.audiotrack),
+        "我的",
+        this,
       ),
       new NavigationIconView(
-        icon: new Icon(Icons.person),
-        title: "设置",
-        vsync: this,
+        new Icon(Icons.person),
+        "设置",
+        this,
       ),
     ];
 
-    for (NavigationIconView view in _navigationViews) {
+    for (NavigationIconView view in _navigationViews!) {
       view.controller.addListener(_rebuild);
     }
 
@@ -68,12 +68,12 @@ class _IndexState extends State<MainTab> with TickerProviderStateMixin {
   @override
   void dispose() {
     super.dispose();
-    for (NavigationIconView view in _navigationViews) {
+    for (NavigationIconView view in _navigationViews!) {
       view.controller.dispose();
     }
   }
 
-  Widget _buildAppBar() {
+  PreferredSizeWidget _buildAppBar() {
     //标题
     var title = "";
     switch (_currentIndex) {
@@ -89,7 +89,7 @@ class _IndexState extends State<MainTab> with TickerProviderStateMixin {
     }
 
     //操作按钮
-    List<Widget> actions;
+    List<Widget>? actions;
     if (_currentIndex == 0) {
       actions = <Widget>[
         new IconButton(

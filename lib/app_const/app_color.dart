@@ -20,7 +20,7 @@ class AppColor {
       const Color.fromARGB(255, 207, 207, 207);
 
   //副文字色
-  static final Color textColorSubLight = Colors.grey[500];
+  static final Color textColorSubLight = Colors.grey[500]!;
   static final Color textColorSubDark =
       const Color.fromARGB(255, 116, 116, 117);
 

@@ -13,7 +13,7 @@ class SheetMyHisView extends StatelessWidget {
       "最近播放",
       style: TextStyle(
           fontSize: 20,
-          color: Theme.of(context).textTheme.bodyText1.color,
+          color: Theme.of(context).textTheme.bodyText1!.color,
           fontWeight: FontWeight.w500),
     );
 

@@ -14,7 +14,7 @@ class SheeBlockItemView extends StatelessWidget {
     var cover = OctoImage(
       width: 85,
       height: 85,
-      image: CachedNetworkImageProvider(sheet.cover_img_url),
+      image: CachedNetworkImageProvider(sheet.cover_img_url ?? ""),
       placeholderBuilder: (_) {
         return Image.asset("images/empty.png",
             alignment: Alignment.center, fit: BoxFit.fill);
@@ -27,11 +27,11 @@ class SheeBlockItemView extends StatelessWidget {
     );
 
     //歌单标题
-    var title = Text(sheet.title,
+    var title = Text(sheet.title ?? "",
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
-            color: Theme.of(context).textTheme.bodyText1.color,
+            color: Theme.of(context).textTheme.bodyText1!.color,
             fontSize: 12,
             fontWeight: FontWeight.w400));
 

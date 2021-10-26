@@ -10,8 +10,8 @@ import '../event_service.dart';
 
 ///我的歌单配置读写
 class MySheetsDataService {
-  static List<SheetModel> mySheets;
-  static List<SheetModel> favSheets;
+  static List<SheetModel>? mySheets;
+  static List<SheetModel>? favSheets;
 
   ///读取
   static Future<void> read() async {
@@ -24,11 +24,11 @@ class MySheetsDataService {
     var jsonStr = await file.readAsString();
 
     //文件为空 返回空对象
-    if (jsonStr == null || jsonStr == "") {
+    if (jsonStr == "") {
       mySheets = <SheetModel>[];
       favSheets = <SheetModel>[];
     } else {
-      Map mySheetsMap = jsonDecode(jsonStr);
+      Map<String, dynamic> mySheetsMap = jsonDecode(jsonStr);
       var sheetsData = new MySheetsModel.fromJson(mySheetsMap);
       mySheets = sheetsData.mySheets;
       favSheets = sheetsData.favSheets;
@@ -38,13 +38,13 @@ class MySheetsDataService {
   ///写入
   static _write() async {
     File file = new File(await AppPath.mySheetsPath());
-    var jsonStr = jsonEncode(new MySheetsModel(mySheets, favSheets));
+    var jsonStr = jsonEncode(new MySheetsModel(mySheets!, favSheets!));
     file.writeAsString(jsonStr);
   }
 
   ///添加我的歌单
-  static Future<SheetModel> addMySheet(SheetModel inSheet) async {
-    if (inSheet == null) return null;
+  static Future<SheetModel?> addMySheet(SheetModel inSheet) async {
+    if (inSheet.id == null) return null;
 
     //深copy歌单
     var sheet = SheetModel.fromJson(inSheet.toJson());
@@ -52,12 +52,12 @@ class MySheetsDataService {
 
     //检查相同歌单
     await read();
-    var mySheet = mySheets.firstWhere((element) => element.id == sheet.id,
-        orElse: () => null);
+    var mySheet = mySheets!.firstWhere((element) => element.id == sheet.id,
+        orElse: () => SheetModel.empty());
 
-    if (mySheet == null) {
+    if (mySheet.id == null) {
       //不存在相同歌单 直接新增
-      mySheets.insert(0, sheet);
+      mySheets!.insert(0, sheet);
       await _write();
       eventBus.fire(MySheetsRefreshEvent("add"));
       return sheet;
@@ -76,13 +76,13 @@ class MySheetsDataService {
 
   ///更新我的歌单
   static Future<bool> updateMySheet(SheetModel sheet) async {
-    if (sheet == null) return false;
+    if (sheet.id == null) return false;
 
     //校验
     await read();
-    var mySheet = mySheets.firstWhere((element) => element.id == sheet.id,
-        orElse: () => null);
-    if (mySheet == null) {
+    var mySheet = mySheets!.firstWhere((element) => element.id == sheet.id,
+        orElse: () => SheetModel.empty());
+    if (mySheet.id == null) {
       return false;
     }
 
@@ -102,13 +102,13 @@ class MySheetsDataService {
   static Future<bool> delMySheet(String sheetId) async {
     //校验
     await read();
-    var mySheet = mySheets.firstWhere((element) => element.id == sheetId,
-        orElse: () => null);
-    if (mySheet == null) {
+    var mySheet = mySheets!.firstWhere((element) => element.id == sheetId,
+        orElse: () => SheetModel.empty());
+    if (mySheet.id == null) {
       return true;
     }
 
-    mySheets.removeWhere((element) => element.id == sheetId);
+    mySheets!.removeWhere((element) => element.id == sheetId);
 
     //同时删除最近播放 避免问题
     await HisDataService.delSheetHis(sheetId);
@@ -122,15 +122,15 @@ class MySheetsDataService {
   ///我的歌单插入歌曲
   static Future<bool> insertMusicMySheet(
       String sheetId, MusicModel music) async {
-    if (music == null) {
+    if (music.id == null) {
       return false;
     }
 
     //校验
     await read();
-    var mySheet = mySheets.firstWhere((element) => element.id == sheetId,
-        orElse: () => null);
-    if (mySheet == null) {
+    var mySheet = mySheets!.firstWhere((element) => element.id == sheetId,
+        orElse: () => SheetModel.empty());
+    if (mySheet.id == null) {
       return false;
     }
     if (mySheet.tracks.any((element) => element.id == music.id)) {
@@ -147,9 +147,9 @@ class MySheetsDataService {
 
   ///判断歌曲存在
   static Future<bool> existMusicMySheet(String sheetId, String musicId) async {
-    var mySheet = mySheets.firstWhere((element) => element.id == sheetId,
-        orElse: () => null);
-    if (mySheet == null) {
+    var mySheet = mySheets!.firstWhere((element) => element.id == sheetId,
+        orElse: () => SheetModel.empty());
+    if (mySheet.id == null) {
       return false;
     }
     return mySheet.tracks.any((element) => element.id == musicId);
@@ -159,9 +159,9 @@ class MySheetsDataService {
   static Future<bool> delMusicMySheet(String sheetId, String musicId) async {
     //校验
     await read();
-    var mySheet = mySheets.firstWhere((element) => element.id == sheetId,
-        orElse: () => null);
-    if (mySheet == null) {
+    var mySheet = mySheets!.firstWhere((element) => element.id == sheetId,
+        orElse: () => SheetModel.empty());
+    if (mySheet.id == null) {
       return false;
     }
     if (!mySheet.tracks.any((element) => element.id == musicId)) {
@@ -178,7 +178,7 @@ class MySheetsDataService {
 
   ///添加收藏歌单
   static Future<void> addFavSheet(SheetModel inSheet) async {
-    if (inSheet == null) {
+    if (inSheet.id == null) {
       return;
     }
 
@@ -188,12 +188,12 @@ class MySheetsDataService {
 
     //检查相同歌单
     await read();
-    var favSheet = favSheets.firstWhere((element) => element.id == sheet.id,
-        orElse: () => null);
+    var favSheet = favSheets!.firstWhere((element) => element.id == sheet.id,
+        orElse: () => SheetModel.empty());
 
-    if (favSheet == null) {
+    if (favSheet.id == null) {
       //不存在相同歌单 直接新增
-      favSheets.insert(0, sheet);
+      favSheets!.insert(0, sheet);
     } else {
       //存在相同歌单 更新信息
       favSheet = sheet;
@@ -207,14 +207,12 @@ class MySheetsDataService {
   static Future<bool> delFavSheet(String sheetId) async {
     //检查相同歌单
     await read();
-    var favSheet = favSheets.firstWhere((element) => element.id == sheetId,
-        orElse: () => null);
-    if (favSheet == null) {
+    if (!favSheets!.any((element) => element.id == sheetId)) {
       return true;
     }
 
     //删除
-    favSheets.removeWhere((element) => element.id == sheetId);
+    favSheets!.removeWhere((element) => element.id == sheetId);
 
     //保存数据
     await _write();
@@ -224,6 +222,6 @@ class MySheetsDataService {
   ///是否收藏歌单
   static Future<bool> isFavSheets(String sheetId) async {
     await read();
-    return favSheets.any((element) => element.id == sheetId);
+    return favSheets!.any((element) => element.id == sheetId);
   }
 }

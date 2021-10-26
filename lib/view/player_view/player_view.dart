@@ -18,18 +18,18 @@ class PlayerView extends StatefulWidget {
 }
 
 class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
-  MusicModel curMusic;
-  RoundModeEnum roundMode;
+  late MusicModel curMusic;
+  late RoundModeEnum roundMode;
 
-  String curMusicId;
-  String curMusicImg;
+  late String curMusicId;
+  late String curMusicImg;
 
-  Duration totalTime;
-  Duration curTime;
-  bool isPlaying;
+  late Duration totalTime;
+  late Duration curTime;
+  late bool isPlaying;
 
-  double width;
-  double height;
+  late double width;
+  late double height;
 
   var event1;
   var event2;
@@ -39,8 +39,8 @@ class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
     curMusic = PlayerService.curMusic;
     roundMode = CurListService.roundMode;
 
-    curMusicId = curMusic?.id ?? "";
-    curMusicImg = curMusic?.img_url ?? "";
+    curMusicId = curMusic.id ?? "";
+    curMusicImg = curMusic.img_url ?? "";
 
     curTime = PlayerService.curTime;
     totalTime = PlayerService.totalTime;
@@ -56,8 +56,8 @@ class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
       if (mounted) {
         setState(() {
           curMusic = event.music;
-          curMusicId = curMusic?.id ?? "";
-          curMusicImg = event.music?.img_url ?? "";
+          curMusicId = curMusic.id ?? "";
+          curMusicImg = event.music.img_url ?? "";
           //进度置空
           curTime = Duration.zero;
           totalTime = event.totalTime;
@@ -108,7 +108,8 @@ class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
               height: 30,
               width: 30,
               child: Icon(Icons.arrow_back_ios,
-                  size: 25, color: Theme.of(context).textTheme.bodyText1.color),
+                  size: 25,
+                  color: Theme.of(context).textTheme.bodyText1!.color),
             ),
             onTap: () {
               Navigator.pop(context);
@@ -159,7 +160,7 @@ class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
       //限制进度条的宽度
       width: width * 0.85,
       child: new LinearProgressIndicator(
-          value: (totalTime == null || totalTime.inMilliseconds == 0)
+          value: (totalTime.inMilliseconds == 0)
               ? 0.0
               : (curTime?.inMilliseconds ?? 0).toDouble() /
                   totalTime.inMilliseconds,
@@ -181,12 +182,12 @@ class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
             style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w400,
-                color: Theme.of(context).textTheme.bodyText2.color)),
+                color: Theme.of(context).textTheme.bodyText2!.color)),
         Text(totalTime.toString().substring(2, 7),
             style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w400,
-                color: Theme.of(context).textTheme.bodyText2.color)),
+                color: Theme.of(context).textTheme.bodyText2!.color)),
       ],
     );
 
@@ -212,7 +213,7 @@ class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
         style: TextStyle(
             fontSize: 25,
             fontWeight: FontWeight.w500,
-            color: Theme.of(context).textTheme.bodyText1.color));
+            color: Theme.of(context).textTheme.bodyText1!.color));
   }
 
   //副标题
@@ -223,7 +224,7 @@ class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
         style: TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.w400,
-            color: Theme.of(context).textTheme.bodyText2.color));
+            color: Theme.of(context).textTheme.bodyText2!.color));
   }
 
   //按钮
@@ -244,22 +245,22 @@ class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
                         ? Icons.repeat_one
                         : Icons.shuffle,
                 size: width * 0.1,
-                color: Theme.of(context).textTheme.bodyText1.color),
+                color: Theme.of(context).textTheme.bodyText1!.color),
           ),
           onTap: () {
             if (roundMode == RoundModeEnum.listRound) {
-              CurPlayDataService.curPlay.roundMode = RoundModeEnum.singleRound;
+              CurPlayDataService.curPlay!.roundMode = RoundModeEnum.singleRound;
             } else if (roundMode == RoundModeEnum.singleRound) {
-              CurPlayDataService.curPlay.roundMode = RoundModeEnum.randomRound;
+              CurPlayDataService.curPlay!.roundMode = RoundModeEnum.randomRound;
             } else if (roundMode == RoundModeEnum.randomRound) {
-              CurPlayDataService.curPlay.roundMode = RoundModeEnum.listRound;
+              CurPlayDataService.curPlay!.roundMode = RoundModeEnum.listRound;
             }
             //保存循环方式配置
             CurPlayDataService.write();
             //设置页面与播放器循环方式
             if (mounted) {
               setState(() {
-                roundMode = CurPlayDataService.curPlay.roundMode;
+                roundMode = CurPlayDataService.curPlay!.roundMode;
               });
             }
             CurListService.setRoundMode();
@@ -273,7 +274,7 @@ class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
             width: width * 0.12,
             child: Icon(Icons.skip_previous,
                 size: width * 0.12,
-                color: Theme.of(context).textTheme.bodyText1.color),
+                color: Theme.of(context).textTheme.bodyText1!.color),
           ),
           onTap: () {
             PlayerService.pre();
@@ -287,7 +288,7 @@ class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
             width: width * 0.18,
             child: Icon(isPlaying ? Icons.pause : Icons.play_arrow,
                 size: width * 0.18,
-                color: Theme.of(context).textTheme.bodyText1.color),
+                color: Theme.of(context).textTheme.bodyText1!.color),
           ),
           onTap: () {
             if (isPlaying)
@@ -304,7 +305,7 @@ class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
             width: width * 0.12,
             child: Icon(Icons.skip_next,
                 size: width * 0.12,
-                color: Theme.of(context).textTheme.bodyText1.color),
+                color: Theme.of(context).textTheme.bodyText1!.color),
           ),
           onTap: () {
             PlayerService.next(true);
@@ -319,7 +320,7 @@ class _PlayerViewState extends State<PlayerView> with TickerProviderStateMixin {
             margin: EdgeInsets.only(left: 5),
             child: Icon(Icons.queue_music,
                 size: width * 0.1,
-                color: Theme.of(context).textTheme.bodyText1.color),
+                color: Theme.of(context).textTheme.bodyText1!.color),
           ),
           onTap: () {
             showModalBottomSheet(

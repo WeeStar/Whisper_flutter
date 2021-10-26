@@ -23,7 +23,7 @@ class HttpService {
   ///GET
   static Future<Object> get(
       String module, String methodUrl, MusicSource musicSource,
-      [Map<String, String> queryParameters, bool showNotice = true]) async {
+      [Map<String, String>? queryParameters, bool showNotice = true]) async {
     // 构造url
     var url = _getUrl(module, methodUrl, musicSource);
     var uri = new Uri.http(_baseUrl, url, queryParameters);
@@ -41,7 +41,7 @@ class HttpService {
       if (response.statusCode == HttpStatus.ok) {
         //请求成功
         var jsonStr = decoder.convert(response.bodyBytes);
-        Map json = jsonDecode(jsonStr);
+        Map<String, dynamic> json = jsonDecode(jsonStr);
         var data = MethodResult.fromJson(json);
 
         if (data.state == 1) {
@@ -69,8 +69,8 @@ class HttpService {
   ///post
   static Future<Object> post(
       String module, String methodUrl, MusicSource musicSource,
-      {Map<String, String> queryParameters,
-      Object body,
+      {Map<String, String>? queryParameters,
+      Object? body,
       bool showNotice = true}) async {
     // 构造url
     var url = _getUrl(module, methodUrl, musicSource);
@@ -91,7 +91,7 @@ class HttpService {
       if (response.statusCode == HttpStatus.ok) {
         //请求成功
         var jsonStr = decoder.convert(response.bodyBytes);
-        Map json = jsonDecode(jsonStr);
+        Map<String, dynamic> json = jsonDecode(jsonStr);
         var data = MethodResult.fromJson(json);
 
         if (data.state == 1) {

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_dialog/flutter_custom_dialog.dart';
 import 'package:whisper/model/music_model.dart';
+import 'package:whisper/model/sheet_model.dart';
 import 'package:whisper/service/data/my_sheets_data_service.dart';
 import 'package:whisper/service/http/api_service.dart';
 import 'package:whisper/view/sheet_view/add/sheet_add_view.dart';
@@ -14,7 +15,7 @@ class DialogView {
       {IconData icon = Icons.check_circle_outline,
       int dissmissMilliseconds = 0,
       double width = 150,
-      BuildContext context}) {
+      BuildContext? context}) {
     var notice = YYDialog().build(context)
       ..width = width
       ..height = 100
@@ -26,10 +27,10 @@ class DialogView {
         child: Icon(
           icon,
           size: 40,
-          color: Theme.of(notice.context)
+          color: Theme.of(notice.context!)
               .textTheme
-              .bodyText1
-              .color
+              .bodyText1!
+              .color!
               .withOpacity(0.7),
         )))
       ..widget(Padding(
@@ -39,15 +40,15 @@ class DialogView {
           style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w500,
-              color: Theme.of(notice.context)
+              color: Theme.of(notice.context!)
                   .textTheme
-                  .bodyText1
-                  .color
+                  .bodyText1!
+                  .color!
                   .withOpacity(0.7)),
         ),
       ))
       ..backgroundColor =
-          Theme.of(notice.context).backgroundColor.withOpacity(0.8)
+          Theme.of(notice.context!).backgroundColor.withOpacity(0.8)
 
       //定时消失
       ..showCallBack = dissmissMilliseconds > 0
@@ -67,15 +68,15 @@ class DialogView {
       VoidCallback onTap1, VoidCallback onTap2) {
     var dialog = YYDialog().build()..borderRadius = 5.0;
 
-    var theme = Theme.of(dialog.context);
-    var width = MediaQuery.of(dialog.context).size.width;
+    var theme = Theme.of(dialog.context!);
+    var width = MediaQuery.of(dialog.context!).size.width;
 
     return dialog
       ..width = width * 0.7
       ..text(
         padding: EdgeInsets.all(20.0),
         text: text,
-        color: theme.textTheme.bodyText1.color,
+        color: theme.textTheme.bodyText1!.color,
         fontSize: 16.0,
         fontWeight: FontWeight.w400,
       )
@@ -97,7 +98,7 @@ class DialogView {
           onTap2?.call();
         },
       )
-      ..backgroundColor = Theme.of(dialog.context).scaffoldBackgroundColor
+      ..backgroundColor = Theme.of(dialog.context!).scaffoldBackgroundColor
       ..show();
   }
 
@@ -116,7 +117,7 @@ class DialogView {
         padding: EdgeInsets.fromLTRB(20, 20, 0, 0),
         alignment: Alignment.topLeft,
         text: "导入歌单",
-        color: theme.textTheme.bodyText1.color,
+        color: theme.textTheme.bodyText1!.color,
         fontSize: 16.0,
         fontWeight: FontWeight.w500,
       )
@@ -150,7 +151,7 @@ class DialogView {
   static Future<void> _addSheetCallback(
       BuildContext context, String url, MusicSource source) async {
     //参数错误
-    if (url == null || url == '' || source == MusicSource.unknow) {
+    if (url == '' || source == MusicSource.unknow) {
       return;
     }
     try {
@@ -158,11 +159,12 @@ class DialogView {
       var sheetInfo =
           await ApiService.getSheetInfo(source, url, showNotice: false);
       //添加到我的歌单
-      var mySheetInfo = await MySheetsDataService.addMySheet(sheetInfo);
+      var mySheetInfo =
+          await MySheetsDataService.addMySheet(sheetInfo ?? SheetModel.empty());
       sheetInfo = null;
       //打开歌单详情
       Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return SheetInfoView(mySheetInfo);
+        return SheetInfoView(mySheetInfo ?? SheetModel.empty());
       }));
 
       DialogView.showNoticeView('已添加至我的歌单',

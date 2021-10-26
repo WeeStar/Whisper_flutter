@@ -19,7 +19,7 @@ class BannerItemView extends StatelessWidget {
     var cover = OctoImage(
       height: width * 0.8,
       width: width,
-      image: CachedNetworkImageProvider(sheet.ori_cover_img_url),
+      image: CachedNetworkImageProvider(sheet.ori_cover_img_url ?? ""),
       placeholderBuilder: (_) {
         return Image.asset("images/empty.png",
             alignment: Alignment.center, fit: BoxFit.fill);
@@ -33,12 +33,12 @@ class BannerItemView extends StatelessWidget {
 
     //右上角播放次数
     var playTimes = Text(
-      Util.playNumsFormat(sheet.play) + " 次播放",
+      Util.playNumsFormat(sheet.play ?? "0") + " 次播放",
       maxLines: 1,
       style: TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.w500,
-          color: Theme.of(context).textTheme.subtitle1.color),
+          color: Theme.of(context).textTheme.subtitle1?.color),
     );
 
     //下部描述文字
@@ -47,7 +47,7 @@ class BannerItemView extends StatelessWidget {
       style: TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.w500,
-          color: Theme.of(context).textTheme.subtitle1.color),
+          color: Theme.of(context).textTheme.subtitle1?.color),
     );
 
     //下部描述图标

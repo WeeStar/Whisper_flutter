@@ -9,8 +9,8 @@ import '../event_service.dart';
 
 ///历史数据读写
 class HisDataService {
-  static List<String> searchHis;
-  static List<SheetModel> playSheetHis;
+  static List<String>? searchHis;
+  static List<SheetModel>? playSheetHis;
 
   ///读取
   static Future<void> read() async {
@@ -23,11 +23,11 @@ class HisDataService {
     var jsonStr = await file.readAsString();
 
     //文件为空 返回空对象
-    if (jsonStr == null || jsonStr == "") {
+    if (jsonStr == "") {
       searchHis = <String>[];
       playSheetHis = <SheetModel>[];
     } else {
-      Map mySheetsMap = jsonDecode(jsonStr);
+      Map<String, dynamic> mySheetsMap = jsonDecode(jsonStr);
       var sheetsData = new HisModel.fromJson(mySheetsMap);
       searchHis = sheetsData.searchHis;
       playSheetHis = sheetsData.playSheetHis;
@@ -37,12 +37,12 @@ class HisDataService {
   ///写入
   static _write() async {
     File file = new File(await AppPath.hisPath());
-    var jsonStr = jsonEncode(new HisModel(searchHis, playSheetHis));
+    var jsonStr = jsonEncode(new HisModel(searchHis!, playSheetHis!));
     file.writeAsString(jsonStr);
   }
 
   ///插入搜索历史
-  static Future<void> addHis(String keyWord) async {
+  static Future<void> addHis(String? keyWord) async {
     if (keyWord == null || keyWord == "") {
       return;
     }
@@ -51,7 +51,7 @@ class HisDataService {
     await read();
     var newSearchHis = <String>[];
     newSearchHis.add(keyWord);
-    for (var item in searchHis) {
+    for (var item in searchHis!) {
       if (item == keyWord) {
         continue;
       }
@@ -74,7 +74,7 @@ class HisDataService {
 
   ///写入歌单历史
   static addSheetHis(SheetModel sheet) async {
-    if (sheet == null) {
+    if (sheet.id == null) {
       return;
     }
 
@@ -86,7 +86,7 @@ class HisDataService {
     await read();
     var newSheetHis = <SheetModel>[];
     newSheetHis.add(newSheet);
-    for (var item in playSheetHis) {
+    for (var item in playSheetHis!) {
       if (item.id == sheet.id) {
         continue;
       }
@@ -107,14 +107,13 @@ class HisDataService {
   static Future<bool> delSheetHis(String sheetId) async {
     //校验
     await read();
-    var mySheet = playSheetHis.firstWhere((element) => element.id == sheetId,
-        orElse: () => null);
-    if (mySheet == null) {
+
+    if (!playSheetHis!.any((element) => element.id == sheetId)) {
       return true;
     }
 
     //删除
-    playSheetHis.removeWhere((element) => element.id == sheetId);
+    playSheetHis!.removeWhere((element) => element.id == sheetId);
     await _write();
     return true;
   }

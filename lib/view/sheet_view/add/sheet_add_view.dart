@@ -52,20 +52,21 @@ class _SheetAddViewState extends State<SheetAddView>
 
     //构造选项
     var childs = <Widget>[];
-    for (var item in ConfigDataService.config.musicSourcSeq) {
+    for (var item in ConfigDataService.config!.musicSourcSeq) {
       childs.add(RadioListTile(
         title: Text(
           item.desc,
           style: TextStyle(
-              color: Theme.of(context).textTheme.bodyText1.color, fontSize: 14),
+              color: Theme.of(context).textTheme.bodyText1!.color,
+              fontSize: 14),
         ),
         value: item,
         groupValue: source,
         onChanged: (value) {
           setState(() {
-            source = value;
+            source = value as MusicSource;
           });
-          widget.onRadioChanged?.call(value);
+          widget.onRadioChanged.call(value as MusicSource);
         },
         activeColor: theme.primaryColor,
         dense: true,
@@ -95,61 +96,57 @@ class _SheetAddViewState extends State<SheetAddView>
 
       //解析不出 直接返回原文
       var host = u.host;
-      if (host == '') widget.onTextChange?.call(url);
+      if (host == '') widget.onTextChange.call(url);
 
       //根据host解析来源
       if (host.contains(".kugou.")) {
         setState(() {
           source = MusicSource.kugou;
         });
-        widget.onRadioChanged?.call(source);
+        widget.onRadioChanged.call(source);
 
         //解析ID
         var id = u.pathSegments.last.replaceAll(new RegExp(r'.html'), '');
-        widget.onTextChange?.call(id);
-      }
-      else if (host.contains(".163.")) {
+        widget.onTextChange.call(id);
+      } else if (host.contains(".163.")) {
         setState(() {
           source = MusicSource.netease;
         });
-        widget.onRadioChanged?.call(source);
+        widget.onRadioChanged.call(source);
 
         //解析ID
         var id = u.queryParameters["id"];
-        widget.onTextChange?.call(id);
-      }
-      else if (host.contains(".qq.")) {
+        widget.onTextChange.call(id ?? "");
+      } else if (host.contains(".qq.")) {
         setState(() {
           source = MusicSource.tencent;
         });
-        widget.onRadioChanged?.call(source);
+        widget.onRadioChanged.call(source);
 
         //解析ID
         var id = u.pathSegments.last.replaceAll(new RegExp(r'.html'), '');
-        widget.onTextChange?.call(id);
-      }
-      else if (host.contains(".migu.")) {
+        widget.onTextChange.call(id);
+      } else if (host.contains(".migu.")) {
         setState(() {
           source = MusicSource.migu;
         });
-        widget.onRadioChanged?.call(source);
+        widget.onRadioChanged.call(source);
 
         //解析ID
         var id = u.pathSegments.last.replaceAll(new RegExp(r'.html'), '');
-        widget.onTextChange?.call(id);
-      }
-      else if (host.contains(".xiami.")) {
+        widget.onTextChange.call(id);
+      } else if (host.contains(".xiami.")) {
         setState(() {
           source = MusicSource.xiami;
         });
-        widget.onRadioChanged?.call(source);
+        widget.onRadioChanged.call(source);
 
         //解析ID
         var id = u.pathSegments.last.replaceAll(new RegExp(r'.html'), '');
-        widget.onTextChange?.call(id);
+        widget.onTextChange.call(id);
       }
     } catch (exp) {
-      widget.onTextChange?.call(url);
+      widget.onTextChange.call(url);
     }
   }
 }

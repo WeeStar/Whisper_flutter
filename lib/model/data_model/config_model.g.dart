@@ -10,10 +10,10 @@ ConfigModel _$ConfigModelFromJson(Map<String, dynamic> json) {
   return ConfigModel(
     json['colorMode'] as int,
     json['isReplaceCurList'] as bool,
-    (json['musicSourcSeq'] as List)
+    (json['musicSourcSeq'] as List?)
             ?.map((e) => musicSourceFromString(e))
-            ?.toList() ??
-        null,
+            .toList() ??
+        [],
   );
 }
 
@@ -21,5 +21,5 @@ Map<String, dynamic> _$ConfigModelToJson(ConfigModel instance) =>
     <String, dynamic>{
       'colorMode': instance.colorMode,
       'isReplaceCurList': instance.isReplaceCurList,
-      'musicSourcSeq': instance.musicSourcSeq?.map((e) => e.name) ?? null,
+      'musicSourcSeq': instance.musicSourcSeq.map((e) => e.name),
     };

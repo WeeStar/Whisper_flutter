@@ -8,18 +8,22 @@ part of 'my_sheets_model.dart';
 
 MySheetsModel _$MySheetsModelFromJson(Map<String, dynamic> json) {
   return MySheetsModel(
-      (json['mySheets'] as List)
-          ?.map((e) =>
-              e == null ? null : SheetModel.fromJson(e as Map<String, dynamic>))
-          ?.toList(),
-      (json['favSheets'] as List)
-          ?.map((e) =>
-              e == null ? null : SheetModel.fromJson(e as Map<String, dynamic>))
-          ?.toList());
+      (json['mySheets'] as List?)
+              ?.map((e) => e == null
+                  ? SheetModel.empty()
+                  : SheetModel.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+      (json['favSheets'] as List?)
+              ?.map((e) => e == null
+                  ? SheetModel.empty()
+                  : SheetModel.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          []);
 }
 
 Map<String, dynamic> _$MySheetsModelToJson(MySheetsModel instance) =>
     <String, dynamic>{
-      'mySheets': instance.mySheets?.map((e) => e.toJson())?.toList() ?? null,
-      'favSheets': instance.favSheets?.map((e) => e.toJson())?.toList() ?? null,
+      'mySheets': instance.mySheets.map((e) => e.toJson()).toList(),
+      'favSheets': instance.favSheets.map((e) => e.toJson()).toList(),
     };

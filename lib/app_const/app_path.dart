@@ -4,7 +4,7 @@ import 'package:path_provider/path_provider.dart';
 //app关键路径
 class AppPath {
   //用户数据路径
-  static String _userConfigPath;
+  static late String _userConfigPath;
 
   static userConfigPath() async {
     if (_userConfigPath != null) {
@@ -16,7 +16,7 @@ class AppPath {
     _userConfigPath = '$appDocPath/UserConfigPath.json';
 
     //文件不存在则创建
-    File file = new File(_userConfigPath);
+    File file = new File(_userConfigPath!);
     if (!file.existsSync()) {
       file.createSync();
     }
@@ -24,7 +24,7 @@ class AppPath {
   }
 
   //历史数据路径
-  static String _hisPath;
+  static String? _hisPath;
 
   static hisPath() async {
     if (_hisPath != null) {
@@ -36,7 +36,7 @@ class AppPath {
     _hisPath = '$appDocPath/His.json';
 
     //文件不存在则创建
-    File file = new File(_hisPath);
+    File file = new File(_hisPath!);
     if (!file.existsSync()) {
       file.createSync();
     }
@@ -44,7 +44,7 @@ class AppPath {
   }
 
   //我的歌单数据路径
-  static String _mySheetsPath;
+  static String? _mySheetsPath;
 
   static mySheetsPath() async {
     if (_mySheetsPath != null) {
@@ -56,7 +56,7 @@ class AppPath {
     _mySheetsPath = '$appDocPath/MySheets.json';
 
     //文件不存在则创建
-    File file = new File(_mySheetsPath);
+    File file = new File(_mySheetsPath!);
     if (!file.existsSync()) {
       file.createSync();
     }
@@ -64,7 +64,7 @@ class AppPath {
   }
 
   //我的歌单数据路径
-  static String _curPlayPath;
+  static String? _curPlayPath;
 
   static curPlayPath() async {
     if (_curPlayPath != null) {
@@ -76,7 +76,7 @@ class AppPath {
     _curPlayPath = '$appDocPath/CurPlay.json';
 
     //文件不存在则创建
-    File file = new File(_curPlayPath);
+    File file = new File(_curPlayPath!);
     if (!file.existsSync()) {
       file.createSync();
     }

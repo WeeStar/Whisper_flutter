@@ -17,7 +17,7 @@ class SheetListItemView extends StatelessWidget {
     var cover = OctoImage(
       width: 60,
       height: 60,
-      image: CachedNetworkImageProvider(sheet.cover_img_url),
+      image: CachedNetworkImageProvider(sheet.cover_img_url ?? ""),
       placeholderBuilder: (_) {
         return Image.asset("images/empty.png",
             alignment: Alignment.center, fit: BoxFit.fill);
@@ -30,7 +30,7 @@ class SheetListItemView extends StatelessWidget {
     );
 
     //歌单标题
-    var title = Text(sheet.title,
+    var title = Text(sheet.title ?? "",
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         style: Theme.of(context).textTheme.bodyText1);
@@ -44,7 +44,7 @@ class SheetListItemView extends StatelessWidget {
         maxLines: 1,
         style: Theme.of(context).textTheme.bodyText2,
       ));
-    } else if (sheet.play == null || sheet.play.isEmpty) {
+    } else if (sheet.play == null || sheet.play!.isEmpty) {
       //非我的歌单 播放量为空 展示点击播放
       descChilden.add(Icon(Icons.play_circle_outline,
           size: 16, color: Theme.of(context).disabledColor));
@@ -59,7 +59,7 @@ class SheetListItemView extends StatelessWidget {
     } else {
       //非我的歌单 播放量不为空 展示播放量
       descChilden.add(Text(
-        Util.playNumsFormat(sheet.play) + " 次播放",
+        Util.playNumsFormat(sheet.play!) + " 次播放",
         maxLines: 1,
         style: Theme.of(context).textTheme.bodyText2,
       ));

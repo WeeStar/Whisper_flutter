@@ -9,16 +9,14 @@ class MusicItemView extends StatelessWidget {
   final MusicModel musicInfo;
   final int musicIdx;
   final bool isPlaying;
-  final Function delInMySheet;
-  final Function delCallBack;
+  final Function? delInMySheet;
+  final Function? delCallBack;
 
   MusicItemView(this.musicInfo,
-      {Key key,
-      this.musicIdx,
+      {required this.musicIdx,
       this.isPlaying = false,
       this.delInMySheet,
-      this.delCallBack})
-      : super(key: key);
+      this.delCallBack});
 
   //构造菜单
   List<MenuSheetItemModel> _buildMenus(BuildContext context) {
@@ -46,7 +44,7 @@ class MusicItemView extends StatelessWidget {
     //我的歌单中的歌曲 可删除
     if (delInMySheet != null) {
       menus.add(
-          MenuSheetItemModel("删除", Icons.delete_outline, this.delInMySheet));
+          MenuSheetItemModel("删除", Icons.delete_outline, this.delInMySheet!));
     }
 
     return menus;
@@ -79,7 +77,7 @@ class MusicItemView extends StatelessWidget {
               color: this.isPlaying
                   ? Theme.of(context).primaryColor
                   : (this.musicInfo.isPlayable()
-                      ? Theme.of(context).textTheme.bodyText1.color
+                      ? Theme.of(context).textTheme.bodyText1!.color
                       : Theme.of(context).disabledColor))),
     );
 
@@ -172,7 +170,7 @@ class MusicItemView extends StatelessWidget {
                     size: 20, color: Theme.of(context).disabledColor),
               ),
               onTap: () {
-                this.delCallBack();
+                this.delCallBack!();
               },
             ),
 

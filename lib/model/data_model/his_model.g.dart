@@ -8,16 +8,16 @@ part of 'his_model.dart';
 
 HisModel _$HisModelFromJson(Map<String, dynamic> json) {
   return HisModel(
-      (json['searchHis'] as List)?.map((e) => e as String)?.toList() ?? null,
-      (json['playSheetHis'] as List)
+      (json['searchHis'] as List?)?.map((e) => e as String)?.toList() ?? [],
+      (json['playSheetHis'] as List?)
               ?.map((e) => e == null
-                  ? null
+                  ? SheetModel.empty()
                   : SheetModel.fromJson(e as Map<String, dynamic>))
-              ?.toList() ??
-          null);
+              .toList() ??
+          []);
 }
 
 Map<String, dynamic> _$HisModelToJson(HisModel instance) => <String, dynamic>{
       'searchHis': instance.searchHis,
-      'playSheetHis': instance.playSheetHis?.map((e) => e.toJson())?.toList() ?? null,
+      'playSheetHis': instance.playSheetHis.map((e) => e.toJson()).toList(),
     };

@@ -13,11 +13,11 @@ class MainViewMy extends StatefulWidget {
 }
 
 class _MainViewMyState extends State<MainViewMy> with TickerProviderStateMixin {
-  TabController _controller;
+  late TabController _controller;
 
-  List<SheetModel> _hisSheets = List<SheetModel>.empty(); //历史歌单
-  List<SheetModel> _favSheets = List<SheetModel>.empty(); //收藏歌单
-  List<SheetModel> _mySheets = List<SheetModel>.empty(); //我的歌单
+  late List<SheetModel> _hisSheets; //历史歌单
+  late List<SheetModel> _favSheets; //收藏歌单
+  late List<SheetModel> _mySheets; //我的歌单
 
   var event1;
   var event2;
@@ -26,9 +26,9 @@ class _MainViewMyState extends State<MainViewMy> with TickerProviderStateMixin {
   void initState() {
     super.initState();
 
-    _hisSheets = HisDataService.playSheetHis;
-    _favSheets = MySheetsDataService.favSheets;
-    _mySheets = MySheetsDataService.mySheets;
+    _hisSheets = HisDataService.playSheetHis!;
+    _favSheets = MySheetsDataService.favSheets!;
+    _mySheets = MySheetsDataService.mySheets!;
 
     _controller = TabController(
         initialIndex: _mySheets.length > 0 ? 0 : 1, length: 2, vsync: this);
@@ -37,7 +37,7 @@ class _MainViewMyState extends State<MainViewMy> with TickerProviderStateMixin {
     event1 = eventBus.on<SheetHisRefreshEvent>().listen((event) {
       if (mounted)
         setState(() {
-          _hisSheets = HisDataService.playSheetHis;
+          _hisSheets = HisDataService.playSheetHis!;
         });
     });
 
@@ -45,7 +45,7 @@ class _MainViewMyState extends State<MainViewMy> with TickerProviderStateMixin {
     event2 = eventBus.on<MySheetsRefreshEvent>().listen((event) {
       if (mounted)
         setState(() {
-          _mySheets = MySheetsDataService.mySheets;
+          _mySheets = MySheetsDataService.mySheets!;
         });
     });
   }
@@ -55,7 +55,7 @@ class _MainViewMyState extends State<MainViewMy> with TickerProviderStateMixin {
       labelPadding: EdgeInsets.symmetric(horizontal: 5),
       isScrollable: true,
       controller: _controller,
-      labelColor: Theme.of(context).textTheme.bodyText1.color,
+      labelColor: Theme.of(context).textTheme.bodyText1!.color,
       labelStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
 
       unselectedLabelColor: Theme.of(context).disabledColor, //tab标签未选中时的颜色

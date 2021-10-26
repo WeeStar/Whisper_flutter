@@ -8,14 +8,17 @@ part of 'cur_play_model.dart';
 
 CurPlayModel _$CurPlayModelFromJson(Map<String, dynamic> json) {
   return CurPlayModel(
-      (json['curList'] as List)
-          ?.map((e) =>
-              e == null ? null : MusicModel.fromJson(e as Map<String, dynamic>))
-          ?.toList(),
+      (json['curList'] as List?)
+              ?.map((e) => e == null
+                  ? MusicModel.empty()
+                  : MusicModel.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
       json['curMusic'] == null
-          ? null
+          ? MusicModel.empty()
           : MusicModel.fromJson(json['curMusic'] as Map<String, dynamic>),
-      _$enumDecodeNullable(_$RoundModeEnumEnumMap, json['roundMode']));
+      _$enumDecodeNullable(_$RoundModeEnumEnumMap, json['roundMode']) ??
+          RoundModeEnum.listRound);
 }
 
 Map<String, dynamic> _$CurPlayModelToJson(CurPlayModel instance) =>
@@ -38,7 +41,7 @@ T _$enumDecode<T>(Map<T, dynamic> enumValues, dynamic source) {
       .key;
 }
 
-T _$enumDecodeNullable<T>(Map<T, dynamic> enumValues, dynamic source) {
+T? _$enumDecodeNullable<T>(Map<T, dynamic> enumValues, dynamic source) {
   if (source == null) {
     return null;
   }

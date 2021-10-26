@@ -11,36 +11,36 @@ typedef void TabChangeCallback(MusicSource source);
 typedef void SetStateCallback(void fn());
 
 class AppBarSearch {
-  final TextFieldSubmitCallback onSubmitted; //提交事件
-  final TabChangeCallback onTabChanged; //tab切换事件
-  final VoidCallback onCleared; //清空事件
+  final TextFieldSubmitCallback? onSubmitted; //提交事件
+  final TabChangeCallback? onTabChanged; //tab切换事件
+  final VoidCallback? onCleared; //清空事件
   final String hintText; //提示文字
 
   //上下文相关
   final TickerProvider provider;
   final SetStateCallback setState;
 
-  TextEditingController _controller;
-  TabController _tabController;
+  late TextEditingController _controller;
+  late TabController _tabController;
 
   bool _clearActive = false;
 
   //tab相关
   bool _isShowTab = false;
   int _tabIdx = 0;
-  List<MusicSource> _sourceSeq;
+  late List<MusicSource> _sourceSeq;
 
   //构造
   AppBarSearch({
-    @required this.provider,
-    @required this.setState,
+    required this.provider,
+    required this.setState,
     this.hintText = 'Search',
     this.onSubmitted,
     this.onTabChanged,
     this.onCleared,
   }) {
     //异步 获取各平台展示顺序
-    _sourceSeq = ConfigDataService.config.musicSourcSeq;
+    _sourceSeq = ConfigDataService.config!.musicSourcSeq;
 
     //构造 textcontroller
     this._controller = TextEditingController();

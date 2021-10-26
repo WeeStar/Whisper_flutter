@@ -6,14 +6,12 @@ import 'package:whisper/service/http/http_service.dart';
 // 业务接口
 class ApiService {
   // 获取歌单信息
-  static Future<SheetModel> getSheetInfo(MusicSource source, String sheetId,
+  static Future<SheetModel?> getSheetInfo(MusicSource source, String sheetId,
       {bool showNotice = true}) async {
     var resData = await HttpService.get(
         "music", "sheet_info", source, {"sheet_id": sheetId}, showNotice);
-    if (resData == null) {
-      return null;
-    }
-    return SheetModel.fromJson(resData);
+
+    return SheetModel.fromJson(resData as Map<String, dynamic>);
   }
 
   // 搜索歌曲
@@ -25,10 +23,6 @@ class ApiService {
       "page_index": pageIndex.toString(),
       "page_size": pageSize.toString()
     });
-
-    if (resData == null) {
-      return List<MusicModel>.empty();
-    }
 
     var musicList = <MusicModel>[];
     var resList = resData as List<dynamic>;
@@ -49,13 +43,13 @@ class ApiService {
     await ConfigDataService.read();
 
     var res = await Future.wait<RecomModel>([f1, f2,  f4, f5]);
-    var sequence = ConfigDataService.config.musicSourcSeq;
+    var sequence = ConfigDataService.config!.musicSourcSeq;
 
     var resWithSeq = <RecomModel>[];
     for (var item in sequence) {
       var recom = res.firstWhere((element) => element.source == item,
-          orElse: () => null);
-      if (recom == null || recom.sheets.length == 0) {
+          orElse: () => RecomModel(MusicSource.unknow, []));
+      if (recom.sheets.length == 0) {
         continue;
       }
       resWithSeq.add(recom);
@@ -74,9 +68,6 @@ class ApiService {
     };
     //访问接口
     var resData = await HttpService.get("music", "hot_sheets", source, params);
-    if (resData == null) {
-      return new RecomModel(source, List<SheetModel>.empty());
-    }
 
     var sheetList = <SheetModel>[];
     var resList = resData as List<dynamic>;
@@ -96,7 +87,6 @@ class ApiService {
           body: body, showNotice: false);
 
       //尝试转换类型
-      if (resData == null) return MusicPlayUrlModel();
       var resList = resData as List<dynamic>;
       if (resList.isEmpty) return MusicPlayUrlModel();
 
@@ -118,6 +108,6 @@ class RecomModel {
 
 class MusicPlayUrlModel {
   MusicPlayUrlModel([this.playUrl, this.imgUrl]);
-  String playUrl;
-  String imgUrl;
+  String? playUrl;
+  String? imgUrl;
 }
