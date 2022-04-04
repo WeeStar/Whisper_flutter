@@ -129,7 +129,7 @@ class _PlayerRingViewState extends State<PlayerRingView>
             strokeWidth: 2,
             value: ( totalTime.inMilliseconds == 0)
                 ? 0.0
-                : (curTime.inMilliseconds ?? 0).toDouble() /
+                : (curTime.inMilliseconds).toDouble() /
                     totalTime.inMilliseconds,
             backgroundColor: Colors.grey[300]!.withOpacity(0.6),
             valueColor: AlwaysStoppedAnimation(Colors.white),
